@@ -31,6 +31,7 @@ function main() {
 server=$(ps -aef | grep -v grep | grep -E -o 'uvicorn|fastwsgi' | sort -u)
 
 echo $server
+echo ---
 time main 16 1000
 
 #wc -l *.txt
