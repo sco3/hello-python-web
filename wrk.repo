@@ -1,0 +1,11 @@
+[copr:copr.fedorainfracloud.org:getpagespeed:wrk]
+name=Copr repo for wrk owned by getpagespeed
+baseurl=https://download.copr.fedorainfracloud.org/results/getpagespeed/wrk/fedora-$releasever-$basearch/
+type=rpm-md
+skip_if_unavailable=True
+gpgcheck=0
+gpgkey=https://download.copr.fedorainfracloud.org/results/getpagespeed/wrk/pubkey.gpg
+repo_gpgcheck=0
+enabled=1
+enabled_metadata=1
+
