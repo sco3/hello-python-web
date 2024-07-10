@@ -1,2 +1,8 @@
 poetry.lock
 **/__pycache__
+/.gradle/
+.classpath
+bin
+build
+.project
+.settings
