@@ -1,5 +1,8 @@
 package sco3;
 
+import static java.lang.System.getProperty;
+import static java.lang.System.out;
+
 import io.jooby.Jooby;
 import io.jooby.ServerOptions;
 
@@ -12,6 +15,9 @@ public class Main extends Jooby {
 	}
 
 	public static void main(String[] args) {
+		out.println("" //
+				+ getProperty("java.vendor.version") //
+		);
 		runApp(args, Main::new);
 	}
 }
