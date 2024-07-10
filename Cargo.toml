@@ -1,0 +1,25 @@
+[package]
+name = "fastjson"
+version = "0.1.0"
+authors = ["scorta <scorta@gmail.com>"]
+edition = "2018"
+description = "cargo build --release"
+
+
+[[bin]]
+name="minihttp"
+path = "src/main/rust/main.rs"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+may_minihttp = "0.1"
+
+[profile.release]
+opt-level = 3
+#rustflags = ["-C", "target-cpu=native"]
+
+[profile.dev]
+opt-level = 0
+debug = true
+
