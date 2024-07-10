@@ -1,17 +1,3 @@
-fastwsgi
----
-
-```
-Running 10s test @ http://127.0.0.1:8000
-  2 threads and 200 connections
-  Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency   784.94us   93.02us   3.11ms   94.17%
-    Req/Sec   128.11k     5.33k  136.77k    82.00%
-  2547947 requests in 10.00s, 340.19MB read
-Requests/sec: 254749.13
-Transfer/sec:     34.01MB
-```
-
 uvicorn
 ---
 
@@ -24,6 +10,20 @@ Running 10s test @ http://127.0.0.1:8000
   138704 requests in 10.00s, 19.97MB read
 Requests/sec:  13865.62
 Transfer/sec:      2.00MB
+```
+
+fastwsgi
+---
+
+```
+Running 10s test @ http://127.0.0.1:8000
+  2 threads and 200 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   784.94us   93.02us   3.11ms   94.17%
+    Req/Sec   128.11k     5.33k  136.77k    82.00%
+  2547947 requests in 10.00s, 340.19MB read
+Requests/sec: 254749.13
+Transfer/sec:     34.01MB
 ```
 
 JavaJooby
