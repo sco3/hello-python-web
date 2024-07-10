@@ -26,20 +26,6 @@ Requests/sec:  13865.62
 Transfer/sec:      2.00MB
 ```
 
-minihttp
----
-
-```
-Running 10s test @ http://127.0.0.1:8000
-  2 threads and 200 connections
-  Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency   273.32us  102.32us   3.75ms   85.70%
-    Req/Sec   193.81k    15.74k  250.57k    87.00%
-  3854999 requests in 10.00s, 371.32MB read
-Requests/sec: 385441.12
-Transfer/sec:     37.13MB
-```
-
 JavaJooby
 ---
 
@@ -52,4 +38,18 @@ Running 10s test @ http://127.0.0.1:8000
   2657596 requests in 10.00s, 321.88MB read
 Requests/sec: 265700.85
 Transfer/sec:     32.18MB
+```
+
+rust-minihttp
+---
+
+```
+Running 10s test @ http://127.0.0.1:8000
+  2 threads and 200 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   273.46us  101.65us   2.79ms   85.69%
+    Req/Sec   193.45k    16.15k  246.23k    84.00%
+  3850709 requests in 10.00s, 370.90MB read
+Requests/sec: 385038.33
+Transfer/sec:     37.09MB
 ```

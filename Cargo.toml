@@ -7,7 +7,7 @@ description = "cargo build --release"
 
 
 [[bin]]
-name="minihttp"
+name="rust-minihttp"
 path = "src/main/rust/main.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
