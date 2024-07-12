@@ -16,6 +16,10 @@ dependencies {
     implementation 'org.glassfish.jersey.containers:jersey-container-netty-http:3.1.7'
 	implementation 'org.glassfish.jersey.inject:jersey-hk2:3.1.7'
 	implementation 'org.glassfish.jersey.containers:jersey-container-jetty-http:3.1.7'
+	implementation 'org.glassfish.jersey.containers:jersey-container-grizzly2-http:3.1.7'
+ 	implementation 'io.vertx:vertx-core:4.2.1'
+    implementation 'io.vertx:vertx-web:4.2.1'
+    
     testImplementation "junit:junit:4.13.2"
 }
 
@@ -42,3 +46,12 @@ task jetty(type: JavaExec) {
     classpath sourceSets.main.runtimeClasspath
     mainClass = "sco3.MainJerseyJetty"
 }
+task grizzly(type: JavaExec) {
+    classpath sourceSets.main.runtimeClasspath
+    mainClass = "sco3.MainJerseyGrizzly"
+}
+task vertx(type: JavaExec) {
+    classpath sourceSets.main.runtimeClasspath
+    mainClass = "sco3.MainVertx"
+}
+
