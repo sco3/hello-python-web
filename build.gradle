@@ -3,7 +3,6 @@
 
 plugins {
     id 'java'
-    id 'io.quarkus'
 }
 
 group = "sco3"
@@ -16,16 +15,10 @@ repositories {
 }
 
 dependencies {
-    implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
-    implementation 'io.quarkus:quarkus-websockets'
-    implementation 'io.quarkus:quarkus-arc'
-
     implementation 'io.jooby:jooby:3.2.3'
     implementation 'io.jooby:jooby-netty:3.2.3'
 
-    testImplementation 'io.quarkus:quarkus-junit5'
     testImplementation "junit:junit:4.13.2"
-
 }
 
 
@@ -34,9 +27,6 @@ java {
     targetCompatibility = JavaVersion.VERSION_21
 }
 
-test {
-    systemProperty "java.util.logging.manager", "org.jboss.logmanager.LogManager"
-}
 compileJava {
     options.encoding = 'UTF-8'
     options.compilerArgs << '-parameters'
