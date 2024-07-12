@@ -54,5 +54,5 @@ task copy(type: Copy) {
 
 task run(type: JavaExec) {
     classpath sourceSets.main.runtimeClasspath
-    mainClass = "sco3.Main"
+    mainClass = "sco3.MainJooby"
 }
