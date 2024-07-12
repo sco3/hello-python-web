@@ -39,6 +39,33 @@ Running 10s test @ http://127.0.0.1:8000
 Requests/sec: 265700.85
 Transfer/sec:     32.18MB
 ```
+JerseyNetty
+---
+
+```
+Running 10s test @ http://127.0.0.1:8000
+  2 threads and 200 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     8.99ms   21.16ms 516.58ms   94.00%
+    Req/Sec    21.24k    11.75k   45.90k    61.00%
+  424321 requests in 10.05s, 42.09MB read
+Requests/sec:  42238.90
+Transfer/sec:      4.19MB
+```
+JerseyJetty
+---
+
+```
+Running 10s test @ http://127.0.0.1:8000
+  2 threads and 200 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     7.56ms   28.40ms 457.55ms   96.51%
+    Req/Sec    36.31k    25.16k   84.63k    54.04%
+  716496 requests in 10.05s, 107.96MB read
+Requests/sec:  71306.70
+Transfer/sec:     10.74MB
+```
+
 
 rust-minihttp
 ---
