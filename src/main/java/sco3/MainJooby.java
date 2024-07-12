@@ -6,7 +6,7 @@ import static java.lang.System.out;
 import io.jooby.Jooby;
 import io.jooby.ServerOptions;
 
-public class JavaJooby extends Jooby {
+public class MainJooby extends Jooby {
 
 	{
 		ServerOptions opts = new ServerOptions().setPort(8000);
@@ -18,6 +18,6 @@ public class JavaJooby extends Jooby {
 		out.println("" //
 				+ getProperty("java.vendor.version") //
 		);
-		runApp(args, JavaJooby::new);
+		runApp(args, MainJooby::new);
 	}
 }
