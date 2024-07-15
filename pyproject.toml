@@ -8,6 +8,7 @@ authors = []
 python = "^3.11"
 fastwsgi = "^0.0.9"
 uvicorn = "^0.30.1"
+fastapi = "^0.111.1"
 
 
 [build-system]
