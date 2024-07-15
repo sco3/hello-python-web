@@ -2,7 +2,7 @@ import asyncio
 import websockets
 
 async def hello(websocket, path):
-    await websocket.send("Hello World!\n")
+    await websocket.send("Hello, world!\n")
 
 start_server = websockets.serve(hello, "localhost", 8081)
 

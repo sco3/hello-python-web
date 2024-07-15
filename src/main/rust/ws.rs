@@ -26,7 +26,7 @@ async fn handle_socket(ws: warp::ws::WebSocket) {
         match result {
             Ok(_msg) => {
                 //println!("Received message: {:?}", msg);
-                if tx.send(warp::ws::Message::text("Hello, World!")).await.is_err() {
+                if tx.send(warp::ws::Message::text("Hello, world!\n")).await.is_err() {
                     eprintln!("websocket send error");
                     return;
                 }
