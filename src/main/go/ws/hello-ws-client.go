@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -41,6 +42,14 @@ func handleConnection(count *int64, stats *Stats) {
 	}
 	end := time.Now() // Record time after receiving
 	rtt := end.Sub(start)
+	min_rtt := atomic.LoadInt64(&stats.min_rtt)
+	max_rtt := atomic.LoadInt64(&stats.max_rtt)
+	if min_rtt > int64(rtt) {
+		atomic.StoreInt64(&stats.min_rtt, rtt.Nanoseconds())
+	}
+	if max_rtt < int64(rtt) {
+		atomic.StoreInt64(&stats.max_rtt, rtt.Nanoseconds())
+	}
 
 	atomic.AddInt64(&stats.dur, int64(rtt.Nanoseconds()))
 	atomic.AddInt64(&stats.cnt, 1)
@@ -61,24 +70,29 @@ func openSomeConnections(id int, stats *Stats) {
 	}
 	for atomic.LoadInt64(&count) > 0 {
 		fmt.Printf("Thread: %v Count: %v\n", id, atomic.LoadInt64(&count))
-		time.Sleep(333 * time.Millisecond)
+		time.Sleep(100 * time.Millisecond)
 	}
 	fmt.Printf("Thread: %v Count: %v\n", id, atomic.LoadInt64(&count))
 }
 
 type Stats struct {
-	dur int64
-	cnt int64
-	snt int64
-	rcv int64
+	min_rtt int64
+	max_rtt int64
+	dur     int64
+	cnt     int64
+	snt     int64
+	rcv     int64
 }
 
 func main() {
+
 	stats := Stats{
-		dur: 0,
-		cnt: 0,
-		snt: 0,
-		rcv: 0,
+		min_rtt: math.MaxInt64,
+		max_rtt: math.MinInt64,
+		dur:     0,
+		cnt:     0,
+		snt:     0,
+		rcv:     0,
 	}
 
 	start := time.Now()
@@ -101,12 +115,17 @@ func main() {
 	}
 	wg.Wait()
 
-	avg := float64(stats.dur) / float64(stats.cnt) / 1000_000
+	avg_rtt := float64(stats.dur) / float64(stats.cnt) / 1000_000
+	min_rtt := float64(stats.min_rtt) / 1000_000.0
+	max_rtt := float64(stats.max_rtt) / 1000_000.0
 	//tsnt := float64(stats.snt) / float64(stats.dur) / 1024 / 1024
 	//trcv := float64(stats.rcv) / float64(stats.dur) / 1024 / 1024
-	thr := float64(stats.snt+stats.rcv) / float64(stats.dur/1000_000_000) / 1024 / 1024
-	fmt.Printf("Duration: %v expected bytes: %v\n", duration, int64(len(message))*stats.cnt)
-	fmt.Printf("Requests sent/received: %v Avg: %v ms bytes: %v/%v throughput: %v mb/s\n",
-		stats.cnt, avg, stats.snt, stats.rcv, thr,
+	thr := float64(stats.snt+stats.rcv) / float64(duration.Seconds()) / 1024 / 1024
+	fmt.Printf("Duration: %v s expected bytes: %v\n", duration.Seconds(), int64(len(message))*stats.cnt)
+	fmt.Printf("Requests sent/received: %v bytes: %v/%v throughput: %v mb/s\n",
+		stats.cnt, stats.snt, stats.rcv, thr,
+	)
+	fmt.Printf("RTT min: %v ms max: %v ms avg: %v ms\n",
+		min_rtt, max_rtt, avg_rtt,
 	)
 }
