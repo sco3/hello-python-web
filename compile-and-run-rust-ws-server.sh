@@ -1,2 +1,2 @@
-cargo build --release && target/release/rust-ws 
+cargo build --release && target/release/rust-ws
 
