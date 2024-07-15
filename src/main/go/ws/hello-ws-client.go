@@ -8,8 +8,8 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var addr = "ws://localhost:8081" // Change to your WebSocket server address
-var parallel = 200
+var addr = "ws://localhost:8081/ws" // Change to your WebSocket server address
+var parallel = 2
 var threads = 2
 
 // Function to handle a single WebSocket connection
@@ -87,10 +87,10 @@ func main() {
 		}
 	}
 
-	avg := float64(t_duration) / float64(t_requests)
+	avg := float64(t_duration) / float64(t_requests) / 1000_000
 	trhougput := float64(t_bytes) / float64(duration.Seconds()) / 1024 / 1024
 	fmt.Printf("Duration: %v\n", duration)
-	fmt.Printf("Requests sent/received: %v Avg: %v ns thoughput: %v",
+	fmt.Printf("Requests sent/received: %v Avg: %v ms thoughput: %v mb/s\n",
 		t_requests, avg, trhougput,
 	)
 }

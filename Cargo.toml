@@ -10,10 +10,18 @@ description = "cargo build --release"
 name="rust-minihttp"
 path = "src/main/rust/main.rs"
 
+[[bin]]
+name="rust-ws"
+path = "src/main/rust/ws.rs"
+
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 may_minihttp = "0.1"
+warp = "0.3"
+tokio = { version = "1", features = ["full"] }
+futures-util = "0.3"
 
 [profile.release]
 opt-level = 3
@@ -22,4 +30,7 @@ opt-level = 3
 [profile.dev]
 opt-level = 0
 debug = true
+
+
+
 
