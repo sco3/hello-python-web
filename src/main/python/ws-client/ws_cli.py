@@ -29,9 +29,9 @@ async def client():
             async with total_lock:
                 total+=1
             tasks.add(task)
-            task.add_done_callback(tasks.discard)
+            #task.add_done_callback(tasks.discard)
 
-        await asyncio.sleep(.0001)
+        await asyncio.sleep(.00001)
 
 
 async def main():
