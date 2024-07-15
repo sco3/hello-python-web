@@ -61,7 +61,7 @@ func openSomeConnections(id int, stats *Stats) {
 	}
 	for atomic.LoadInt64(&count) > 0 {
 		fmt.Printf("Thread: %v Count: %v\n", id, atomic.LoadInt64(&count))
-		time.Sleep(1000 * time.Millisecond)
+		time.Sleep(333 * time.Millisecond)
 	}
 	fmt.Printf("Thread: %v Count: %v\n", id, atomic.LoadInt64(&count))
 }
@@ -104,8 +104,9 @@ func main() {
 	avg := float64(stats.dur) / float64(stats.cnt) / 1000_000
 	//tsnt := float64(stats.snt) / float64(stats.dur) / 1024 / 1024
 	//trcv := float64(stats.rcv) / float64(stats.dur) / 1024 / 1024
-	fmt.Printf("Duration: %v\n", duration)
-	fmt.Printf("Requests sent/received: %v Avg: %v ms thoughput: %v/%v bytes expected: %v\n",
-		stats.cnt, avg, stats.snt, stats.rcv, int64(len(message))*stats.cnt,
+	thr := float64(stats.snt+stats.rcv) / float64(stats.dur/1000_000_000) / 1024 / 1024
+	fmt.Printf("Duration: %v expected bytes: %v\n", duration, int64(len(message))*stats.cnt)
+	fmt.Printf("Requests sent/received: %v Avg: %v ms bytes: %v/%v throughput: %v mb/s\n",
+		stats.cnt, avg, stats.snt, stats.rcv, thr,
 	)
 }
