@@ -14,7 +14,7 @@ import (
 func writeConfigFile(filename string, clientPort, clusterPort int, routes []string) error {
 
 	serverName := strings.TrimSuffix(filename, ".conf")
-	logFile := fmt.Sprintf("/tmp/nats/%s.log", serverName)
+	logFile := fmt.Sprintf("%s.log", serverName)
 
 	configContent := fmt.Sprintf(`
 port: %d
@@ -48,6 +48,7 @@ cluster {
 
 // Function to start a NATS server in a tmux session
 func startNatsServer(sessionName, configFile string) error {
+	fmt.Printf ("config: %s\n", configFile)
 	cmd := exec.Command("tmux", "new-session", "-d", "-s", sessionName, "nats-server", "-c", configFile)
 	return cmd.Run()
 }
