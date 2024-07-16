@@ -30,12 +30,12 @@ public class MainVertxWs extends AbstractVerticle {
 		// When a message is received
 		webSocket.textMessageHandler(message -> {
 			out.println("Received message: " + message);
-			webSocket.writeTextMessage("Hello, World!");
+			webSocket.writeTextMessage("Hello, world!\n");
 		});
 
 		// When the connection is closed
 		webSocket.closeHandler(v -> {
-			out.println("WebSocket connection closed");
+			// out.println("WebSocket connection closed");
 		});
 	}
 
