@@ -55,3 +55,9 @@ task vertx(type: JavaExec) {
     mainClass = "sco3.MainVertx"
 }
 
+task vertws(type: JavaExec) {
+    classpath sourceSets.main.runtimeClasspath
+    mainClass = "sco3.MainVertxWs"
+}
+
+
