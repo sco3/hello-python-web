@@ -10,7 +10,7 @@ async def ping_pong ():
     async with websockets.connect('ws://localhost:8081/ws') as websocket:
         await websocket.send('Hello, world!\n')
         response = await websocket.recv()
-        #print (f"{response}")
+        print (f"{response}")
 
 
 async def client():

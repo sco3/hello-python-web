@@ -13,7 +13,7 @@ app = FastAPI()
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     data = await websocket.receive_text()
-    print(f"Received message: {time.time_ns()} {data}")
+    #print(f"Received message: {time.time_ns()} {data}")
     await websocket.send_text("Hello, world!\n")
     await websocket.close()
 
