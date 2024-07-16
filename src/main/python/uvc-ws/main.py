@@ -4,6 +4,11 @@ from fastapi import FastAPI, WebSocket
 import uvicorn
 import logging
 import time
+import asyncio
+import uvloop
+
+asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+
 
 logging.basicConfig(level=logging.CRITICAL)
 
