@@ -24,11 +24,13 @@ async fn handle_socket(ws: warp::ws::WebSocket) {
 
     while let Some(result) = rx.next().await {
         match result {
-            Ok(_msg) => {
+            Ok(msg) => {
                 //println!("Received message: {:?}", msg);
-                if tx.send(warp::ws::Message::text("Hello, world!\n")).await.is_err() {
-                    eprintln!("websocket send error");
-                    return;
+                if !msg.is_close() {
+                    //println!("send");
+                    if tx.send(warp::ws::Message::text("Hello, world!\n")).await.is_err() {
+                        eprintln!("websocket send error");
+                    }
                 }
             }
             Err(e) => {
