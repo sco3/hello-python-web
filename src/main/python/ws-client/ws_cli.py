@@ -1,22 +1,58 @@
 #!/usr/bin/env -S poetry run python
 import asyncio
 import websockets
+import sys
 import time
 import concurrent.futures
 import uvloop
+from _asyncio import Task
 
 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 
+HELLO = "Hello, world!\n"
+HELLO_LEN = len(HELLO)
+
 total = 0
+recv = 0
+sent = 0
+rtt = 0
+min_rtt = sys.maxsize
+max_rtt = 0
 total_lock = asyncio.Lock()
 
 
 async def ping_pong():
+    global recv
+    global sent
+    global rtt
+    global min_rtt
+    global max_rtt
+
     async with websockets.connect("ws://localhost:8081/ws") as websocket:
-        await websocket.send("Hello, world!\n")
-        response = await websocket.recv()
-        # print (f"{response}")
+        start = time.time_ns()
+        if False:
+            await websocket.send(HELLO)
+            response = await websocket.recv()
+        else:
+            task = asyncio.create_task(websocket.recv())
+            await websocket.send(HELLO)
+            response = await task
+
+        end = time.time_ns()
+        async with total_lock:
+            recv += len(response)
+            sent += HELLO_LEN
+            cur_rtt = end - start
+            rtt += cur_rtt
+
+            if cur_rtt > max_rtt:
+                max_rtt = cur_rtt
+
+            if cur_rtt < min_rtt:
+                min_rtt = cur_rtt
+
+        # print (response)
 
 
 async def client():
@@ -49,4 +85,22 @@ async def main():
 
 
 asyncio.run(main())
-print("Total:", total)
+print(
+    "Total rounds:",
+    total,
+    "sent:",
+    sent,
+    "bytes recv:",
+    recv,
+    "bytes expected:",
+    total * HELLO_LEN,
+    "bytes \nAverage rtt:",
+    rtt / total / 1000_000,
+    "ms",
+    "min rtt:",
+    min_rtt / 1000_000,
+    "ms",
+    "max rtt:",
+    max_rtt / 1000_000,
+    "ms",
+)
