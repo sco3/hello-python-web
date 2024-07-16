@@ -1,5 +1,9 @@
 package sco3;
 
+import static java.lang.System.out;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import io.vertx.core.Vertx;
 import io.vertx.core.http.WebSocket;
 import io.vertx.core.http.WebSocketConnectOptions;
@@ -21,14 +25,17 @@ public class MainVertxWsClient {
 			if (webSocketAsyncResult.succeeded()) {
 				WebSocket webSocket = webSocketAsyncResult.result();
 				webSocket.textMessageHandler(message -> {
-					System.out.println("Received message: " + message);
+					out.println("Received message: " + message);
+					webSocket.close();
+					vertx.close();
 				});
 				webSocket.writeTextMessage("Hello, world!\n");
-				webSocket.exceptionHandler(Throwable::printStackTrace);
+				webSocket.exceptionHandler(e -> {
+					out.println(e.getMessage());
+				});
 			} else {
 				webSocketAsyncResult.cause().printStackTrace();
 			}
 		});
-
 	}
 }
