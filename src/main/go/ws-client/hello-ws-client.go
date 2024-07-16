@@ -25,7 +25,7 @@ func handleConnection(count *int64, stats *Stats) {
 		fmt.Printf("Error during connection: %v\n", err)
 		return
 	}
-	defer c.Close()
+	defer closeGracefully(c)
 	defer atomic.AddInt64(count, -1)
 
 	start := time.Now() // Record time before sending
@@ -57,6 +57,17 @@ func handleConnection(count *int64, stats *Stats) {
 	atomic.AddInt64(&stats.snt, int64(len(message)))
 }
 
+func closeGracefully(c *websocket.Conn) {
+	defer c.Close()
+	err := c.WriteMessage(
+		websocket.CloseMessage,
+		websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""),
+	)
+	if err != nil {
+		fmt.Printf("error sending close message: %v", err)
+	}
+}
+
 // Function to open 200 WebSocket connections
 func openSomeConnections(id int, stats *Stats) {
 	defer wg.Done()
@@ -70,7 +81,7 @@ func openSomeConnections(id int, stats *Stats) {
 	}
 	for atomic.LoadInt64(&count) > 0 {
 		fmt.Printf("Thread: %v Count: %v\n", id, atomic.LoadInt64(&count))
-		time.Sleep(100 * time.Millisecond)
+		time.Sleep(500 * time.Millisecond)
 	}
 	fmt.Printf("Thread: %v Count: %v\n", id, atomic.LoadInt64(&count))
 }
@@ -107,19 +118,18 @@ func main() {
 	for {
 		end = time.Now() // Record time after receiving
 		duration = end.Sub(start)
-		if duration > 10*time.Second {
+		if duration >= 10*time.Second {
 			atomic.AddInt64(&stop_flag, 1)
 			break
 		}
 		time.Sleep(time.Millisecond)
 	}
 	wg.Wait()
+	duration = end.Sub(start)
 
 	avg_rtt := float64(stats.dur) / float64(stats.cnt) / 1000_000
 	min_rtt := float64(stats.min_rtt) / 1000_000.0
 	max_rtt := float64(stats.max_rtt) / 1000_000.0
-	//tsnt := float64(stats.snt) / float64(stats.dur) / 1024 / 1024
-	//trcv := float64(stats.rcv) / float64(stats.dur) / 1024 / 1024
 	thr := float64(stats.snt+stats.rcv) / float64(duration.Seconds()) / 1024 / 1024
 	fmt.Printf("Duration: %v s expected bytes: %v\n", duration.Seconds(), int64(len(message))*stats.cnt)
 	fmt.Printf("Requests sent/received: %v bytes: %v/%v throughput: %v mb/s\n",

@@ -1,9 +1,10 @@
 
 
+mkdir -p target
+
 out=$(readlink -f target/hello-ws-client)
 
 rm -rf out
-
 
 cd src/main/go/ws-client/
 
