@@ -19,7 +19,8 @@ server_name: %s
 
 log_file: "%s"
 debug: false
-trace: true
+trace: false
+logfile_size_limit: 100MB
 
 accounts: {
   SYSDBA: {
