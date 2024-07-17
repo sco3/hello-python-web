@@ -2,12 +2,10 @@
 
 import asyncio
 import time
-import uvloop
 
 from nats.aio.client import Client as NATS
-from nats_common import NatsCommon
 
-asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+from nats_common import NatsCommon
 
 
 async def main():

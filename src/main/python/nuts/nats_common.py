@@ -1,4 +1,5 @@
 import asyncio
+import uvloop
 from typing import ClassVar
 
 
@@ -53,3 +54,6 @@ class NatsCommon:
             print(f"Error: {e}")
 
         return result
+
+
+asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())

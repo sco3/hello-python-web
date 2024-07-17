@@ -11,13 +11,9 @@ import uuid
 
 from nats.aio.client import Client as NatsClient
 from pkg_resources._vendor.importlib_resources._common import Anchor
-import uvloop
 import websockets
 
 from nats_common import NatsCommon
-
-
-asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 
 async def call(anc: Union[NatsClient, None] = None) -> None:
@@ -73,8 +69,9 @@ async def round(anc: Union[NatsClient, None] = None) -> None:
 
     mb = NatsCommon.traffic / 1024 / 1024
     expected = 2 * NatsCommon.calls * NatsCommon.HELLO_LEN
+    calls_sec = NatsCommon.calls / duration
     print(
-        f"Calls: {NatsCommon.calls} in {duration} s"
+        f"Calls: {NatsCommon.calls} in {duration} s {calls_sec} calls/s "
         "\n"
         f"Bytes: {NatsCommon.traffic} / {expected} bytes "
         "\n"
