@@ -51,8 +51,15 @@ func startNatsServer(sessionName, configFile string, logFile string) error {
 }
 
 func main() {
+	var err error
+
+	err = exec.Command("pgrep", "-x", "nats-server").Run()
+	if err == nil {
+		fmt.Println("NATS server is already running")
+		os.Exit(0)
+	}
+
 	numServers := 3
-	var err error = nil
 	if len(os.Args) > 1 {
 		numServers, err = strconv.Atoi(os.Args[1])
 		if err != nil {
