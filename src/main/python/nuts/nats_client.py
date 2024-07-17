@@ -1,16 +1,21 @@
 #!/usr/bin/env -S poetry run python
 import asyncio
-import websockets
+import cProfile
+import concurrent.futures
+import io
+import pstats
 import sys
 import time
-import concurrent.futures
-import uvloop
+from typing import Union
 import uuid
-from nats_common import NatsCommon
 
 from nats.aio.client import Client as NatsClient
-from typing import Union
 from pkg_resources._vendor.importlib_resources._common import Anchor
+import uvloop
+import websockets
+
+from nats_common import NatsCommon
+
 
 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
@@ -65,7 +70,7 @@ async def round(anc: Union[NatsClient, None] = None) -> None:
     end: int = start + 10 * 1_000_000_000  # 10 seconds
 
     while time.time_ns() < end:
-        await call()
+        await call(anc)
 
     duration = (time.time_ns() - start) / 1_000_000_000
 
@@ -83,7 +88,7 @@ async def round(anc: Union[NatsClient, None] = None) -> None:
     )
 
 
-async def main() -> None:
+async def two_rounds() -> None:
     await round()
     NatsCommon.reset_stats()
     nc: NatsClient = NatsClient()
@@ -92,6 +97,27 @@ async def main() -> None:
     await nc.close()
 
 
-if __name__ == "__main__":
+def main() -> None:
+    asyncio.run(two_rounds())
+
+
+def prof():
+    profiler = cProfile.Profile()
+    profiler.enable()
     print("Nats client")
-    asyncio.run(main())
+    main()
+    profiler.disable()
+
+    s = io.StringIO()
+
+    # Create a Stats object and print the profiling results to the buffer
+    sortby = "cumulative"
+    ps = pstats.Stats(profiler, stream=s).sort_stats(sortby)
+    ps.print_stats()
+
+    # Print the profiling results
+    print(s.getvalue())
+
+
+if __name__ == "__main__":
+    main()
