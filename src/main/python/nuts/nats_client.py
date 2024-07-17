@@ -28,10 +28,7 @@ async def call(anc: Union[NatsClient, None] = None) -> None:
     else:
         nc: NatsClient = NatsClient()
 
-    if not anc:
-        result = await NatsCommon.connect(nc)
-
-    if anc or result:
+    if anc or await NatsCommon.connect(nc):
         id = uuid.uuid4()
 
         ready = asyncio.Event()
@@ -83,13 +80,17 @@ async def round(anc: Union[NatsClient, None] = None) -> None:
         "\n"
         f"Throughput: {mb/duration} mb/s "
         "\n"
-        f"Avg Full RTT: {NatsCommon.duration/NatsCommon.calls} "
+        f"Avg Full RTT: {NatsCommon.duration/NatsCommon.calls} ms "
         f"Avg Call RTT: {NatsCommon.call_duration/NatsCommon.calls} ms "
     )
 
 
 async def two_rounds() -> None:
+    print("\n" "First round with separate connections" "\n")
     await round()
+
+    print("\n" "Second round with single connection" "\n")
+
     NatsCommon.reset_stats()
     nc: NatsClient = NatsClient()
     await NatsCommon.connect(nc)

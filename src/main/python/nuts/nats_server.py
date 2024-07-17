@@ -15,19 +15,23 @@ async def main():
     if await NatsCommon.connect(nc):
 
         async def message_handler(msg):
-            #print(f"Received message: {msg.subject} {msg.data.decode()}")
+            # print(f"Received message: {msg.subject} {msg.data.decode()}")
             subject = msg.subject
             uuid = subject[NatsCommon.REQ_PREFIX_LEN :]
             res_sub = NatsCommon.RES_SUBJECT.format(uuid)
-            #print(f"Send {NatsCommon.HELLO_STR} to {res_sub}")
+            # print(f"Send {NatsCommon.HELLO_STR} to {res_sub}")
             await nc.publish(res_sub, NatsCommon.HELLO)
 
         await nc.subscribe(NatsCommon.REQ_ALL, cb=message_handler)
         await nc.flush()
-        while True:
-            await asyncio.sleep(1)
+
+        await asyncio.Event().wait()
+
+
+#        while True:
+#            await asyncio.sleep(1)
 
 
 if __name__ == "__main__":
-    
+
     asyncio.run(main())
