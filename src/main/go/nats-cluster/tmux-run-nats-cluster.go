@@ -11,10 +11,7 @@ import (
 )
 
 // Function to write a NATS configuration file
-func writeConfigFile(filename string, clientPort, clusterPort int, routes []string) error {
-
-	serverName := strings.TrimSuffix(filename, ".conf")
-	logFile := fmt.Sprintf("%s.log", serverName)
+func writeConfigFile(serverName string, filename string, logFile string, clientPort, clusterPort int, routes []string) error {
 
 	configContent := fmt.Sprintf(`
 port: %d
@@ -47,8 +44,8 @@ cluster {
 }
 
 // Function to start a NATS server in a tmux session
-func startNatsServer(sessionName, configFile string) error {
-	fmt.Printf ("config: %s\n", configFile)
+func startNatsServer(sessionName, configFile string, logFile string) error {
+	fmt.Printf("config: %s log: %s\n", configFile, logFile)
 	cmd := exec.Command("tmux", "new-session", "-d", "-s", sessionName, "nats-server", "-c", configFile)
 	return cmd.Run()
 }
@@ -63,8 +60,8 @@ func main() {
 			return
 		}
 	}
-
-	err = os.Mkdir("/tmp/nats", 0755) // 0755 is the permission mode for the directory
+	dir := "/tmp/nats"
+	err = os.Mkdir(dir, 0755) // 0755 is the permission mode for the directory
 	if err != nil {
 		fmt.Printf("Directory: %v\n", err)
 	}
@@ -76,7 +73,9 @@ func main() {
 	for i := 0; i < numServers; i++ {
 		clientPort := baseClientPort + i
 		clusterPort := baseClusterPort + i
-		configFilename := fmt.Sprintf("/tmp/nats/nats%d.conf", i)
+		serverName := fmt.Sprintf("nats%d", i)
+		configFilename := fmt.Sprintf("%s/%s.conf", dir, serverName)
+		logFile := fmt.Sprintf("%s/%s.log", dir, serverName)
 
 		// Generate routes for the cluster configuration
 		var routes []string
@@ -86,13 +85,13 @@ func main() {
 			}
 		}
 
-		if err := writeConfigFile(configFilename, clientPort, clusterPort, routes); err != nil {
+		if err := writeConfigFile(serverName, configFilename, logFile, clientPort, clusterPort, routes); err != nil {
 			fmt.Printf("Failed to write configuration file: %s\n", configFilename)
 			continue
 		}
 
 		sessionName := fmt.Sprintf("nats%d", i)
-		if err := startNatsServer(sessionName, configFilename); err != nil {
+		if err := startNatsServer(sessionName, configFilename, logFile); err != nil {
 			fmt.Printf("Failed to start NATS server in tmux session: %s\n", sessionName)
 			continue
 		}
