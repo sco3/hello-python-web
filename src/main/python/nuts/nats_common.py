@@ -1,8 +1,9 @@
+import asyncio
 from typing import ClassVar
 
 
 class NatsCommon:
-    HELLO_STR: ClassVar[bytes] = "Hello, world!\n"
+    HELLO_STR: ClassVar[str] = "Hello, world!\n"
     HELLO: ClassVar[bytes] = HELLO_STR.encode("UTF-8")
     HELLO_LEN: ClassVar[int] = len(HELLO)
 
@@ -24,6 +25,20 @@ class NatsCommon:
     RES_PREFIX_LEN: ClassVar[int] = len(RES_PREFIX)
     RES_SUBJECT: ClassVar[str] = f"{RES_PREFIX}" + "{}"
 
+    lock: asyncio.Lock = asyncio.Lock()
+
+    calls: ClassVar[int] = 0
+    traffic: ClassVar[int] = 0
+    duration: ClassVar[int] = 0
+    call_duration: ClassVar[int] = 0
+
+    @staticmethod
+    def reset_stats() -> None:
+        NatsCommon.calls = 0
+        NatsCommon.traffic = 0
+        NatsCommon.duration = 0
+        NatsCommon.call_duration = 0
+
     @staticmethod
     async def connect(nc) -> bool:
         result: bool = False
@@ -34,7 +49,7 @@ class NatsCommon:
                 password=NatsCommon.PASS,
             )
             result = True
-        except ErrNoServers as e:
+        except RuntimeError as e:
             print(f"Error: {e}")
 
         return result
