@@ -15,7 +15,6 @@ import websockets
 
 from nats_common import NatsCommon
 
-
 async def call(anc: Union[NatsClient, None] = None) -> None:
     start: int = time.time_ns()
 
@@ -25,7 +24,7 @@ async def call(anc: Union[NatsClient, None] = None) -> None:
         nc: NatsClient = NatsClient()
 
     if anc or await NatsCommon.connect(nc):
-        id = "1" # uuid.uuid4()
+        id = uuid.uuid4()
 
         ready = asyncio.Event()
 
@@ -39,11 +38,11 @@ async def call(anc: Union[NatsClient, None] = None) -> None:
             ready.set()
 
         req_sub = NatsCommon.REQ_SUBJECT.format(id)
-        res_sub = NatsCommon.RES_SUBJECT.format(id)
+        res_sub = req_sub
 
         await nc.subscribe(res_sub, cb=response)
         call_start = time.time_ns()
-        await nc.publish(req_sub, NatsCommon.HELLO)
+        await nc.publish(req_sub, NatsCommon.HELLO, reply=res_sub)
         await ready.wait()
 
         duration = (time.time_ns() - start) / 1_000_000
