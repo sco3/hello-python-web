@@ -13,13 +13,13 @@ async fn main() -> Result<(), async_nats::Error> {
     let client = async_nats::connect_with_options("localhost:4222", conn_opts).await?;
 
     // Subscribe to the "messages" subject
-    let mut subscriber = client.subscribe("messages").await?;
+    let mut subscriber = client.subscribe("req.*").await?;
 
     // Receive and process messages
     while let Some(message) = subscriber.next().await {
-        println!("Received message {:?}", message);
+        //println!("Received message {:?}", message);
         if let Some(subj) = message.reply {
-            println!("reply subj: {}", subj);
+            //println!("reply subj: {}", subj);
             client.publish(subj, "Hello, world!\n".into()).await?;
         }
     }

@@ -8,5 +8,5 @@ echo $server
 echo ---
 echo ''
 echo '```'
-wrk http://127.0.0.1:8000 -d 10 -t 1 -c 1 -H "Hello, world\n"
+wrk http://127.0.0.1:8000 -d 10 -t 2 -c 200
 echo '```'

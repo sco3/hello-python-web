@@ -1,3 +1,5 @@
+///usr/bin/true; exec /usr/bin/env go run "$0" "$@"
+
 package main
 
 import (
@@ -9,6 +11,7 @@ import (
 const hello string = "Hello, world!\n"
 
 func main() {
+
 	var hello_bytes []byte = []byte(hello)
 	opts := nats.Options{
 		Servers: []string{
@@ -25,14 +28,16 @@ func main() {
 	}
 	defer nc.Close()
 
-	nc.Subscribe("req.*", func(m *nats.Msg) {
+	subj := "req.*"
+
+	nc.Subscribe(subj, func(m *nats.Msg) {
 		//nc.Publish("res."+m.Subject[4:], hello_bytes)
 		m.Respond(hello_bytes)
 		if err != nil {
 			log.Printf("Failed to respond to message: %v", err)
 		}
 	})
-
+	println("listening:", subj)
 	// Keep the connection alive
 	select {}
 }
