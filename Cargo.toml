@@ -11,6 +11,10 @@ name="rust-minihttp"
 path = "src/main/rust/main.rs"
 
 [[bin]]
+name="rust-nats-server"
+path = "src/main/rust/nats-server.rs"
+
+[[bin]]
 name="rust-ws"
 path = "src/main/rust/ws.rs"
 
@@ -28,6 +32,9 @@ tokio = { version = "1", features = ["full"] }
 futures-util = "0.3"
 ws2 = "0.2.5"
 log2 = "0.1.11"
+async-nats = "0.35.1"
+bytes = "1.6.1"
+futures = "0.3.30"
 
 [profile.release]
 opt-level = 3
