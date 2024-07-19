@@ -7,11 +7,58 @@ import (
 	"log"
 	"time"
 
+	"sync"
+	"sync/atomic"
+
 	"github.com/google/uuid"
 	"github.com/nats-io/nats.go"
 )
 
-func main() {
+type Stats struct {
+	Count int64
+	Bytes int64
+
+	group     sync.WaitGroup
+	groupSize int32
+	GroupStop bool
+}
+
+func (s *Stats) IncCount() {
+	atomic.AddInt64(&s.Count, 1)
+}
+func (s *Stats) IncBytes(b int64) {
+	atomic.AddInt64(&s.Bytes, b)
+}
+func (s *Stats) Add(i int32) {
+	s.group.Add(int(i))
+	atomic.AddInt32(&s.groupSize, i)
+}
+func (s *Stats) Done() {
+	s.group.Done()
+	atomic.AddInt32(&s.groupSize, -1)
+}
+func (s *Stats) Wait() {
+	s.group.Wait()
+}
+func (s *Stats) GroupSize() int32 {
+	return atomic.LoadInt32(&s.groupSize)
+}
+
+func call(nc *nats.Conn, stats *Stats) {
+	defer stats.Done()
+	hello := []byte("Hello, world!\n")
+	id := uuid.New().String()
+	reqSubj := "req." + id
+	resp, err := nc.Request(reqSubj, hello, 4*time.Second)
+	if err != nil {
+		log.Fatal(err)
+	} else {
+		stats.IncBytes(int64(len(resp.Data) + len(hello)))
+		stats.IncCount()
+	}
+}
+
+func BenchmarkConnection(stats *Stats, limit int32) {
 	opts := nats.Options{
 		Servers: []string{
 			"nats://127.0.0.1:4222",
@@ -29,36 +76,35 @@ func main() {
 	}
 	defer nc.Close()
 
-	hello := []byte("Hello, world!\n")
-	// Start time for the program
-	startTime := time.Now()
-	traffic := 0
-	count := 0
-
-	for {
-		// Check if 10 seconds have passed
-		if time.Since(startTime) > 10*time.Second {
-			break
-		}
-
-		id := uuid.New().String()
-		reqSubj := "req." + id
-
-		// Create a channel to signal message reception
-
-		resp, err := nc.Request(reqSubj, hello, 4*time.Second)
-		if err != nil {
-			log.Fatal(err)
-		} else {
-			traffic += len(resp.Data) + len(hello)
-			count++
+	for !stats.GroupStop {
+		if stats.GroupSize() < limit {
+			stats.Add(1)
+			call(nc, stats)
 		}
 	}
+
+}
+
+func main() {
+	var stats Stats = Stats{
+		Count: 0,
+		Bytes: 0,
+	}
+
+	// Start time for the program
+	startTime := time.Now()
+
+	go BenchmarkConnection(&stats, 200)
+
+	time.Sleep(10 * time.Second)
+	stats.GroupStop = true
+	stats.Wait()
+
 	endTime := time.Now()
 	dur := endTime.Sub(startTime)
-	fmt.Printf("Time taken: %.3f\n", dur.Seconds())
-	fmt.Printf("Requests: %v %.3f r/s\n", count, float64(count)/dur.Seconds())
-	mbs := (float64(traffic) / (1024 * 1024)) / dur.Seconds()
-	expected := count * 2 * len("Hello, world!\n")
-	fmt.Printf("Traffic: %v/%v bytes %.3f mb/s\n", traffic, expected, mbs)
+	fmt.Printf("Time taken: %.3f seconds\n", dur.Seconds())
+	fmt.Printf("Requests: %v %.3f r/s\n", stats.Count, float64(stats.Count)/dur.Seconds())
+	mbs := (float64(stats.Bytes) / (1024 * 1024)) / dur.Seconds()
+	expected := stats.Count * int64(2*len("Hello, world!\n"))
+	fmt.Printf("Throughput: %v/%v bytes %.3f mb/s\n", stats.Bytes, expected, mbs)
 }
