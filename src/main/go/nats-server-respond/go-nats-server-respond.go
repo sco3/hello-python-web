@@ -31,7 +31,6 @@ func main() {
 	subj := "req.*"
 
 	nc.Subscribe(subj, func(m *nats.Msg) {
-		//nc.Publish("res."+m.Subject[4:], hello_bytes)
 		m.Respond(hello_bytes)
 		if err != nil {
 			log.Printf("Failed to respond to message: %v", err)

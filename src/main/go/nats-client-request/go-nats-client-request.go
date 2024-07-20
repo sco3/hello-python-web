@@ -12,6 +12,8 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/nats-io/nats.go"
+	"os"
+	"strconv"
 )
 
 type Stats struct {
@@ -86,6 +88,16 @@ func BenchmarkConnection(stats *Stats, limit int32) {
 }
 
 func main() {
+	conns := 1
+	if len(os.Args) > 1 {
+	    conns,_ = strconv.Atoi(os.Args[1])
+	}
+	pubs :=1 
+	if len (os.Args) > 2 {
+	    pubs,_  =strconv.Atoi(os.Args[2])
+	}
+	
+	fmt.Printf ("Connections*Publishers: %v * %v = %v \n ", conns, pubs, conns*pubs)
 	var stats Stats = Stats{
 		Count: 0,
 		Bytes: 0,
@@ -93,8 +105,9 @@ func main() {
 
 	// Start time for the program
 	startTime := time.Now()
-
-	go BenchmarkConnection(&stats, 200)
+	for i := 0; i < conns; i++ {
+	    go BenchmarkConnection(&stats, 400)
+	}
 
 	time.Sleep(10 * time.Second)
 	stats.GroupStop = true

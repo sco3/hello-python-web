@@ -34,7 +34,7 @@ async def call(anc: Union[NatsClient, None] = None) -> None:
 
         async with NatsCommon.lock:
             NatsCommon.calls += 1
-            NatsCommon.traffic += NatsCommon.HELLO_LEN
+            NatsCommon.traffic += len(result.data)+NatsCommon.HELLO_LEN
             NatsCommon.duration += duration
             NatsCommon.call_duration += call_duration
     if not anc:
