@@ -3,12 +3,39 @@
 package main
 
 import (
-	"log"
-
+	"fmt"
 	"github.com/nats-io/nats.go"
+	"log"
+	"sync/atomic"
+	"time"
 )
 
 const hello string = "Hello, world!\n"
+const delay int64 = 12 * int64(time.Second/time.Nanosecond)
+
+func print_stats(first_ref *int64, last_ref *int64, byte_count_ref *int64) {
+	for {
+		first := atomic.LoadInt64(first_ref)
+		if first > 0 {
+			now := int64(time.Now().UTC().UnixNano())
+			passed_ns := now - first
+			var old_byte_count int64 = atomic.LoadInt64(byte_count_ref)
+			if (passed_ns > delay) && (old_byte_count > 0) {
+				last := atomic.SwapInt64(last_ref, 0)
+				atomic.StoreInt64(last_ref, 0)
+				atomic.StoreInt64(first_ref, 0)
+				old_byte_count = atomic.SwapInt64(byte_count_ref, 0)
+				dur := float64((last-first)*int64(time.Nanosecond)) / float64(time.Second)
+				fmt.Printf("Duration: %v s bytes: %v throughput: %v mb/s\n",
+					dur, old_byte_count,
+					float64(old_byte_count)/1024/1024/float64(dur),
+				)
+			}
+		}
+		time.Sleep(1 * time.Second)
+	}
+
+}
 
 func main() {
 
@@ -30,13 +57,24 @@ func main() {
 
 	subj := "req.*"
 
+	var first int64 = int64(0)
+	var last int64 = int64(0)
+	var byte_count int64 = int64(0)
+
 	nc.Subscribe(subj, func(m *nats.Msg) {
+		now := int64(time.Now().UTC().UnixNano())
+		if atomic.LoadInt64(&first) == 0 {
+			atomic.StoreInt64(&first, now)
+		}
+		atomic.StoreInt64(&last, now)
+		atomic.AddInt64(&byte_count, int64(m.Size()))
 		m.Respond(hello_bytes)
 		if err != nil {
 			log.Printf("Failed to respond to message: %v", err)
 		}
 	})
 	println("listening:", subj)
+	go print_stats(&first, &last, &byte_count)
 	// Keep the connection alive
 	select {}
 }

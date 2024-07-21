@@ -11,7 +11,7 @@ import (
 )
 
 // Function to write a NATS configuration file
-func writeConfigFile(serverName string, filename string, logFile string, clientPort, clusterPort int, routes []string) error {
+func writeConfigFile(serverName string, filename string, logFile string, clientPort int, clusterPort int, httpPort int,  routes []string) error {
 
 	configContent := fmt.Sprintf(`
 port: %d
@@ -21,6 +21,8 @@ log_file: "%s"
 debug: false
 trace: false
 logfile_size_limit: 100MB
+http: localhost:%d
+http_port: %d
 
 accounts: {
   SYSDBA: {
@@ -39,7 +41,7 @@ cluster {
     %s
   ]
 }
-`, clientPort, serverName, logFile, clusterPort, strings.Join(routes, "\n    "))
+`, clientPort, serverName, logFile, httpPort, httpPort, clusterPort, strings.Join(routes, "\n    "))
 	return os.WriteFile(filename, []byte(configContent), 0644)
 
 }
@@ -77,10 +79,12 @@ func main() {
 	// Base ports for the servers
 	baseClientPort := 4222
 	baseClusterPort := 6222
+	baseHttpPort := 8222
 
 	for i := 0; i < numServers; i++ {
 		clientPort := baseClientPort + i
 		clusterPort := baseClusterPort + i
+		httpPort := baseHttpPort + i
 		serverName := fmt.Sprintf("nats%d", i)
 		configFilename := fmt.Sprintf("%s/%s.conf", dir, serverName)
 		logFile := fmt.Sprintf("%s/%s.log", dir, serverName)
@@ -93,7 +97,7 @@ func main() {
 			}
 		}
 
-		if err := writeConfigFile(serverName, configFilename, logFile, clientPort, clusterPort, routes); err != nil {
+		if err := writeConfigFile(serverName, configFilename, logFile, clientPort, clusterPort, httpPort, routes); err != nil {
 			fmt.Printf("Failed to write configuration file: %s\n", configFilename)
 			continue
 		}
