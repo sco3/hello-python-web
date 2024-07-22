@@ -10,14 +10,16 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/google/uuid"
-	"github.com/nats-io/nats.go"
 	"os"
 	"strconv"
+
+	"github.com/google/uuid"
+	"github.com/nats-io/nats.go"
 )
 
 type Stats struct {
 	Count      int64
+	Rtt        int64
 	Bytes      int64
 	TotalBytes int64
 
@@ -28,6 +30,9 @@ type Stats struct {
 
 func (s *Stats) IncCount() {
 	atomic.AddInt64(&s.Count, 1)
+}
+func (s *Stats) IncRtt(rtt int) {
+	atomic.AddInt64(&s.Rtt, int64(rtt))
 }
 func (s *Stats) IncBytes(b int64) {
 	atomic.AddInt64(&s.Bytes, b)
@@ -55,10 +60,13 @@ func call(nc *nats.Conn, stats *Stats) {
 	hello := []byte("Hello, world!\n")
 	id := uuid.New().String()
 	reqSubj := "req." + id
+	start := time.Now().UnixNano()
 	resp, err := nc.Request(reqSubj, hello, 4*time.Second)
 	if err != nil {
 		log.Fatal(err)
 	} else {
+		rtt := time.Now().UnixNano() - start
+		stats.IncRtt(int(rtt))
 		stats.IncBytes(int64(len(resp.Data) + len(hello)))
 		stats.IncTotalBytes(int64(resp.Size()))
 		stats.IncCount()
@@ -122,6 +130,7 @@ func main() {
 	dur := endTime.Sub(startTime)
 	fmt.Printf("Time taken: %.3f seconds\n", dur.Seconds())
 	fmt.Printf("Requests: %v %.3f r/s\n", stats.Count, float64(stats.Count)/dur.Seconds())
+	fmt.Printf("Avg rtt: %.3f ms\n", float64(stats.Rtt)/float64(stats.Count)/1000000)
 	mbs := (float64(stats.Bytes) / (1024 * 1024)) / dur.Seconds()
 	expected := stats.Count * int64(2*len("Hello, world!\n"))
 	fmt.Printf("Payload throughput: %v/%v bytes %.3f mb/s\n", stats.Bytes, expected, mbs)
