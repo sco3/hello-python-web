@@ -1,4 +1,4 @@
-module go-nats-client-request
+module go-nats-client-rr
 
 go 1.21.10
 

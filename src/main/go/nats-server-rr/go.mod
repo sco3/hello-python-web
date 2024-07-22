@@ -1,4 +1,4 @@
-module go-nats-server-respond
+module go-nats-server-rr
 
 go 1.21.10
 
