@@ -17,11 +17,13 @@ async fn main() -> Result<(), async_nats::Error> {
 
     // Receive and process messages
     while let Some(message) = subscriber.next().await {
+
+        //message.reply("Hello, world!\n".into());
         //println!("Received message {:?}", message);
-        if let Some(subj) = message.reply {
-            //println!("reply subj: {}", subj);
-            client.publish(subj, "Hello, world!\n".into()).await?;
-        }
+        // if let Some(subj) = message.reply {
+        //     //println!("reply subj: {}", subj);
+        //     client.publish(subj, "Hello, world!\n".into()).await?;
+        // }
     }
 
     println!("done");

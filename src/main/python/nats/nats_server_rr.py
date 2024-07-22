@@ -13,7 +13,6 @@ async def main():
         async def message_handler(msg):
             # print(f"Received message: {msg.subject} {msg.data.decode()} Send {NatsCommon.HELLO} to {msg.reply}")
             await msg.respond(NatsCommon.HELLO)
-            msg.ack()
 
         await nc.subscribe(NatsCommon.REQ_ALL, cb=message_handler)
 
