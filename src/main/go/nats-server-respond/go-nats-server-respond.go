@@ -13,7 +13,7 @@ import (
 const hello string = "Hello, world!\n"
 const delay int64 = 12 * int64(time.Second/time.Nanosecond)
 
-func print_stats(first_ref *int64, last_ref *int64, byte_count_ref *int64) {
+func print_stats(count_ref *int64, first_ref *int64, last_ref *int64, byte_count_ref *int64) {
 	for {
 		first := atomic.LoadInt64(first_ref)
 		if first > 0 {
@@ -26,8 +26,9 @@ func print_stats(first_ref *int64, last_ref *int64, byte_count_ref *int64) {
 				atomic.StoreInt64(first_ref, 0)
 				old_byte_count = atomic.SwapInt64(byte_count_ref, 0)
 				dur := float64((last-first)*int64(time.Nanosecond)) / float64(time.Second)
-				fmt.Printf("Duration: %v s bytes: %v throughput: %v mb/s\n",
-					dur, old_byte_count,
+				count := atomic.SwapInt64(count_ref, 0)
+				fmt.Printf("Duration: %v s requests: %v bytes: %v throughput: %v mb/s\n",
+					dur, count, old_byte_count,
 					float64(old_byte_count)/1024/1024/float64(dur),
 				)
 			}
@@ -60,8 +61,10 @@ func main() {
 	var first int64 = int64(0)
 	var last int64 = int64(0)
 	var byte_count int64 = int64(0)
+	var count int64 = int64(0)
 
-	nc.Subscribe(subj, func(m *nats.Msg) {
+	nc.QueueSubscribe(subj, "worker", func(m *nats.Msg) {
+		atomic.AddInt64(&count, 1)
 		now := int64(time.Now().UTC().UnixNano())
 		if atomic.LoadInt64(&first) == 0 {
 			atomic.StoreInt64(&first, now)
@@ -74,7 +77,7 @@ func main() {
 		}
 	})
 	println("listening:", subj)
-	go print_stats(&first, &last, &byte_count)
+	go print_stats(&count, &first, &last, &byte_count)
 	// Keep the connection alive
 	select {}
 }

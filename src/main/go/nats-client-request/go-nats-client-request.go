@@ -17,8 +17,9 @@ import (
 )
 
 type Stats struct {
-	Count int64
-	Bytes int64
+	Count      int64
+	Bytes      int64
+	TotalBytes int64
 
 	group     sync.WaitGroup
 	groupSize int32
@@ -45,6 +46,9 @@ func (s *Stats) Wait() {
 func (s *Stats) GroupSize() int32 {
 	return atomic.LoadInt32(&s.groupSize)
 }
+func (s *Stats) IncTotalBytes(b int64) {
+	atomic.AddInt64(&s.TotalBytes, b)
+}
 
 func call(nc *nats.Conn, stats *Stats) {
 	defer stats.Done()
@@ -56,6 +60,7 @@ func call(nc *nats.Conn, stats *Stats) {
 		log.Fatal(err)
 	} else {
 		stats.IncBytes(int64(len(resp.Data) + len(hello)))
+		stats.IncTotalBytes(int64(resp.Size()))
 		stats.IncCount()
 	}
 }
@@ -90,14 +95,14 @@ func BenchmarkConnection(stats *Stats, limit int32) {
 func main() {
 	conns := 1
 	if len(os.Args) > 1 {
-	    conns,_ = strconv.Atoi(os.Args[1])
+		conns, _ = strconv.Atoi(os.Args[1])
 	}
-	pubs :=1 
-	if len (os.Args) > 2 {
-	    pubs,_  =strconv.Atoi(os.Args[2])
+	pubs := 1
+	if len(os.Args) > 2 {
+		pubs, _ = strconv.Atoi(os.Args[2])
 	}
-	
-	fmt.Printf ("Connections*Publishers: %v * %v = %v \n ", conns, pubs, conns*pubs)
+
+	fmt.Printf("Connections*Publishers: %v * %v = %v \n ", conns, pubs, conns*pubs)
 	var stats Stats = Stats{
 		Count: 0,
 		Bytes: 0,
@@ -106,7 +111,7 @@ func main() {
 	// Start time for the program
 	startTime := time.Now()
 	for i := 0; i < conns; i++ {
-	    go BenchmarkConnection(&stats, 400)
+		go BenchmarkConnection(&stats, 400)
 	}
 
 	time.Sleep(10 * time.Second)
@@ -119,5 +124,7 @@ func main() {
 	fmt.Printf("Requests: %v %.3f r/s\n", stats.Count, float64(stats.Count)/dur.Seconds())
 	mbs := (float64(stats.Bytes) / (1024 * 1024)) / dur.Seconds()
 	expected := stats.Count * int64(2*len("Hello, world!\n"))
-	fmt.Printf("Throughput: %v/%v bytes %.3f mb/s\n", stats.Bytes, expected, mbs)
+	fmt.Printf("Payload throughput: %v/%v bytes %.3f mb/s\n", stats.Bytes, expected, mbs)
+	mbs = (float64(stats.TotalBytes) / (1024 * 1024)) / dur.Seconds()
+	fmt.Printf("Received throughput: %v bytes %.3f mb/s\n", stats.TotalBytes, mbs)
 }
