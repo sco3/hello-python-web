@@ -17,6 +17,7 @@ public class NatsSquareService implements NatsSquare {
 			buffer.put(0, inBytes, 0, ILEN);
 			int in = buffer.getInt(0);
 			int out = in * in;
+			// System.out.println(in);
 			buffer.putInt(0, out);
 			buffer.get(0, inBytes, 0, ILEN);
 			nc.publish(msg.getReplyTo(), inBytes);
