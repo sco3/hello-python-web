@@ -86,9 +86,8 @@ public class NatsSquareClientReactor implements NatsSquare {
 			svc.execute(new Runnable() {
 				@Override
 				public void run() {
-					long l = 0;
 					try {
-						l = call(nc);
+						call(nc);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
