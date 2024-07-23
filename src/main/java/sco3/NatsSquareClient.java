@@ -31,7 +31,7 @@ public class NatsSquareClient implements NatsSquare {
 			System.out.println(i2);
 		}
 		long finish = System.currentTimeMillis();
-		System.out.println("Time: " + (finish - start) + " ms");
+		System.out.println("T i m e: " + (finish - start) + " ms");
 	}
 
 	public static void main(String[] args) throws Exception {
