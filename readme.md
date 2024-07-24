@@ -68,6 +68,20 @@ Requests/sec: 260789.43
 Transfer/sec:     19.65MB
 ```
 
+Spring
+---
+
+```
+Running 10s test @ http://127.0.0.1:8000
+  2 threads and 100 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   346.21us  496.33us   9.07ms   95.67%
+    Req/Sec   129.44k    18.28k  190.04k    69.50%
+  2574612 requests in 10.00s, 228.35MB read
+Requests/sec: 257415.61
+Transfer/sec:     22.83MB
+
+
 JavaJooby
 ---
 

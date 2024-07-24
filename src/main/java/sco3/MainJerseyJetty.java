@@ -18,7 +18,7 @@ public class MainJerseyJetty {
 		);
 
 		URI baseUri = UriBuilder.fromUri("http://localhost/").port(8000).build();
-		ResourceConfig config = new ResourceConfig(HelloWorldResource.class);
+		ResourceConfig config = new ResourceConfig(JerseyResource.class);
 		JettyHttpContainerFactory.createServer(baseUri, config);
 	}
 

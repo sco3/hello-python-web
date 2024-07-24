@@ -54,7 +54,7 @@ public class NatsSquareClientReactor implements NatsSquare {
 		while (run.get()) {
 			Thread.sleep(1);
 		}
-		// System.out.println(result);
+		System.out.println(result);
 
 		long finish = System.currentTimeMillis();
 		return finish - start;

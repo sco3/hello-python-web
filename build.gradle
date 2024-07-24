@@ -1,6 +1,14 @@
 plugins {
-	id 'java'
+    id 'java'
     id 'eclipse'
+    id 'org.springframework.boot' version '3.4.0-SNAPSHOT'
+    id 'io.spring.dependency-management' version '1.1.6'
+    id 'application'
+
+}
+
+application {
+    mainClass = 'sco3.SpringMain'
 }
 
 group = "sco3"
@@ -8,7 +16,11 @@ version = "1.0.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    maven { url 'https://repo.spring.io/milestone' }
+    maven { url 'https://repo.spring.io/snapshot' }
+
 }
+
 
 dependencies {
     implementation 'io.jooby:jooby:3.2.6'
@@ -23,12 +35,19 @@ dependencies {
     implementation 'io.nats:jnats:2.19.1'
     implementation 'io.projectreactor:reactor-core:3.5.6'
     testImplementation "junit:junit:4.13.2"
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
 }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
 }
+
+
 
 compileJava {
     options.encoding = 'UTF-8'

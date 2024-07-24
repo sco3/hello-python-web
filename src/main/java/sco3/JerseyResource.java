@@ -6,7 +6,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
 @Path("/")
-public class HelloWorldResource {
+public class JerseyResource {
 
 	/**
 	 * Method handling HTTP GET requests. The returned object will be sent to the

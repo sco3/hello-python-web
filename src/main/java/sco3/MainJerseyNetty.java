@@ -18,7 +18,7 @@ public class MainJerseyNetty {
 		);
 
 		URI baseUri = UriBuilder.fromUri("http://localhost/").port(8000).build();
-		ResourceConfig resourceConfig = new ResourceConfig(HelloWorldResource.class);
+		ResourceConfig resourceConfig = new ResourceConfig(JerseyResource.class);
 		NettyHttpContainerProvider.createServer(baseUri, resourceConfig, false);
 	}
 
