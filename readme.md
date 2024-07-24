@@ -124,3 +124,19 @@ Running 10s test @ http://127.0.0.1:8000
 Requests/sec: 385038.33
 Transfer/sec:     37.09MB
 ```
+
+
+go
+---
+
+```
+Running 10s test @ http://127.0.0.1:8000
+  2 threads and 100 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   247.21us  233.74us   4.21ms   86.16%
+    Req/Sec   151.00k    10.76k  184.44k    88.00%
+  3004691 requests in 10.00s, 383.98MB read
+Requests/sec: 300416.65
+Transfer/sec:     38.39MB
+```
+
