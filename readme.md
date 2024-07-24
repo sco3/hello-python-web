@@ -140,3 +140,16 @@ Requests/sec: 300416.65
 Transfer/sec:     38.39MB
 ```
 
+fasthttp-go
+---
+
+```
+Running 10s test @ http://127.0.0.1:8000
+  2 threads and 100 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   136.98us   49.53us   2.59ms   78.79%
+    Req/Sec   195.09k    21.11k  251.76k    84.00%
+  3881392 requests in 10.00s, 551.54MB read
+Requests/sec: 388073.54
+Transfer/sec:     55.14MB
+```

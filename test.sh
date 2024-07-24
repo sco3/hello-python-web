@@ -1,7 +1,7 @@
 #!/usr/bin/env -S bash
 
 server=$(ps -aef | grep -v grep | \
-grep -E -o 'uvicorn|fastwsgi|rust-minihttp|JavaJooby|JerseyNetty|JerseyJetty|JerseyGrizzly|Vertx|spring|main-v|go' \
+grep -E -o 'uvicorn|fastwsgi|rust-minihttp|JavaJooby|JerseyNetty|JerseyJetty|JerseyGrizzly|Vertx|spring|main-v|fasthttp-go|go' \
 | sort -u)
 
 echo $server
