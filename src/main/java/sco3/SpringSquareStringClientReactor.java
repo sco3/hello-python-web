@@ -93,12 +93,9 @@ public class SpringSquareStringClientReactor implements NatsSquare {
 	public static void main(String[] args) throws Exception {
 		SpringSquareStringClientReactor cli = new SpringSquareStringClientReactor();
 		long start = System.currentTimeMillis();
-		int n = mTests;
-		for (int i = 0; i < n; i++) {
-			cli.call();
-		}
+		cli.runParallel();
 		long duration = System.currentTimeMillis() - start;
-		out.println("Time: " + duration + " ms runs: " + n + " avg: " + duration / n);
+		out.println("Time: " + duration + " ms runs: " + mTests + " avg: " + duration / mTests);
 
 	}
 
