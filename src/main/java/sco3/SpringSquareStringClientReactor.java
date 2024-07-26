@@ -4,6 +4,7 @@ import static java.lang.String.format;
 import static java.lang.System.out;
 import static java.lang.Thread.sleep;
 import static java.util.concurrent.Executors.newFixedThreadPool;
+import static reactor.core.publisher.Mono.fromFuture;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -12,14 +13,19 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.web.reactive.function.client.WebClient;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 public class SpringSquareStringClientReactor implements NatsSquare {
 	static int mTests = 1000;
@@ -27,15 +33,27 @@ public class SpringSquareStringClientReactor implements NatsSquare {
 	AtomicLong mCount = new AtomicLong(0);
 	private int mPoolSize = 100;
 
-	String toStr(int i) {
+	static String toStr(int i) {
 		return Integer.toString(i);
 	}
 
-	int toInt(String s) {
+	static int toInt(String s) {
 		return Integer.parseInt(s);
 	}
 
-	private static CompletableFuture<HttpResponse<String>> sendAsyncRequest(String url) {
+	CompletableFuture<String> getFuture(HttpClient client, String url) {
+		HttpRequest req = (HttpRequest.newBuilder()//
+				.uri(URI.create(url))//
+				.GET()//
+				.build()//
+		);
+
+		CompletableFuture<HttpResponse<String>> response = client//
+				.sendAsync(req, HttpResponse.BodyHandlers.ofString());
+
+		CompletableFuture<String> s = response//
+				.thenApplyAsync(HttpResponse::body);
+		return s;
 	}
 
 	void reqBuildin( //
@@ -50,19 +68,24 @@ public class SpringSquareStringClientReactor implements NatsSquare {
 
 		for (int call = 0; call < mCalls; call++) {
 
-			String url = format("http://localhost:8000/square/%d", call + 1);
+			String url = format("http://127.0.0.1:8000/square/%d", call + 1);
 			urls.add(url);
 		}
-		List<CompletableFuture<HttpResponse<String>>> f = urls.stream().map(url -> {
-			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
-			return client.sendAsync(request, BodyHandlers.ofString());
-		}).toList();
-		CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
-		int idx = 0;
-		for (CompletableFuture<HttpResponse<String>> asdf : f) {
-			result[idx] = toInt(asdf.get().body());
-			idx++;
+		final AtomicBoolean run = new AtomicBoolean(true);
+
+		Flux<Integer> flux = Flux.fromIterable(urls)//
+				.flatMap(url -> fromFuture(getFuture(client, url))) //
+				.map(SpringSquareStringClientReactor::toInt).doOnComplete(() -> run.set(false))//
+				.subscribeOn(Schedulers.single()); //
+
+		AtomicInteger idx = new AtomicInteger(0);
+		flux.subscribe(i -> {
+			result[idx.getAndAdd(1)] = i;
+		});
+		while (run.get()) {
+			Thread.sleep(1);
 		}
+
 	}
 
 	void reqBuildinOld( //
@@ -74,7 +97,7 @@ public class SpringSquareStringClientReactor implements NatsSquare {
 					.build()//
 			);
 
-			String url = format("http://localhost:8000/square/%d", call + 1);
+			String url = format("http://127.0.0.1:8000/square/%d", call + 1);
 			HttpRequest req = (HttpRequest.newBuilder()//
 					.uri(URI.create(url))//
 					.GET()//
@@ -153,6 +176,7 @@ public class SpringSquareStringClientReactor implements NatsSquare {
 
 	private static void printResults(int n, int[][] results) {
 		for (int i = 0; i < n; i++) {
+			Arrays.sort(results[i]);
 			for (int j = 0; j < mCalls; j++) {
 				out.print(results[i][j] + " ");
 			}
@@ -174,7 +198,7 @@ public class SpringSquareStringClientReactor implements NatsSquare {
 		CompletableFuture.allOf(futureResults.toArray(new CompletableFuture<?>[0]));
 		long duration = System.currentTimeMillis() - start;
 		printResults(n, results);
-		out.println("Time -> " + duration + " ms" + " avg: " + duration / n);
+		out.println("Time: " + duration + " ms runs: " + n + " avg: " + duration / n);
 
 	}
 

@@ -8,6 +8,7 @@ import static reactor.core.publisher.Mono.fromFuture;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -57,7 +58,7 @@ public class NatsSquareClientReactor implements NatsSquare {
 
 		Flux<Integer> flux = (Flux.range(1, n) //
 				.map(this::toBytes) //
-				.flatMap(bytes -> fromFuture(nc.request(SQUARE, bytes)))//
+				.flatMap(bytes -> fromFuture(extracted(nc, bytes)))//
 				.map(this::fromMessage)//
 				.doOnComplete(() -> run.set(false))//
 				.subscribeOn(Schedulers.single()) //
@@ -71,6 +72,10 @@ public class NatsSquareClientReactor implements NatsSquare {
 
 		long finish = System.currentTimeMillis();
 		return finish - start;
+	}
+
+	private CompletableFuture<Message> extracted(final Connection nc, byte[] bytes) {
+		return nc.request(SQUARE, bytes);
 	}
 
 	private void runManyTimes() throws Exception {
