@@ -56,10 +56,7 @@ public class SpringSquareStringClientReactor implements NatsSquare {
 		return s;
 	}
 
-	void reqBuildin( //
-			final int[] result, //
-			List<CompletableFuture<Void>> futures//
-	) throws Exception {
+	void reqBuildin(final int[] result) throws Exception {
 		final HttpClient client = (HttpClient.newBuilder()//
 				.version(Version.HTTP_2) //
 				.build()//
@@ -67,22 +64,9 @@ public class SpringSquareStringClientReactor implements NatsSquare {
 		final AtomicBoolean run = new AtomicBoolean(true);
 		Flux<Integer> flux = Flux.range(1, mCalls)//
 				.map(i -> format("http://127.0.0.1:8000/square/%d", i)) //
-				.flatMap(url -> {
-					return fromFuture(() -> {
-						HttpRequest req = (HttpRequest.newBuilder()//
-								.uri(URI.create(url))//
-								.GET()//
-								.build()//
-						);
-
-						CompletableFuture<HttpResponse<String>> response = client.sendAsync(req,
-								HttpResponse.BodyHandlers.ofString());
-
-						return response.thenApplyAsync(HttpResponse::body);
-					}, false);
-				}) //
+				.flatMap(url -> fromFuture(getFuture(client, url), false)) //
 				.map(SpringSquareStringClientReactor::toInt).doOnComplete(() -> run.set(false))//
-				.subscribeOn(Schedulers.boundedElastic()); //
+				.subscribeOn(Schedulers.single()); //
 
 		AtomicInteger idx = new AtomicInteger(0);
 		flux.subscribe(i -> {
@@ -92,31 +76,6 @@ public class SpringSquareStringClientReactor implements NatsSquare {
 			Thread.sleep(1);
 		}
 
-	}
-
-	void reqBuildinOld( //
-			final int[] result, //
-			List<CompletableFuture<Void>> futures//
-	) throws Exception {
-		for (int call = 0; call < mCalls; call++) {
-			HttpClient client = (HttpClient.newBuilder()//
-					.build()//
-			);
-
-			String url = format("http://127.0.0.1:8000/square/%d", call + 1);
-			HttpRequest req = (HttpRequest.newBuilder()//
-					.uri(URI.create(url))//
-					.GET()//
-					.build()//
-			);
-
-			CompletableFuture<HttpResponse<String>> response = client.sendAsync(req,
-					HttpResponse.BodyHandlers.ofString());
-
-			CompletableFuture<String> s = response.thenApplyAsync(HttpResponse::body);
-			final int n = call;
-			futures.add(s.thenAcceptAsync(body -> result[n] = toInt(body)));
-		}
 	}
 
 	int req(int i) {
@@ -199,7 +158,7 @@ public class SpringSquareStringClientReactor implements NatsSquare {
 
 		for (int i = 0; i < n; i++) {
 			results[i] = new int[mCalls];
-			cli.reqBuildin(results[i], futureResults);
+			cli.reqBuildin(results[i]);
 		}
 		CompletableFuture.allOf(futureResults.toArray(new CompletableFuture<?>[0]));
 		long duration = System.currentTimeMillis() - start;
