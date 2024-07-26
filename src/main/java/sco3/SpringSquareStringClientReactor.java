@@ -10,6 +10,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpClient.Version;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
@@ -36,7 +37,37 @@ public class SpringSquareStringClientReactor implements NatsSquare {
 		return Integer.parseInt(s);
 	}
 
+	private static CompletableFuture<HttpResponse<String>> sendAsyncRequest(String url) {
+	}
+
 	void reqBuildin( //
+			final int[] result, //
+			List<CompletableFuture<Void>> futures//
+	) throws Exception {
+		final HttpClient client = (HttpClient.newBuilder()//
+				.version(Version.HTTP_2) //
+				.build()//
+		);
+		List<String> urls = new ArrayList<String>(mCalls);
+
+		for (int call = 0; call < mCalls; call++) {
+
+			String url = format("http://localhost:8000/square/%d", call + 1);
+			urls.add(url);
+		}
+		List<CompletableFuture<HttpResponse<String>>> f = urls.stream().map(url -> {
+			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
+			return client.sendAsync(request, BodyHandlers.ofString());
+		}).toList();
+		CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
+		int idx = 0;
+		for (CompletableFuture<HttpResponse<String>> asdf : f) {
+			result[idx] = toInt(asdf.get().body());
+			idx++;
+		}
+	}
+
+	void reqBuildin2( //
 			final int[] result, //
 			List<CompletableFuture<Void>> futures//
 	) throws Exception {
