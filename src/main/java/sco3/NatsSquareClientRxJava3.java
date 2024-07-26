@@ -1,9 +1,10 @@
 package sco3;
 
+import static io.reactivex.rxjava3.core.Flowable.fromFuture;
+import static io.reactivex.rxjava3.core.Flowable.range;
 import static java.lang.Thread.sleep;
 import static java.lang.ThreadLocal.withInitial;
 import static java.util.concurrent.Executors.newFixedThreadPool;
-import static reactor.core.publisher.Mono.fromFuture;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -16,10 +17,10 @@ import java.util.concurrent.atomic.AtomicLong;
 import io.nats.client.Connection;
 import io.nats.client.Message;
 import io.nats.client.Nats;
-import reactor.core.publisher.Flux;
-import reactor.core.scheduler.Schedulers;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class NatsSquareClientReactor implements NatsSquare {
+public class NatsSquareClientRxJava3 implements NatsSquare {
 	AtomicLong mCount = new AtomicLong(0);
 	ThreadLocal<ByteBuffer> mBuffer = new ThreadLocal<>() {
 		@Override
@@ -55,15 +56,13 @@ public class NatsSquareClientReactor implements NatsSquare {
 		final AtomicBoolean run = new AtomicBoolean(true);
 		final Connection nc = tnc.get();
 
-		Flux<Integer> flux = (Flux.range(1, n) //
-				.map(this::toBytes) //
-				.flatMap(bytes -> fromFuture(nc.request(SQUARE, bytes)))//
-				.map(this::fromMessage)//
+		Flowable<Integer> flowable = range(1, n)//
+				.map(this::toBytes).flatMap(b -> fromFuture(nc.request(SQUARE, b)))//
+				.map(this::fromMessage) //
 				.doOnComplete(() -> run.set(false))//
-				.subscribeOn(Schedulers.single()) //
-		);
+				.subscribeOn(Schedulers.trampoline());
 
-		flux.subscribe(i -> result.add(i));
+		flowable.subscribe(i -> result.add(i));
 		while (run.get()) {
 			Thread.sleep(1);
 		}
@@ -119,7 +118,7 @@ public class NatsSquareClientReactor implements NatsSquare {
 	}
 
 	public static void main(String[] args) throws Exception {
-		NatsSquareClientReactor client = new NatsSquareClientReactor();
+		NatsSquareClientRxJava3 client = new NatsSquareClientRxJava3();
 		client.runManyTimes();
 	}
 
