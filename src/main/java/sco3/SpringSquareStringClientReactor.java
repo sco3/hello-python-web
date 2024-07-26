@@ -44,22 +44,23 @@ public class SpringSquareStringClientReactor implements NatsSquare {
 	int[] call() throws Exception {
 		final AtomicBoolean run = new AtomicBoolean(true);
 		final int[] result = new int[mCalls];
-		final HttpClient client = (HttpClient.newBuilder()//
+		try (final HttpClient client = (HttpClient.newBuilder()//
 				.version(Version.HTTP_2) //
 				.build()//
-		);
-		Flux<Integer> flux = Flux.range(1, mCalls)//
-				.map(i -> format("http://127.0.0.1:8000/square/%d", i)) //
-				.flatMap(url -> fromFuture(getFuture(client, url), false)) //
-				.map(Integer::parseInt).doOnComplete(() -> run.set(false))//
-				.subscribeOn(Schedulers.single()); //
+		)) {
+			Flux<Integer> flux = Flux.range(1, mCalls)//
+					.map(i -> format("http://127.0.0.1:8000/square/%d", i)) //
+					.flatMap(url -> fromFuture(getFuture(client, url), false)) //
+					.map(Integer::parseInt).doOnComplete(() -> run.set(false))//
+					.subscribeOn(Schedulers.single()); //
 
-		AtomicInteger idx = new AtomicInteger(0);
-		flux.subscribe(i -> {
-			result[idx.getAndAdd(1)] = i;
-		});
-		while (run.get()) {
-			Thread.sleep(1);
+			AtomicInteger idx = new AtomicInteger(0);
+			flux.subscribe(i -> {
+				result[idx.getAndAdd(1)] = i;
+			});
+			while (run.get()) {
+				Thread.sleep(1);
+			}
 		}
 		return result;
 	}
