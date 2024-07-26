@@ -13,9 +13,7 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -67,7 +65,7 @@ public class SpringSquareStringClientReactor implements NatsSquare {
 		}
 	}
 
-	void reqBuildin2( //
+	void reqBuildinOld( //
 			final int[] result, //
 			List<CompletableFuture<Void>> futures//
 	) throws Exception {
@@ -166,7 +164,7 @@ public class SpringSquareStringClientReactor implements NatsSquare {
 	public static void main(String[] args) throws Exception {
 		SpringSquareStringClientReactor cli = new SpringSquareStringClientReactor();
 		long start = System.currentTimeMillis();
-		int n = 10;
+		int n = 1000;
 		int[][] results = new int[n][mCalls];
 		List<CompletableFuture<Void>> futureResults = new ArrayList<>();
 
@@ -176,8 +174,8 @@ public class SpringSquareStringClientReactor implements NatsSquare {
 		}
 		CompletableFuture.allOf(futureResults.toArray(new CompletableFuture<?>[0]));
 		long duration = System.currentTimeMillis() - start;
-		out.println("Time -> " + duration + " ms");
 		printResults(n, results);
+		out.println("Time -> " + duration + " ms" + " avg: " + duration / n);
 
 	}
 
