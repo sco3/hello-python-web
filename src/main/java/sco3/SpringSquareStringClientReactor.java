@@ -56,7 +56,8 @@ public class SpringSquareStringClientReactor implements NatsSquare {
 		return s;
 	}
 
-	void reqBuildin(final int[] result) throws Exception {
+	int[] reqBuildin() throws Exception {
+		final int[] result = new int[mCalls];
 		final HttpClient client = (HttpClient.newBuilder()//
 				.version(Version.HTTP_2) //
 				.build()//
@@ -75,7 +76,7 @@ public class SpringSquareStringClientReactor implements NatsSquare {
 		while (run.get()) {
 			Thread.sleep(1);
 		}
-
+		return result;
 	}
 
 	int req(int i) {
@@ -158,7 +159,7 @@ public class SpringSquareStringClientReactor implements NatsSquare {
 
 		for (int i = 0; i < n; i++) {
 			results[i] = new int[mCalls];
-			cli.reqBuildin(results[i]);
+			results[i] = cli.reqBuildin();
 		}
 		CompletableFuture.allOf(futureResults.toArray(new CompletableFuture<?>[0]));
 		long duration = System.currentTimeMillis() - start;
