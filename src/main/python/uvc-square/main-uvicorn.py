@@ -1,21 +1,25 @@
 #!/usr/bin/env -S poetry run python
+
 import uvicorn
+
+from typing import ClassVar
 
 data: bytes = b"Hello, World!\n"
 
 
+class Consts:
+    SQUARE: ClassVar[str] = "/square/"
+    SQLEN: ClassVar[int] = len(SQUARE)
+
+
 async def app(scope, receive, send):
     assert scope["type"] == "http"
-    body = b""
-
-    while True:
-        message = await receive()
-        if message["type"] == "http.request":
-            body += message.get("body", b"")
-            if not message.get("more_body"):
-                break
-
-    print("Received POST data:", body)
+    path: str = scope["path"]
+    body: str = b""
+    if path.startswith(Consts.SQUARE):
+        snum: str = path[Consts.SQLEN :]
+        num: int = int(snum)
+        body = str(num * num)
 
     await send(
         {
@@ -26,24 +30,13 @@ async def app(scope, receive, send):
             ],
         }
     )
-    if scope.get("path", "") == "/long":
-        await send(
-            {
-                "type": "http.response.body",
-                "body": data,
-            }
-        )
-    else:
-        await send(
-            {
-                "type": "http.response.body",
-                "body": b"Hello, World!\n",
-            }
-        )
-        
 
-with open("../../../../text-request.txt", "rb") as f:
-    data = f.read()
+    await send(
+        {
+            "type": "http.response.body",
+            "body": body.encode(),
+        }
+    )
 
 
 if __name__ == "__main__":

@@ -2,7 +2,7 @@
 
 import fastwsgi
 
-prefix="/api/square/unary/"
+prefix="/square/"
 prefix_len=len(prefix)
 
 def app(environ, start_response):
@@ -22,4 +22,4 @@ def app(environ, start_response):
 
 
 if __name__ == "__main__":
-    fastwsgi.run(wsgi_app=app, host="0.0.0.0", port=7576)
+    fastwsgi.run(wsgi_app=app, host="0.0.0.0", port=8000)

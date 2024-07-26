@@ -8,7 +8,6 @@ import static reactor.core.publisher.Mono.fromFuture;
 
 import java.net.URI;
 import java.net.http.HttpClient;
-import java.net.http.HttpClient.Version;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.concurrent.CompletableFuture;
@@ -24,7 +23,7 @@ public class SpringSquareStringClientReactor implements NatsSquare {
 	static int mTests = 1000;
 	static int mCalls = 1000;
 	AtomicLong mCount = new AtomicLong(0);
-	private int mPoolSize = 100;
+	private int mPoolSize = 4; // fws = 2 only
 
 	CompletableFuture<String> getFuture(HttpClient client, String url) {
 		HttpRequest req = (HttpRequest.newBuilder()//
@@ -45,7 +44,6 @@ public class SpringSquareStringClientReactor implements NatsSquare {
 		final AtomicBoolean run = new AtomicBoolean(true);
 		final int[] result = new int[mCalls];
 		try (final HttpClient client = (HttpClient.newBuilder()//
-				.version(Version.HTTP_2) //
 				.build()//
 		)) {
 			Flux<Integer> flux = Flux.range(1, mCalls)//
