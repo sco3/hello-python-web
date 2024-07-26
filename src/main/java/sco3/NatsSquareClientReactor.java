@@ -11,24 +11,35 @@ import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 
 import io.nats.client.Connection;
 import io.nats.client.Message;
 import io.nats.client.Nats;
 import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Schedulers;
 
 public class NatsSquareClientReactor implements NatsSquare {
+	AtomicLong mCount = new AtomicLong(0);
+	ThreadLocal<ByteBuffer> mBuffer = new ThreadLocal<>() {
+		@Override
+		protected ByteBuffer initialValue() {
+			long cnt = mCount.incrementAndGet();
+			System.out.println(cnt + " " + Thread.currentThread());
+			return ByteBuffer.allocate(ILEN);
+		}
+	}; // ().withInitial(() -> ByteBuffer.allocate(ILEN));
 
 	byte[] toBytes(int i) {
-		ByteBuffer buffer = ByteBuffer.allocate(ILEN);
-		byte[] bytes = new byte[ILEN];
+		ByteBuffer buffer = mBuffer.get();
+		var bytes = new byte[ILEN];
 		buffer.putInt(0, i);
 		buffer.get(0, bytes, 0, ILEN);
 		return bytes;
 	}
 
 	int toInt(byte[] bytes) {
-		ByteBuffer buffer = ByteBuffer.allocate(ILEN);
+		ByteBuffer buffer = mBuffer.get();
 		buffer.put(0, bytes, 0, ILEN);
 		return buffer.getInt(0);
 	}
@@ -45,16 +56,17 @@ public class NatsSquareClientReactor implements NatsSquare {
 		final Connection nc = tnc.get();
 
 		Flux<Integer> flux = Flux.range(1, n) //
-				.map(i -> toBytes(i)) //
+				.map(this::toBytes) //
 				.flatMap(bytes -> fromFuture(nc.request(SQUARE, bytes)))//
-				.map(m -> fromMessage(m))//
-				.doOnComplete(() -> run.set(false));
+				.map(this::fromMessage)//
+				.doOnComplete(() -> run.set(false))//
+				.subscribeOn(Schedulers.single());
 
 		flux.subscribe(i -> result.add(i));
 		while (run.get()) {
 			Thread.sleep(1);
 		}
-		System.out.println(result);
+		// System.out.println(result);
 
 		long finish = System.currentTimeMillis();
 		return finish - start;
@@ -62,8 +74,8 @@ public class NatsSquareClientReactor implements NatsSquare {
 
 	private void runManyTimes() throws Exception {
 		long start = System.currentTimeMillis();
-
-		int poolSize = 100;
+		int tests = 1000;
+		int poolSize = 10;
 		ConcurrentLinkedQueue<Connection> conns = new ConcurrentLinkedQueue<>();
 
 		ThreadPoolExecutor svc = (ThreadPoolExecutor) newFixedThreadPool(poolSize);
@@ -81,7 +93,6 @@ public class NatsSquareClientReactor implements NatsSquare {
 				}//
 		);
 
-		int tests = 1000;
 		for (int i = 0; i < tests; i++) {
 			svc.execute(new Runnable() {
 				@Override
