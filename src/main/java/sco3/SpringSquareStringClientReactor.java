@@ -140,7 +140,7 @@ public class SpringSquareStringClientReactor implements NatsSquare {
 		svc.shutdown();
 	}
 
-	private static void printResults(int n, int[][] results) {
+	public static void printResults(int n, int[][] results) {
 		for (int i = 0; i < n; i++) {
 			Arrays.sort(results[i]);
 			for (int j = 0; j < mCalls; j++) {
@@ -153,17 +153,11 @@ public class SpringSquareStringClientReactor implements NatsSquare {
 	public static void main(String[] args) throws Exception {
 		SpringSquareStringClientReactor cli = new SpringSquareStringClientReactor();
 		long start = System.currentTimeMillis();
-		int n = 1000;
-		int[][] results = new int[n][mCalls];
-		List<CompletableFuture<Void>> futureResults = new ArrayList<>();
-
+		int n = mTests;
 		for (int i = 0; i < n; i++) {
-			results[i] = new int[mCalls];
-			results[i] = cli.reqBuildin();
+			cli.reqBuildin();
 		}
-		CompletableFuture.allOf(futureResults.toArray(new CompletableFuture<?>[0]));
 		long duration = System.currentTimeMillis() - start;
-		printResults(n, results);
 		out.println("Time: " + duration + " ms runs: " + n + " avg: " + duration / n);
 
 	}
