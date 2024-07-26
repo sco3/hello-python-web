@@ -71,7 +71,6 @@ public class SpringSquareStringClientReactor implements NatsSquare {
 	) throws Exception {
 		for (int call = 0; call < mCalls; call++) {
 			HttpClient client = (HttpClient.newBuilder()//
-					.version(Version.HTTP_2) //
 					.build()//
 			);
 
