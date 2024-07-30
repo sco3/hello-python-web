@@ -2,13 +2,11 @@ package sco3;
 
 import static java.lang.System.out;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import io.vertx.core.Vertx;
-import io.vertx.core.http.WebSocket;
-import io.vertx.core.http.WebSocketConnectOptions;
 import io.vertx.core.http.HttpClient;
 import io.vertx.core.http.HttpClientOptions;
+import io.vertx.core.http.WebSocket;
+import io.vertx.core.http.WebSocketConnectOptions;
 
 public class MainVertxWsClient {
 	public static void main(String[] args) {

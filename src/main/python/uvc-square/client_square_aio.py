@@ -28,7 +28,8 @@ async def main():
         assert result == number * number
 
     duration: int = time.time_ns() - start
-    print(f"duration: {duration/1000_000} ms ")
+    rps: int = runs * calls / (duration / 1000_000_000)
+    print(f"duration: {duration/1000_000} ms requests: {rps} per second")
 
 
 if __name__ == "__main__":

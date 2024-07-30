@@ -17,6 +17,8 @@ nanoid = "^2.0.0"
 nats-python = "^0.8.0"
 requests = "^2.32.3"
 aiohttp = "^3.9.5"
+rx = "^3.2.0"
+motor = "^3.5.1"
 
 
 [build-system]
