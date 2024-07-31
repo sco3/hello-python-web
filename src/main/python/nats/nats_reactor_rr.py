@@ -1,3 +1,5 @@
+#!/usr/bin/env -S poetry run python3
+
 from asyncio import Event
 import asyncio
 import time
