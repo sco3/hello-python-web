@@ -93,9 +93,15 @@ task vertwscli(type: JavaExec) {
     classpath sourceSets.main.runtimeClasspath
     mainClass = "sco3.MainVertxWsClient"
 }
+
 task natsreact(type: JavaExec) {
     classpath sourceSets.main.runtimeClasspath
     mainClass = "sco3.NatsSquareClientReactor"
+}
+
+task nats_square_str_service(type: JavaExec) {
+    classpath sourceSets.main.runtimeClasspath
+    mainClass = "sco3.NatsSquareStringService"
 }
 
 

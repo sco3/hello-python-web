@@ -18,6 +18,8 @@ class NatsCommon:
     USER: ClassVar[str] = "sys"
     PASS: ClassVar[str] = "pass"
 
+    SQUARE_SUBJECT: ClassVar[str] = "square"
+
     REQ_PREFIX: ClassVar[str] = "req."
     REQ_ALL: ClassVar[str] = f"{REQ_PREFIX}*"
     REQ_PREFIX_LEN: ClassVar[int] = len(REQ_PREFIX)
