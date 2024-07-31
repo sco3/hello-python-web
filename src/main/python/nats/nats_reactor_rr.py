@@ -45,7 +45,7 @@ async def main() -> None:
     #    r = await call(nc, b"2")
     #    print(f"{r}")
 
-    n: int = 100000
+    n: int = 1000
     observable: Observable = rx.range(1, n + 1).pipe(
         ops.map(to_bytes),
         ops.flat_map(lambda data: call_as_future(nc, data)),
