@@ -7,11 +7,14 @@ import static org.glassfish.grizzly.utils.Charsets.ASCII_CHARSET;
 import io.nats.client.Connection;
 import io.nats.client.Dispatcher;
 import io.nats.client.Nats;
+import io.nats.client.Options;
 
 public class NatsSquareStringService implements NatsSquare {
 
 	public static void main(String[] args) throws Exception {
-		Connection nc = Nats.connect("nats://localhost:4222");
+		Options options = new Options.Builder().server(SERVER).userInfo(USER, PASS).build();
+
+		Connection nc = Nats.connect(options);
 
 		Dispatcher d = nc.createDispatcher((msg) -> {
 			int in = parseInt(new String(msg.getData(), ASCII_CHARSET));

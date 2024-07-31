@@ -36,7 +36,7 @@ async def main() -> None:
     nc: NatsClient = NatsClient()
     NatsCommon.setClusterNodes(1)
     await NatsCommon.connect(nc)
-    r = await call(nc, b"1")
+    r = await call(nc, b"2")
     print(f"{r}")
 
 
