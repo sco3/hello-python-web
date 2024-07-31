@@ -80,8 +80,8 @@ public class NatsSquareStringClientReactor implements NatsSquare {
 						conns.add(c);
 						return c;
 					} catch (IOException | InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
+						System.exit(0);
 						return null;
 					}
 				}//
@@ -115,5 +115,4 @@ public class NatsSquareStringClientReactor implements NatsSquare {
 		NatsSquareStringClientReactor client = new NatsSquareStringClientReactor();
 		client.runManyTimes();
 	}
-
 }
