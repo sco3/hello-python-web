@@ -2,6 +2,7 @@ import asyncio
 from typing import Union
 
 from nats.aio.client import Client as NatsClient
+from nats.aio.client import Msg
 from observable import Observable
 from rx import operators as ops
 import rx
@@ -11,11 +12,12 @@ import traceback
 from nats_common import NatsCommon
 
 
-async def call(nc: NatsClient, data: bytes):
+async def call(nc: NatsClient, data: bytes) -> bytes:
     subject = NatsCommon.SQUARE_SUBJECT
     print("Request to: ", subject)
-    result = await nc.request(subject, data)
-    return result
+    result: Msg = await nc.request(subject, data)
+    out: bytes = result.data
+    return out
 
 
 def call_as_future(nc: NatsClient, data: bytes) -> Observable:
