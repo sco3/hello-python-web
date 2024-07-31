@@ -1,24 +1,23 @@
+from asyncio import Event
 import asyncio
+import time
+import traceback
 from typing import Union
+import uuid
 
 from nats.aio.client import Client as NatsClient
 from nats.aio.client import Msg
 from observable import Observable
 from rx import operators as ops
 import rx
-import uuid
-import traceback
 
 from nats_common import NatsCommon
 
 
 async def call(nc: NatsClient, data: bytes) -> bytes:
     subject = NatsCommon.SQUARE_SUBJECT
-    print("Request to: ", subject)
     result: Msg = await nc.request(subject, data)
-    out: bytes = result.data
-    print(out)
-    return out
+    return result.data
 
 
 def call_as_future(nc: NatsClient, data: bytes) -> Observable:
@@ -36,6 +35,9 @@ def from_message(m) -> bytes:
 
 
 async def main() -> None:
+    start: int = time.time_ns()
+    finish: Event = Event()
+
     nc: NatsClient = NatsClient()
     NatsCommon.setClusterNodes(1)
     await NatsCommon.connect(nc)
@@ -43,18 +45,22 @@ async def main() -> None:
     #    r = await call(nc, b"2")
     #    print(f"{r}")
 
-    n: int = 1
+    n: int = 1000
     observable: Observable = rx.range(1, n + 1).pipe(
         ops.map(to_bytes),
         ops.flat_map(lambda data: call_as_future(nc, data)),
     )
+    result: list = []
     observable.subscribe(
-        on_next=lambda i: print(f"Received: {i}"),
+        on_next=lambda i: result.append(i),
         on_error=lambda e: print(f"Error: {e}\n{traceback.format_exc()}"),
-        on_completed=lambda: print("Finish."),
+        on_completed=lambda: finish.set(),
     )
 
-    await asyncio.sleep(1000)
+    await finish.wait()
+    duration_ms: int = (time.time_ns() - start) / 1000_1000
+
+    print(f"Took: {duration_ms}")
 
 
 if __name__ == "__main__":
