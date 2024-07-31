@@ -13,7 +13,7 @@ from nats_common import NatsCommon
 
 async def call(nc: NatsClient, data: bytes):
     subject = NatsCommon.SQUARE_SUBJECT
-    print("Request: ", subject)
+    print("Request to: ", subject)
     result = await nc.request(subject, data)
     return result
 
