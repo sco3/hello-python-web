@@ -30,8 +30,8 @@ def to_bytes(i: int) -> bytes:
     return str(i).encode()
 
 
-def from_message(m) -> bytes:
-    return 0
+def from_bytes(m: bytes) -> int:
+    return int(m.decode())
 
 
 async def main() -> None:
@@ -45,10 +45,11 @@ async def main() -> None:
     #    r = await call(nc, b"2")
     #    print(f"{r}")
 
-    n: int = 1000
+    n: int = 100000
     observable: Observable = rx.range(1, n + 1).pipe(
         ops.map(to_bytes),
         ops.flat_map(lambda data: call_as_future(nc, data)),
+        ops.map(from_bytes),
     )
     result: list = []
     observable.subscribe(
@@ -60,7 +61,7 @@ async def main() -> None:
     await finish.wait()
     duration_ms: int = (time.time_ns() - start) / 1000_1000
 
-    print(f"Took: {duration_ms}")
+    print(f"Took: {duration_ms} {result}")
 
 
 if __name__ == "__main__":
