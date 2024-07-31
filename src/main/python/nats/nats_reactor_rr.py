@@ -17,6 +17,7 @@ async def call(nc: NatsClient, data: bytes) -> bytes:
     print("Request to: ", subject)
     result: Msg = await nc.request(subject, data)
     out: bytes = result.data
+    print(out)
     return out
 
 
@@ -38,20 +39,22 @@ async def main() -> None:
     nc: NatsClient = NatsClient()
     NatsCommon.setClusterNodes(1)
     await NatsCommon.connect(nc)
-    r = await call(nc, b"2")
-    print(f"{r}")
 
+    #    r = await call(nc, b"2")
+    #    print(f"{r}")
 
-#    n: int = 1
-#    observable: Observable = rx.range(1, n + 1).pipe(
-#        ops.map(to_bytes),
-#        ops.flat_map(lambda data: call_as_future(nc, data)),
-#    )
-#    observable.subscribe(
-#        on_next=lambda i: print(f"Ok:{i}"),
-#        on_error=lambda e: print(f"Error: {e}\n{traceback.format_exc()}"),
-#        on_completed=lambda: print("Finish."),
-#    )
+    n: int = 1
+    observable: Observable = rx.range(1, n + 1).pipe(
+        ops.map(to_bytes),
+        ops.flat_map(lambda data: call_as_future(nc, data)),
+    )
+    observable.subscribe(
+        on_next=lambda i: print(f"Received: {i}"),
+        on_error=lambda e: print(f"Error: {e}\n{traceback.format_exc()}"),
+        on_completed=lambda: print("Finish."),
+    )
+
+    await asyncio.sleep(1000)
 
 
 if __name__ == "__main__":
