@@ -16,6 +16,7 @@ from rx import operators as ops
 import rx
 
 from nats_common import NatsCommon
+import threading
 
 
 async def request(nc: NatsClient, data: bytes) -> bytes:
@@ -39,7 +40,8 @@ def from_bytes(m: bytes) -> int:
 
 
 async def call(n: int = 1000) -> list:
-    # print("n:", n)
+    thread_id = threading.get_ident()
+    print(f"Current thread ID: {thread_id}")
 
     finish: Event = Event()
 
@@ -98,5 +100,5 @@ def app(environ, start_response):
 
 
 if __name__ == "__main__":
-    fastwsgi.run(wsgi_app=app, host="0.0.0.0", port=8000)
+    fastwsgi.run(wsgi_app=app, host="0.0.0.0", port=8000, workers=100)
     # asyncio.run(test())
