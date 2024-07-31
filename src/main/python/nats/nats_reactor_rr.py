@@ -16,7 +16,7 @@ import rx
 from nats_common import NatsCommon
 
 
-async def call(nc: NatsClient, data: bytes) -> bytes:
+async def request(nc: NatsClient, data: bytes) -> bytes:
     subject = NatsCommon.SQUARE_SUBJECT
     result: Msg = await nc.request(subject, data)
     return result.data
@@ -24,7 +24,7 @@ async def call(nc: NatsClient, data: bytes) -> bytes:
 
 def call_as_future(nc: NatsClient, data: bytes) -> Observable:
     loop = asyncio.get_event_loop()
-    future = loop.create_task(call(nc, data))
+    future = loop.create_task(request(nc, data))
     return rx.from_future(future)
 
 
@@ -36,15 +36,15 @@ def from_bytes(m: bytes) -> int:
     return int(m.decode())
 
 
-async def main() -> None:
-    start: int = time.time_ns()
+async def call() -> None:
+
     finish: Event = Event()
 
     nc: NatsClient = NatsClient()
     NatsCommon.setClusterNodes(1)
     await NatsCommon.connect(nc)
 
-    #    r = await call(nc, b"2")
+    #    r = await request(nc, b"2")
     #    print(f"{r}")
 
     n: int = 1000
@@ -61,10 +61,14 @@ async def main() -> None:
     )
 
     await finish.wait()
-    duration_ms: int = (time.time_ns() - start) / 1000_1000
 
-    print(f"Took: {duration_ms} {result}")
+
+async def test() -> None:
+    start: int = time.time_ns()
+    await call()
+    duration_ms: int = (time.time_ns() - start) / 1000_1000
+    print(f"Took: {duration_ms}")
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(test())
