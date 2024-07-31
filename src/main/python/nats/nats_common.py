@@ -8,10 +8,11 @@ class NatsCommon:
     HELLO: ClassVar[bytes] = HELLO_STR.encode("UTF-8")
     HELLO_LEN: ClassVar[int] = len(HELLO)
 
+    START_PORT: ClassVar[int] = 4222
+    NODES: ClassVar[int] = 3
+
     SERVERS: ClassVar[list] = [
-        "nats://localhost:4222",
-        "nats://localhost:4223",
-        "nats://localhost:4224",
+        f"nats://localhost:{i}" for i in range(START_PORT, START_PORT + NODES)
     ]
 
     USER: ClassVar[str] = "sys"
@@ -39,6 +40,13 @@ class NatsCommon:
         NatsCommon.traffic = 0
         NatsCommon.duration = 0
         NatsCommon.call_duration = 0
+
+    @staticmethod
+    def setClusterNodes(nodes: int) -> None:
+        NatsCommon.NODES = nodes
+        NatsCommon.SERVERS = [
+            f"nats://localhost:{i}" for i in range(4222, 4222 + nodes)
+        ]
 
     @staticmethod
     async def connect(nc) -> bool:
