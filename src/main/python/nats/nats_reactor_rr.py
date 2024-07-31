@@ -1,5 +1,7 @@
 #!/usr/bin/env -S poetry run python3
 
+import fastwsgi
+
 from asyncio import Event
 import asyncio
 import time
@@ -36,7 +38,8 @@ def from_bytes(m: bytes) -> int:
     return int(m.decode())
 
 
-async def call() -> None:
+async def call(n: int = 1000) -> list:
+    # print("n:", n)
 
     finish: Event = Event()
 
@@ -47,7 +50,6 @@ async def call() -> None:
     #    r = await request(nc, b"2")
     #    print(f"{r}")
 
-    n: int = 1000
     observable: Observable = rx.range(1, n + 1).pipe(
         ops.map(to_bytes),
         ops.flat_map(lambda data: call_as_future(nc, data)),
@@ -61,6 +63,7 @@ async def call() -> None:
     )
 
     await finish.wait()
+    return result
 
 
 async def test() -> None:
@@ -70,5 +73,30 @@ async def test() -> None:
     print(f"Took: {duration_ms}")
 
 
+prefix = "/square/"
+prefix_len = len(prefix)
+
+
+def app(environ, start_response):
+
+    try:
+        request_body_size = int(environ.get("CONTENT_LENGTH", 0))
+    except ValueError:
+        request_body_size = 0
+
+    headers = [("Content-Type", "text/plain")]
+    start_response("200 OK", headers)
+    path = environ.get("PATH_INFO", "")
+    if not path == "":
+        v = int(path[prefix_len:])
+
+    loop = asyncio.get_event_loop()
+    r = loop.run_until_complete(call(v))
+    # print(r)
+
+    return str(r).encode()
+
+
 if __name__ == "__main__":
-    asyncio.run(test())
+    fastwsgi.run(wsgi_app=app, host="0.0.0.0", port=8000)
+    # asyncio.run(test())
