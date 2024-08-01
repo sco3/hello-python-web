@@ -9,10 +9,13 @@ from typing import List
 import rx
 from rx import operators as ops
 from rx.core.typing import Observable
+from rx.core.observable.observable import Observable as ObsObs
+
 from nats.aio.client import Client as NatsClient
 from nats.aio.client import Msg
 
 from nats_common import NatsCommon
+
 
 
 class NatsClientManager:
@@ -74,7 +77,7 @@ class NatsClientManager:
         :return: A list of results.
         """
         finish: Event = Event()
-        observable: Observable = rx.range(1, n + 1).pipe(
+        observable: ObsObs = rx.range(1, n + 1).pipe(
             ops.map(self.to_bytes),
             ops.flat_map(lambda data: self.call_as_future(data)),
             ops.map(self.from_bytes),
@@ -98,7 +101,7 @@ class NatsClientManager:
         start: int = time.time_ns()
 
         await self.call(n)
-        duration_ms: int = (time.time_ns() - start) / 1_000_000
+        duration_ms: float = (time.time_ns() - start) / 1_000_000
         print(f"Took: {duration_ms} ms")
 
 

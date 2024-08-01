@@ -1,6 +1,7 @@
 import asyncio
 import uvloop
 from typing import ClassVar
+from asyncio import Lock
 
 
 class NatsCommon:
@@ -29,12 +30,12 @@ class NatsCommon:
     RES_PREFIX_LEN: ClassVar[int] = len(RES_PREFIX)
     RES_SUBJECT: ClassVar[str] = f"{RES_PREFIX}" + "{}"
 
-    lock: asyncio.Lock = asyncio.Lock()
+    lock: ClassVar[Lock] = asyncio.Lock()
 
     calls: ClassVar[int] = 0
     traffic: ClassVar[int] = 0
-    duration: ClassVar[int] = 0
-    call_duration: ClassVar[int] = 0
+    duration: ClassVar[float] = 0
+    call_duration: ClassVar[float] = 0
 
     @staticmethod
     def reset_stats() -> None:
