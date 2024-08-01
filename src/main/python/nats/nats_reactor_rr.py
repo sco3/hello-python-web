@@ -74,7 +74,7 @@ async def test() -> None:
     NatsCommon.reset_stats()
 
     await aggregate(nc)
-    duration_ms: float = (time.time_ns() - start) / 1000_1000
+    duration_ms: float = (time.time_ns() - start) / 1_000_000
     print(f"Took: {duration_ms} calls: {NatsCommon.calls}")
 
 
