@@ -21,7 +21,7 @@ class NatsReactor:
         self.nc: NatsClient = NatsClient()
         self.servers: int = servers
 
-    async def connect(self) -> None:
+    async def connect_nats(self) -> None:
         """Connects to the NATS server."""
         NatsCommon.setClusterNodes(self.servers)
         await NatsCommon.connect(self.nc)
@@ -95,7 +95,7 @@ class NatsReactor:
 async def main():
     start: int = time.time_ns()
     manager = NatsReactor()
-    await manager.connect()
+    await manager.connect_nats()
     await manager.aggregate()
     duration_ms: float = (time.time_ns() - start) / 1_000_000
     print(f"Took: {duration_ms} ms calls:{NatsCommon.calls}")
