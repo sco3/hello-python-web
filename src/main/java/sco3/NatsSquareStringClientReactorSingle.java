@@ -72,5 +72,6 @@ public class NatsSquareStringClientReactorSingle implements NatsSquare {
 		);
 		long duration = client.call(nc);
 		System.out.println("Took: " + duration + " ms");
+		nc.close();
 	}
 }
