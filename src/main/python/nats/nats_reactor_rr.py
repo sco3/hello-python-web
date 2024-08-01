@@ -75,30 +75,5 @@ async def test() -> None:
     print(f"Took: {duration_ms}")
 
 
-prefix = "/square/"
-prefix_len = len(prefix)
-
-
-def app(environ, start_response):
-
-    try:
-        request_body_size = int(environ.get("CONTENT_LENGTH", 0))
-    except ValueError:
-        request_body_size = 0
-
-    headers = [("Content-Type", "text/plain")]
-    start_response("200 OK", headers)
-    path = environ.get("PATH_INFO", "")
-    if not path == "":
-        v = int(path[prefix_len:])
-
-    loop = asyncio.get_event_loop()
-    r = loop.run_until_complete(call(v))
-    # print(r)
-
-    return str(r).encode()
-
-
 if __name__ == "__main__":
-    fastwsgi.run(wsgi_app=app, host="0.0.0.0", port=8000, workers=100)
-    # asyncio.run(test())
+    asyncio.run(test())
