@@ -16,7 +16,7 @@ from rx.core.typing import Observable
 from nats_common import NatsCommon
 
 
-class NatsClientManager:
+class NatsReactor:
     def __init__(self, servers: int = 1):
         self.nc: NatsClient = NatsClient()
         self.servers: int = servers
@@ -26,25 +26,26 @@ class NatsClientManager:
         NatsCommon.setClusterNodes(self.servers)
         await NatsCommon.connect(self.nc)
 
-    async def request(self, data: bytes) -> bytes:
+    async def call(self, data: bytes) -> bytes:
         """
-        Send a request to the NATS server and return the response data.
+        Send a call to the NATS server and return the response data.
 
         :param data: The data to send to the NATS server.
         :return: The response data from the NATS server.
         """
         result: Msg = await self.nc.request(NatsCommon.SQUARE_SUBJECT, data)
+        NatsCommon.calls += 1
         return result.data
 
     def call_as_future(self, data: bytes) -> Observable:
         """
-        Wrap the request in an asyncio task and return an Observable.
+        Wrap the call in an asyncio task and return an Observable.
 
         :param data: The data to send to the NATS server.
         :return: An Observable wrapping the asyncio task.
         """
         loop = asyncio.get_event_loop()
-        future = loop.create_task(self.request(data))
+        future = loop.create_task(self.call(data))
         return rx.from_future(future)
 
     @staticmethod
@@ -67,7 +68,7 @@ class NatsClientManager:
         """
         return int(data.decode())
 
-    async def call(self, n: int = 1000) -> List[int]:
+    async def aggregate(self, n: int = 1000) -> List[int]:
         """
         Perform the main logic for making requests and processing results.
 
@@ -90,23 +91,14 @@ class NatsClientManager:
         await finish.wait()
         return result
 
-    async def test(self, n: int = 1000) -> None:
-        """
-        Test the NATS client by measuring the time taken to process requests.
-
-        :param n: The number of requests to process.
-        """
-        start: int = time.time_ns()
-
-        await self.call(n)
-        duration_ms: float = (time.time_ns() - start) / 1_000_000
-        print(f"Took: {duration_ms} ms")
-
 
 async def main():
-    manager = NatsClientManager()
+    start: int = time.time_ns()
+    manager = NatsReactor()
     await manager.connect()
-    await manager.test()
+    await manager.aggregate()
+    duration_ms: float = (time.time_ns() - start) / 1_000_000
+    print(f"Took: {duration_ms} ms calls:{NatsCommon.calls}")
 
 
 if __name__ == "__main__":
