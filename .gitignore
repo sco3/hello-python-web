@@ -11,3 +11,4 @@ target
 Cargo.lock
 /.pydevproject
 /.mypy_cache/
+.idea
