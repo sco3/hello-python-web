@@ -1,21 +1,19 @@
 #!/usr/bin/env -S poetry run python3
 
+from asyncio import Event
 import asyncio
 import time
 import traceback
-from asyncio import Event
 from typing import List
-
-import rx
-from rx import operators as ops
-from rx.core.typing import Observable
-from rx.core.observable.observable import Observable as ObsObs
 
 from nats.aio.client import Client as NatsClient
 from nats.aio.client import Msg
+from rx import operators as ops
+import rx
+from rx.core.observable.observable import Observable as ObsObs
+from rx.core.typing import Observable
 
 from nats_common import NatsCommon
-
 
 
 class NatsClientManager:
