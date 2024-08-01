@@ -11,8 +11,6 @@ async def fetch(session, url):
 
 
 async def main():
-    url = "http://localhost:8000/square/1"
-
     # Create a single ClientSession to be reused
     async with aiohttp.ClientSession() as session:
         # Perform multiple requests using the same session
