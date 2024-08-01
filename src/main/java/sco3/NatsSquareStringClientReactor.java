@@ -6,7 +6,6 @@ import static java.util.concurrent.Executors.newFixedThreadPool;
 import static reactor.core.publisher.Mono.fromFuture;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -18,6 +17,7 @@ import org.glassfish.grizzly.utils.Charsets;
 import io.nats.client.Connection;
 import io.nats.client.Message;
 import io.nats.client.Nats;
+import io.nats.client.Options;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
@@ -38,12 +38,12 @@ public class NatsSquareStringClientReactor implements NatsSquare {
 
 	public long call(ThreadLocal<Connection> tnc) throws Exception {
 		long start = System.currentTimeMillis();
-		int n = 1000;
-		ArrayList<Integer> result = new ArrayList<>(n);
+		int results = 1000;
+		ArrayList<Integer> result = new ArrayList<>(results);
 		final AtomicBoolean run = new AtomicBoolean(true);
 		final Connection nc = tnc.get();
 
-		Flux<Integer> flux = (Flux.range(1, n) //
+		Flux<Integer> flux = (Flux.range(1, results) //
 				.map(this::toBytes) //
 				.flatMap(bytes -> fromFuture(nc.request(SQUARE, bytes)))//
 				.map(this::fromMessage)//
@@ -55,7 +55,6 @@ public class NatsSquareStringClientReactor implements NatsSquare {
 		while (run.get()) {
 			Thread.sleep(1);
 		}
-		// System.out.println(result);
 
 		long finish = System.currentTimeMillis();
 		return finish - start;
@@ -71,12 +70,18 @@ public class NatsSquareStringClientReactor implements NatsSquare {
 		ThreadLocal<Connection> nc = withInitial(//
 				() -> {
 					try {
-						Connection c = Nats.connect("nats://localhost:4222");
+						Options options = (new Options.Builder()//
+								.server(SERVER)//
+								.userInfo(USER, PASS)//
+								.build() //
+						);
+
+						Connection c = Nats.connect(options);
 						conns.add(c);
 						return c;
 					} catch (IOException | InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
+						System.exit(0);
 						return null;
 					}
 				}//
@@ -110,5 +115,4 @@ public class NatsSquareStringClientReactor implements NatsSquare {
 		NatsSquareStringClientReactor client = new NatsSquareStringClientReactor();
 		client.runManyTimes();
 	}
-
 }

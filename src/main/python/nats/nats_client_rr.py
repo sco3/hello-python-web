@@ -19,10 +19,11 @@ from nats_common import NatsCommon
 async def call(anc: Union[NatsClient, None] = None) -> None:
     start: int = time.time_ns()
 
+    nc: NatsClient
     if anc:
-        nc: NatsClient = anc
+        nc = anc
     else:
-        nc: NatsClient = NatsClient()
+        nc = NatsClient()
 
     if anc or await NatsCommon.connect(nc):
         id = uuid.uuid4()
@@ -34,7 +35,7 @@ async def call(anc: Union[NatsClient, None] = None) -> None:
 
         async with NatsCommon.lock:
             NatsCommon.calls += 1
-            NatsCommon.traffic += len(result.data)+NatsCommon.HELLO_LEN
+            NatsCommon.traffic += len(result.data) + NatsCommon.HELLO_LEN
             NatsCommon.duration += duration
             NatsCommon.call_duration += call_duration
     if not anc:

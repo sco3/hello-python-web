@@ -18,14 +18,14 @@ from nats_common import NatsCommon
 
 async def call(anc: Union[NatsClient, None] = None) -> None:
     start: int = time.time_ns()
-
+    nc: NatsClient
     if anc:
-        nc: NatsClient = anc
+        nc = anc
     else:
-        nc: NatsClient = NatsClient()
+        nc = NatsClient()
 
     if anc or await NatsCommon.connect(nc):
-        id = "1" # uuid.uuid4()
+        id = "1"  # uuid.uuid4()
 
         ready = asyncio.Event()
 

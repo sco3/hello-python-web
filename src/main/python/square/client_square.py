@@ -32,10 +32,19 @@ def get_square(number: int):
 
 if __name__ == "__main__":
     # Example usage
-    start: int = time.time_ns()
+    start: int = time.time()
 
-    for iter, number in product(range(1, 100), range(1, 1000)):
+    calls: int = 1000
+    runs: int = 1
+    cnt: int = 0
+
+    for run, number in product(range(1, runs + 1), range(1, calls + 1)):
+        # print(run, number)
         result = get_square(number)
+        cnt += 1
 
-    duration: int = time.time_ns() - start
-    print(f"duration: {duration/1000_000} ms")
+    print("cnt", cnt)
+
+    duration: int = time.time() - start
+    rps: int = runs * calls / duration
+    print(f"duration: {duration*1000} ms requests: {rps} per second")
