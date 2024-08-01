@@ -21,17 +21,18 @@ import rx
 from nats_common import NatsCommon
 
 
-async def request(nc: NatsClient, data: bytes) -> bytes:
+async def call(nc: NatsClient, data: bytes) -> bytes:
 
     subject = NatsCommon.SQUARE_SUBJECT
     result: Msg = await nc.request(subject, data)
+    NatsCommon.calls += 1
 
     return result.data
 
 
 def call_as_future(nc: NatsClient, data: bytes) -> Observable:
     loop = asyncio.get_event_loop()
-    future = loop.create_task(request(nc, data))
+    future = loop.create_task(call(nc, data))
     return rx.from_future(future)
 
 
@@ -43,7 +44,7 @@ def from_bytes(m: bytes) -> int:
     return int(m.decode())
 
 
-async def call(nc: NatsClient, n: int = 1000) -> list:
+async def aggregate(nc: NatsClient, n: int = 1000) -> list:
     thread_id = threading.get_ident()
     print(f"Current thread ID: {thread_id}")
 
@@ -72,9 +73,9 @@ async def test() -> None:
     await NatsCommon.connect(nc)
     NatsCommon.reset_stats()
 
-    await call(nc)
+    await aggregate(nc)
     duration_ms: float = (time.time_ns() - start) / 1000_1000
-    print(f"Took: {duration_ms}")
+    print(f"Took: {duration_ms} calls: {NatsCommon.calls}")
 
 
 if __name__ == "__main__":

@@ -10,3 +10,4 @@ build
 target
 Cargo.lock
 /.pydevproject
+/.mypy_cache/
