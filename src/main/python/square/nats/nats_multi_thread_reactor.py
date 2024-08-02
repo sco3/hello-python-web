@@ -20,7 +20,7 @@ async def aggregate_async(x: int) -> list:
             if not reactor:
                 reactor = NatsReactor()
                 reactors[pid] = reactor
-                print(f"Process: {pid} reactor: {reactor}")
+                print(f"Thread: {pid} reactor: {reactor}")
 
         await reactor.connect_nats()
         result_list = await reactor.aggregate(x)
@@ -32,11 +32,9 @@ async def aggregate_async(x: int) -> list:
 
 
 def aggregate_sync(x: int) -> list:
-    try:
+    if asyncio.get_event_loop_policy()._local._loop:
         loop = asyncio.get_event_loop()
-
-    except Exception as e:
-        print("Error", e)
+    else:
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
 
@@ -50,7 +48,7 @@ def collect_results(result: list) -> None:
 
 def benchmark():
     start = time.time()
-    with ThreadPoolExecutor(max_workers=1) as executor:
+    with ThreadPoolExecutor(max_workers=2) as executor:
         futures = [executor.submit(aggregate_sync, 1000) for _ in range(1000)]
         for future in as_completed(futures):
             collect_results(future.result())
