@@ -12,6 +12,7 @@ lock = manager.Lock()
 reactors: dict = {}
 result_list = []
 
+
 async def a_call(x):
     pid = os.getpid()
     try:
@@ -20,6 +21,7 @@ async def a_call(x):
             if not reactor:
                 reactor = NatsReactor()
                 reactors[pid] = reactor
+                print(f"Process: {pid} reactor: {reactor}")
 
         await reactor.connect_nats()
         r = await reactor.aggregate(1000)
@@ -36,16 +38,13 @@ def foo_pool(x):
     return loop.run_until_complete(a_call(x))
 
 
-
-
-
 def log_result(result):
     result_list.append(result)
 
 
 def apply_async_with_callback():
     start = time.time()
-    pool = Pool(processes=10)
+    pool = Pool(processes=16)
     for i in range(1000):
         pool.apply_async(foo_pool, args=(i,), callback=log_result)
     pool.close()
