@@ -3,9 +3,15 @@ import asyncio
 from nats_reactor import NatsReactor
 import time
 
-pool_size = 1
+pool_size = 2
 q = Queue(pool_size)
-result_list = []
+
+
+async def aggregate_task():
+    r = await q.get()
+    result = await r.aggregate(1000)
+    await q.put(r)
+    return result
 
 
 async def benchmark():
@@ -15,10 +21,15 @@ async def benchmark():
         await r.connect_nats()
         q.put_nowait(r)
 
-    for i in range(1000):
-        r = await q.get()
-        result_list.append(await r.aggregate(1000))
-        r = await q.put(r)
+    tasks = []
+    for i in range(2):
+        tasks.append(asyncio.create_task(aggregate_task()))
+
+#    while any(not task.done() for task in tasks):
+#        print(q.qsize())
+#        asyncio.sleep(0.1)
+
+    result_list = await asyncio.gather(*tasks)
 
     dur = 1000 * (time.time() - start)
     result_sizes = set()
