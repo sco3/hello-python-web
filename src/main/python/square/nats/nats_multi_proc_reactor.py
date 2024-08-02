@@ -40,7 +40,8 @@ def aggregate_sync(x: int) -> list:
 
 
 def collect_results(result: list) -> None:
-    result_list.append(result)
+    with lock:
+        result_list.append(result)
 
 
 def benchmark():
