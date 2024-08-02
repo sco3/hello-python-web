@@ -11,7 +11,6 @@ async def main():
     if await NatsCommon.connect(nc):
 
         async def message_handler(msg):
-            # print(f"Received message: {msg.subject} {msg.data.decode()} Send {NatsCommon.HELLO} to {msg.reply}")
             await msg.respond(NatsCommon.HELLO)
 
         await nc.subscribe(NatsCommon.REQ_ALL, cb=message_handler)
@@ -20,5 +19,4 @@ async def main():
 
 
 if __name__ == "__main__":
-
     asyncio.run(main())

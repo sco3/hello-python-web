@@ -23,8 +23,9 @@ class NatsReactor:
 
     async def connect_nats(self) -> None:
         """Connects to the NATS server."""
-        NatsCommon.setClusterNodes(self.servers)
-        await NatsCommon.connect(self.nc)
+        if not self.nc.is_connected:
+            NatsCommon.setClusterNodes(self.servers)
+            await NatsCommon.connect(self.nc)
 
     async def call(self, data: bytes) -> bytes:
         """
@@ -92,7 +93,7 @@ class NatsReactor:
         return result
 
 
-async def main():
+async def main() -> None:
     start: int = time.time_ns()
     manager = NatsReactor()
     await manager.connect_nats()
