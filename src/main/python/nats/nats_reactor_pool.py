@@ -53,7 +53,7 @@ async def main():
 
     # Run tasks concurrently and wait for completion
     await asyncio.gather(*tasks)
-    print(time.time() - start)
+    print("Took:",1000*(time.time() - start), "ms")
 
 
 if __name__ == "__main__":
