@@ -3,7 +3,7 @@ import asyncio
 from nats_reactor import NatsReactor
 import time
 
-pool_size = 2
+pool_size = 8  #
 q = Queue(pool_size)
 
 
@@ -14,6 +14,27 @@ async def aggregate_task():
     return result
 
 
+async def check_execution(tasks):
+    while True:
+        done = True
+        running = 0
+        states = {}
+        for task in tasks:
+            state = task._state
+            cnt = states.get(state, 0)
+            states[state] = cnt + 1
+            if not task.done():
+                done = False
+
+        print(states)
+        #        if done:
+        #            break
+        await asyncio.sleep(1)
+
+
+# while any(not task.done() for task in tasks):
+
+
 async def benchmark():
     start = time.time()
     for i in range(pool_size):
@@ -22,12 +43,10 @@ async def benchmark():
         q.put_nowait(r)
 
     tasks = []
-    for i in range(2):
+    for i in range(1000):
         tasks.append(asyncio.create_task(aggregate_task()))
 
-#    while any(not task.done() for task in tasks):
-#        print(q.qsize())
-#        asyncio.sleep(0.1)
+    await check_execution(tasks)
 
     result_list = await asyncio.gather(*tasks)
 
