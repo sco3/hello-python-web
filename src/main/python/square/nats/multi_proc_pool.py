@@ -2,6 +2,8 @@ from multiprocessing import Pool
 import os
 import time
 
+res = []
+
 
 def hello_world(name):
     print("enter:", os.getpid())
@@ -10,22 +12,21 @@ def hello_world(name):
     return name.upper()
 
 
-list_of_movie_names = ["john_wick_1", "john_wick_1", "john_wick_3"]
+def collect(name):
+    res.append(name)
 
 
 def demo_multi_processing():
     tic = time.time()
     pool = Pool(processes=os.cpu_count())
-    
-    res = list(
-        pool.apply_async(hello_world, args=(name,)) for name in list_of_movie_names
-    )
+
+    for i in range(10):
+        pool.apply_async(hello_world, args=(f"x{i}",), callback=collect)
 
     pool.close()
     pool.join()
 
-    results = [r.get() for r in res]
-    print(results)
+    print(res)
     toc = time.time()
     print(f"Completed in {toc - tic} seconds")
 
