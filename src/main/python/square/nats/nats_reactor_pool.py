@@ -27,8 +27,8 @@ async def check_execution(tasks):
                 done = False
 
         print(states)
-        #        if done:
-        #            break
+        if done:
+            break
         await asyncio.sleep(1)
 
 
