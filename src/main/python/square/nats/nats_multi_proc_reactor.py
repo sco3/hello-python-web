@@ -23,7 +23,7 @@ async def aggregate_async(x: int) -> list:
             reactors[pid] = reactor
 
             with lock:
-                print(f"Process: {pid} reactor: {reactor}")
+                ((print(f"Process: {pid} reactor: {reactor}")))
 
         await reactor.connect_nats()
         result_list = await reactor.aggregate(x)
@@ -43,7 +43,7 @@ def collect_results(result: list) -> None:
     result_list.append(result)
 
 
-def apply_async_with_callback():
+def benchmark():
     start = time.time()
     pool = Pool(processes=16)
     for i in range(1000):
@@ -51,8 +51,19 @@ def apply_async_with_callback():
     pool.close()
     pool.join()
     dur = 1000 * (time.time() - start)
-    print("results:", len(result_list), "took:", dur, "ms")
+    result_sizes = set()
+    for result in result_list:
+        result_sizes.add(len(result))
+    print(
+        "took:",
+        dur,
+        "results:",
+        len(result_list),
+        "sizes:",
+        result_sizes,
+        "ms",
+    )
 
 
 if __name__ == "__main__":
-    apply_async_with_callback()
+    benchmark()
