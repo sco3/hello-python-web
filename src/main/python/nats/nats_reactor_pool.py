@@ -42,7 +42,7 @@ async def worker(task_id: int, pool: ConnectionPool):
 async def main():
     start = time.time()
     num_tasks = 1000
-    max_concurrent_tasks = 2
+    max_concurrent_tasks = 1
 
     # Create and initialize the connection pool
     pool = ConnectionPool(pool_size=max_concurrent_tasks)
