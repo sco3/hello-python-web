@@ -1,44 +1,45 @@
 import asyncio
-import os
 from multiprocessing import Manager
 from multiprocessing import Pool
-from multiprocessing.managers import ValueProxy
 from multiprocessing.managers import DictProxy
-from nats_reactor import NatsReactor
+from multiprocessing.managers import ValueProxy
+import os
 import time
 
-manager = Manager()
-lock = manager.Lock()
+from nats_reactor import NatsReactor
+
+
+lock = Manager().Lock()
 reactors: dict = {}
 result_list = []
 
 
-async def a_call(x):
+async def aggregate_async(x: int) -> list:
     pid = os.getpid()
     try:
-        with lock:
-            reactor = reactors.get(pid, None)
-            if not reactor:
-                reactor = NatsReactor()
-                reactors[pid] = reactor
+        reactor = reactors.get(pid, None)
+        if not reactor:
+            reactor = NatsReactor()
+            reactors[pid] = reactor
+
+            with lock:
                 print(f"Process: {pid} reactor: {reactor}")
 
         await reactor.connect_nats()
-        r = await reactor.aggregate(1000)
+        result_list = await reactor.aggregate(x)
 
     except Exception as e:
         print("Exception:", e)
 
-    # print("pid:", pid, reactors, "reactor:", reactor)
-    return r
+    return result_list
 
 
-def foo_pool(x):
+def aggregate_sync(x: int) -> list:
     loop = asyncio.get_event_loop()
-    return loop.run_until_complete(a_call(x))
+    return loop.run_until_complete(aggregate_async(x))
 
 
-def log_result(result):
+def collect_results(result: list) -> None:
     result_list.append(result)
 
 
@@ -46,7 +47,7 @@ def apply_async_with_callback():
     start = time.time()
     pool = Pool(processes=16)
     for i in range(1000):
-        pool.apply_async(foo_pool, args=(i,), callback=log_result)
+        pool.apply_async(aggregate_sync, args=(1000,), callback=collect_results)
     pool.close()
     pool.join()
     dur = 1000 * (time.time() - start)
