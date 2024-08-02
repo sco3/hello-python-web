@@ -46,7 +46,7 @@ async def benchmark():
     for i in range(1000):
         tasks.append(asyncio.create_task(aggregate_task()))
 
-    await check_execution(tasks)
+    # await check_execution(tasks)
 
     result_list = await asyncio.gather(*tasks)
 
