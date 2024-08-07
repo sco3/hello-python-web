@@ -52,9 +52,10 @@ func aggregate(num int, nc *nats.Conn) []int {
 			Map(func(ctx context.Context, i interface{}) (interface{}, error) {
 				return fromBytes(i.([]byte)), nil
 			})*/
-	observable := rxgo.Range(1, num).FlatMap(func(i rxgo.Item) rxgo.Observable {
-		return rxgo.Just(i.V.(int) * i.V.(int))()
-	})
+	observable := rxgo.Range(1, num).
+		FlatMap(func(i rxgo.Item) rxgo.Observable {
+			return rxgo.Just(call(nc, i.V.(int)))()
+		})
 	i := 0
 	for item := range observable.Observe() {
 		n := item.V.(int)
