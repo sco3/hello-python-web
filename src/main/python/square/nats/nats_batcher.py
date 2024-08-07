@@ -75,7 +75,8 @@ async def main() -> None:
     start: int = time.time_ns()
     manager = NatsBatcher()
     await manager.connect_nats()
-    await manager.aggregate()
+    for i in range(1000):
+        await manager.aggregate()
     duration_ms: float = (time.time_ns() - start) / 1_000_000
     print(f"Took: {duration_ms} ms calls:{NatsCommon.calls}")
 
