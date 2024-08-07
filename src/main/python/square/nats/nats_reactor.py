@@ -4,7 +4,7 @@ from asyncio import Event
 import asyncio
 import time
 import traceback
-from typing import List
+from typing import List, ClassVar
 
 from nats.aio.client import Client as NatsClient
 from nats.aio.client import Msg
@@ -17,6 +17,9 @@ from nats_common import NatsCommon
 
 
 class NatsReactor:
+    number: ClassVar[int] = 1000
+    tests: ClassVar[int] = 1000
+
     def __init__(self, servers: int = 1):
         self.nc: NatsClient = NatsClient()
         self.servers: int = servers
@@ -97,7 +100,8 @@ async def main() -> None:
     start: int = time.time_ns()
     manager = NatsReactor()
     await manager.connect_nats()
-    await manager.aggregate()
+    for i in range(NatsReactor.tests):
+        await manager.aggregate(NatsReactor.number)
     duration_ms: float = (time.time_ns() - start) / 1_000_000
     print(f"Took: {duration_ms} ms calls:{NatsCommon.calls}")
 
