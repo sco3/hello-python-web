@@ -3,9 +3,12 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"time"
+
+	"github.com/reactivex/rxgo/v2"
 
 	"strconv"
 
@@ -27,11 +30,13 @@ func call(nc *nats.Conn, num int) int {
 func aggregate(num int, nc *nats.Conn) []int {
 	var result = make([]int, num)
 
-
-	var i int
-	for i = 0; i < num; i++ {
-		var outNum = call(nc, i+1)
-		result[i] = outNum
+	observable := rxgo.Range(1, num+1).
+		Map(func(_ context.Context, item interface{}) (interface{}, error) {
+			return call(nc, item.(int)), nil
+		}, rxgo.WithPool(1))
+	i := 0
+	for item := range observable.Observe() {
+		result[i] = item.V.(int)
 	}
 	return result
 }
@@ -58,6 +63,7 @@ func main() {
 	defer nc.Close()
 
 	var results map[int]struct{} = make(map[int]struct{})
+
 	for i := 0; i < nTests; i++ {
 		result := aggregate(number, nc)
 		results[len(result)] = struct{}{}
