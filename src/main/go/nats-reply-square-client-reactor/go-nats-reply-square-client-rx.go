@@ -4,12 +4,14 @@ package main
 
 import (
 	"fmt"
-	"github.com/reactivex/rxgo/v2"
 	"log"
 	"time"
 
 	"strconv"
 
+	"github.com/jjeffcaii/reactor-go"
+	"github.com/jjeffcaii/reactor-go/flux"
+	"github.com/jjeffcaii/reactor-go/scheduler"
 	"github.com/nats-io/nats.go"
 )
 
@@ -41,16 +43,18 @@ func toBytes(num int) []byte {
 
 func aggregate(num int, nc *nats.Conn) []int {
 	var result = make([]int, num)
-	observable := rxgo.Range(1, num).
-		FlatMap(func(i rxgo.Item) rxgo.Observable {
-			return rxgo.Just(call(nc, i.V.(int)))()
-		})
-	i := 0
-	for item := range observable.Observe() {
-		n := item.V.(int)
-		result[i] = n
-		i++
-	}
+	/*
+		observable := rxgo.Range(1, num).
+			FlatMap(func(i rxgo.Item) rxgo.Observable {
+				return rxgo.Just(call(nc, i.V.(int)))()
+			})
+		i := 0
+		for item := range observable.Observe() {
+			n := item.V.(int)
+			result[i] = n
+			i++
+		}
+	*/
 	return result
 }
 
