@@ -41,17 +41,6 @@ func toBytes(num int) []byte {
 
 func aggregate(num int, nc *nats.Conn) []int {
 	var result = make([]int, num)
-	/*
-		observable := rxgo.Range(1, num).
-			Map(func(ctx context.Context, i interface{}) (interface{}, error) {
-				return toBytes(i.(int)), nil
-			}).
-			FlatMap(func(item interface{}) rxgo.Observable {
-				return rxgo.Just(call2(nc, item.([]byte)))
-			}).
-			Map(func(ctx context.Context, i interface{}) (interface{}, error) {
-				return fromBytes(i.([]byte)), nil
-			})*/
 	observable := rxgo.Range(1, num).
 		FlatMap(func(i rxgo.Item) rxgo.Observable {
 			return rxgo.Just(call(nc, i.V.(int)))()
