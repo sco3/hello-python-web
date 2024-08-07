@@ -3,12 +3,10 @@
 package main
 
 import (
-	"context"
 	"fmt"
+	"github.com/reactivex/rxgo/v2"
 	"log"
 	"time"
-
-	"github.com/reactivex/rxgo/v2"
 
 	"strconv"
 
@@ -43,21 +41,20 @@ func toBytes(num int) []byte {
 
 func aggregate(num int, nc *nats.Conn) []int {
 	var result = make([]int, num)
-
-	observable := rxgo.Range(1, num).
-		Map( //
-			func(ctx context.Context, i interface{}) (interface{}, error) {
+	/*
+		observable := rxgo.Range(1, num).
+			Map(func(ctx context.Context, i interface{}) (interface{}, error) {
 				return toBytes(i.(int)), nil
-			},
-		).   //
-		Map( //
-			func(_ context.Context, item interface{}) (interface{}, error) {
-				return call2(nc, item.([]byte)), nil
-			}, //
-		). //
-		Map(func(ctx context.Context, i interface{}) (interface{}, error) {
-			return fromBytes(i.([]byte)), nil
-		})
+			}).
+			FlatMap(func(item interface{}) rxgo.Observable {
+				return rxgo.Just(call2(nc, item.([]byte)))
+			}).
+			Map(func(ctx context.Context, i interface{}) (interface{}, error) {
+				return fromBytes(i.([]byte)), nil
+			})*/
+	observable := rxgo.Range(1, num).FlatMap(func(i rxgo.Item) rxgo.Observable {
+		return rxgo.Just(i.V.(int) * i.V.(int))()
+	})
 	i := 0
 	for item := range observable.Observe() {
 		n := item.V.(int)
