@@ -46,11 +46,18 @@ func aggregate(num int, nc *nats.Conn) []int {
 
 	observable := rxgo.Range(1, num).
 		Map( //
+			func(ctx context.Context, i interface{}) (interface{}, error) {
+				return toBytes(i.(int)), nil
+			},
+		).   //
+		Map( //
 			func(_ context.Context, item interface{}) (interface{}, error) {
-				return call(nc, item.(int)), nil
+				return call2(nc, item.([]byte)), nil
 			}, //
-			rxgo.WithPool(1), //
-		)
+		). //
+		Map(func(ctx context.Context, i interface{}) (interface{}, error) {
+			return fromBytes(i.([]byte)), nil
+		})
 	i := 0
 	for item := range observable.Observe() {
 		n := item.V.(int)
