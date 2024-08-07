@@ -21,7 +21,7 @@ import io.nats.client.Options;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
-public class NatsSquareStringClientReactor implements NatsSquare {
+public class NatsSquareStringClientReactorThreadPool implements NatsSquare {
 	AtomicLong mCount = new AtomicLong(0);
 
 	byte[] toBytes(int i) {
@@ -112,7 +112,7 @@ public class NatsSquareStringClientReactor implements NatsSquare {
 	}
 
 	public static void main(String[] args) throws Exception {
-		NatsSquareStringClientReactor client = new NatsSquareStringClientReactor();
+		NatsSquareStringClientReactorThreadPool client = new NatsSquareStringClientReactorThreadPool();
 		client.runManyTimes();
 	}
 }

@@ -1,0 +1,1 @@
+nats bench bench --js --pub 1 --sub 1 --pull --size 1400 --msgs 10000000 --stream=benchjs

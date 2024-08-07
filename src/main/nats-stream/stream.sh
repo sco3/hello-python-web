@@ -1,0 +1,1 @@
+nats stream add benchjs --subjects "bench" --storage file --retention work --max-msgs=-1 --max-age=0 --max-bytes=-1 --ack --discard=old --defaults
