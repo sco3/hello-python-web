@@ -59,6 +59,8 @@ func main() {
 	const number int = 1000
 	var start time.Time
 	start = time.Now()
+	
+	done = make(chan struct{})
 
 	var opts = nats.Options{
 		Servers: []string{

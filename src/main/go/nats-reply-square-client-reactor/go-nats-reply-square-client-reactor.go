@@ -3,15 +3,16 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"github.com/jjeffcaii/reactor-go"
+	"github.com/jjeffcaii/reactor-go/flux"
+	"github.com/jjeffcaii/reactor-go/scheduler"
 	"log"
 	"time"
 
 	"strconv"
 
-	"github.com/jjeffcaii/reactor-go"
-	"github.com/jjeffcaii/reactor-go/flux"
-	"github.com/jjeffcaii/reactor-go/scheduler"
 	"github.com/nats-io/nats.go"
 )
 
@@ -43,18 +44,32 @@ func toBytes(num int) []byte {
 
 func aggregate(num int, nc *nats.Conn) []int {
 	var result = make([]int, num)
-	/*
-		observable := rxgo.Range(1, num).
-			FlatMap(func(i rxgo.Item) rxgo.Observable {
-				return rxgo.Just(call(nc, i.V.(int)))()
-			})
-		i := 0
-		for item := range observable.Observe() {
-			n := item.V.(int)
-			result[i] = n
-			i++
-		}
-	*/
+	var su reactor.Subscription
+	done := make(chan struct{})
+	i := 0
+	flux.Range(1, num).
+		Map(func(input reactor.Any) (reactor.Any, error) {
+			output := call(nc, input.(int))
+			return output, nil
+		}).
+		SubscribeOn(scheduler.Single()).
+		Subscribe(context.Background(),
+			reactor.OnSubscribe(
+				func(_ context.Context, s reactor.Subscription) {
+					su = s
+					s.Request(1)
+				}),
+			reactor.OnNext(func(v reactor.Any) error {
+				result[i] = v.(int)
+				i++
+				su.Request(1)
+				return nil
+			}),
+			reactor.OnComplete(func() {
+				close(done)
+			}),
+		)
+	<-done
 	return result
 }
 
