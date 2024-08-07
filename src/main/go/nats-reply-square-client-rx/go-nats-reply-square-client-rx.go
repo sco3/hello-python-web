@@ -15,28 +15,47 @@ import (
 	"github.com/nats-io/nats.go"
 )
 
-func call(nc *nats.Conn, num int) int {
-	var subj string = "square"
+const subj = "square"
 
-	var sNum string = strconv.Itoa(num)
-	var res *nats.Msg
-	res, _ = nc.Request(subj, []byte(sNum), time.Hour)
-	sNum = string(res.Data)
-	var outNum int
-	outNum, _ = strconv.Atoi(sNum)
+func call(nc *nats.Conn, num int) int {
+	bytes := toBytes(num)
+	res, _ := nc.Request(subj, bytes, time.Hour)
+	bytes = res.Data
+	outNum := fromBytes(bytes)
 	return outNum
+}
+
+func call2(nc *nats.Conn, bytes []byte) []byte {
+	res, _ := nc.Request(subj, bytes, time.Hour)
+	bytes = res.Data
+	return bytes
+}
+
+func fromBytes(bytes []byte) int {
+	outNum, _ := strconv.Atoi(string(bytes))
+	return outNum
+}
+
+func toBytes(num int) []byte {
+	bytes := []byte(strconv.Itoa(num))
+	return bytes
 }
 
 func aggregate(num int, nc *nats.Conn) []int {
 	var result = make([]int, num)
 
-	observable := rxgo.Range(1, num+1).
-		Map(func(_ context.Context, item interface{}) (interface{}, error) {
-			return call(nc, item.(int)), nil
-		}, rxgo.WithPool(1))
+	observable := rxgo.Range(1, num).
+		Map( //
+			func(_ context.Context, item interface{}) (interface{}, error) {
+				return call(nc, item.(int)), nil
+			}, //
+			rxgo.WithPool(1), //
+		)
 	i := 0
 	for item := range observable.Observe() {
-		result[i] = item.V.(int)
+		n := item.V.(int)
+		result[i] = n
+		i++
 	}
 	return result
 }
