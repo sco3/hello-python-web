@@ -2,7 +2,7 @@
 
 import asyncio
 import time
-from typing import List
+from typing import List, ClassVar
 
 from nats.aio.client import Client as NatsClient
 from nats.aio.client import Msg
@@ -11,6 +11,11 @@ from nats_common import NatsCommon
 
 
 class NatsBatcher:
+    tests: ClassVar[int] = 1000
+    numbers: ClassVar[int] = 1000
+    running: ClassVar[int] = 0
+    tasks: ClassVar[int] = 100
+
     def __init__(self, servers: int = 1):
         self.nc: NatsClient = NatsClient()
         self.servers: int = servers
@@ -50,10 +55,11 @@ class NatsBatcher:
         """
         data = NatsBatcher.to_bytes(n)
         result: Msg = await self.nc.request(NatsCommon.SQUARE_SUBJECT, data)
+        NatsBatcher.running -= 1
         NatsCommon.calls += 1
         return NatsBatcher.from_bytes(result.data)
 
-    async def aggregate(self, n: int = 1000) -> List[int]:
+    async def aggregate(self, n: int) -> List[int]:
         """
         Perform the main logic for making requests and processing results.
 
@@ -65,7 +71,12 @@ class NatsBatcher:
 
         for i in range(n):
             task = asyncio.create_task(self.call(i))
-            tasks.append(task)
+            if NatsBatcher.running < NatsBatcher.tasks:
+                NatsBatcher.running += 1
+                tasks.append(task)
+
+            # if len([t for t in tasks if not task.done()]) < n:
+            #    tasks.append(task)
 
         result = await asyncio.gather(*tasks)
 
@@ -77,8 +88,8 @@ async def main() -> None:
     manager = NatsBatcher()
     await manager.connect_nats()
     sizes = set()
-    for i in range(1000):
-        r = await manager.aggregate()
+    for i in range(NatsBatcher.tests):
+        r = await manager.aggregate(NatsBatcher.numbers)
         sizes.add(len(r))
 
     duration_ms: float = (time.time_ns() - start) / 1_000_000
