@@ -19,7 +19,6 @@ func call( //
 ) {
 	defer s.Done()
 	const subj string = "square"
-
 	var sNum string = strconv.Itoa(num)
 	var res *nats.Msg
 	res, _ = nc.Request(subj, []byte(sNum), time.Hour)
@@ -40,20 +39,20 @@ func aggregate(num int, nc *nats.Conn) []int {
 	wg.Wait()
 	close(resChannels)
 	var a []int = make([]int, num)
-	i := 0
+	var i int = 0
 	for r := range resChannels {
 		a[i] = r
 		i++
 	}
 	//sort.Ints(a)
-	fmt.Printf("%v\n", a)
+	//fmt.Printf("%v\n", a)
 	return a
 }
 
 func main() {
 	runtime.GOMAXPROCS(1)
-	const nTests int = 10
-	const number int = 10
+	const nTests int = 1000
+	const number int = 1000
 	var start time.Time
 	start = time.Now()
 
