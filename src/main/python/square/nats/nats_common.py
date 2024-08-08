@@ -67,4 +67,4 @@ class NatsCommon:
         return result
 
 
-asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+# asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())

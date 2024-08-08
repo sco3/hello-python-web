@@ -1,6 +1,7 @@
 #!/usr/bin/env -S poetry run python3
 
 from asyncio import Event
+from asyncio import Task
 import asyncio
 import time
 import traceback
@@ -30,28 +31,6 @@ class NatsReactor:
             NatsCommon.setClusterNodes(self.servers)
             await NatsCommon.connect(self.nc)
 
-    async def call(self, data: bytes) -> bytes:
-        """
-        Send a call to the NATS server and return the response data.
-
-        :param data: The data to send to the NATS server.
-        :return: The response data from the NATS server.
-        """
-        result: Msg = await self.nc.request(NatsCommon.SQUARE_SUBJECT, data)
-        NatsCommon.calls += 1
-        return result.data
-
-    def call_as_future(self, data: bytes) -> Observable:
-        """
-        Wrap the call in an asyncio task and return an Observable.
-
-        :param data: The data to send to the NATS server.
-        :return: An Observable wrapping the asyncio task.
-        """
-        loop = asyncio.get_event_loop()
-        future = loop.create_task(self.call(data))
-        return rx.from_future(future)
-
     @staticmethod
     def to_bytes(i: int) -> bytes:
         """
@@ -72,6 +51,17 @@ class NatsReactor:
         """
         return int(data.decode())
 
+    @staticmethod
+    def from_message(msg: Msg) -> int:
+        """
+        Convert bytes back to an integer.
+
+        :param msg: The message to convert.
+        :return: The integer representation of the bytes.
+        """
+
+        return int(msg.data.decode())
+
     async def aggregate(self, n: int = 1000) -> List[int]:
         """
         Perform the main logic for making requests and processing results.
@@ -82,8 +72,14 @@ class NatsReactor:
         finish: Event = Event()
         observable: ObsObs = rx.range(1, n + 1).pipe(
             ops.map(self.to_bytes),
-            ops.flat_map(lambda data: self.call_as_future(data)),
-            ops.map(self.from_bytes),
+            ops.flat_map(
+                lambda data: rx.from_future(
+                    asyncio.get_event_loop().create_task(
+                        self.nc.request(NatsCommon.SQUARE_SUBJECT, data)
+                    )
+                )
+            ),
+            ops.map(self.from_message),
         )
         result: List[int] = []
         observable.subscribe(
@@ -102,7 +98,7 @@ async def main() -> None:
     await manager.connect_nats()
     for i in range(NatsReactor.tests):
         await manager.aggregate(NatsReactor.number)
-        
+
     duration_ms: float = (time.time_ns() - start) / 1_000_000
     print(f"Took: {duration_ms} ms calls:{NatsCommon.calls}")
 
