@@ -15,9 +15,9 @@ import (
 
 func call( //
 	nc *nats.Conn, num int, results chan int, //
-	s *sync.WaitGroup, s2 *sync.Mutex, //
+	wg *sync.WaitGroup, mu *sync.Map, //
 ) {
-	defer s.Done()
+	defer wg.Done()
 	const subj string = "square"
 	var sNum string = strconv.Itoa(num)
 	var res *nats.Msg
@@ -25,34 +25,42 @@ func call( //
 	sNum = string(res.Data)
 	var outNum int
 	outNum, _ = strconv.Atoi(sNum)
-	results <- outNum
+	//results <- outNum
+	mu.Store(num, outNum)
 }
 
 func aggregate(num int, nc *nats.Conn) []int {
 	var wg sync.WaitGroup
 	wg.Add(num)
 	var resChannels chan int = make(chan int, num)
-	var mu sync.Mutex
+	var mu sync.Map
 	for i := 0; i < num; i++ {
 		go call(nc, i+1, resChannels, &wg, &mu)
 	}
 	wg.Wait()
 	close(resChannels)
 	var a []int = make([]int, num)
-	var i int = 0
-	for r := range resChannels {
-		a[i] = r
-		i++
+	for i := 0; i < num; i++ {
+		if value, ok := mu.Load(i); ok {
+			a[i] = value.(int)
+		}
 	}
+	/*
+		var i int = 0
+		for r := range resChannels {
+			a[i] = r
+			i++
+		}
+	*/
 	//sort.Ints(a)
-	//fmt.Printf("%v\n", a)
+	fmt.Printf("%v\n", a)
 	return a
 }
 
 func main() {
 	runtime.GOMAXPROCS(1)
-	const nTests int = 1000
-	const number int = 1000
+	const nTests int = 10
+	const number int = 10
 	var start time.Time
 	start = time.Now()
 
