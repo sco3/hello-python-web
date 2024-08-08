@@ -13,8 +13,6 @@ from nats_common import NatsCommon
 class NatsAsyncBatcher:
     tests: ClassVar[int] = 1000
     numbers: ClassVar[int] = 1000
-    running: ClassVar[int] = 0
-    tasks: ClassVar[int] = 100
 
     def __init__(self, servers: int = 1):
         self.nc: NatsClient = NatsClient()
@@ -55,7 +53,6 @@ class NatsAsyncBatcher:
         """
         data = NatsAsyncBatcher.to_bytes(n)
         result: Msg = await self.nc.request(NatsCommon.SQUARE_SUBJECT, data)
-        NatsAsyncBatcher.running -= 1
         NatsCommon.calls += 1
         return NatsAsyncBatcher.from_bytes(result.data)
 
@@ -71,12 +68,7 @@ class NatsAsyncBatcher:
 
         for i in range(n):
             task = asyncio.create_task(self.call(i))
-            if NatsAsyncBatcher.running < NatsAsyncBatcher.tasks:
-                NatsAsyncBatcher.running += 1
-                tasks.append(task)
-
-            # if len([t for t in tasks if not task.done()]) < n:
-            #    tasks.append(task)
+            tasks.append(task)
 
         result = await asyncio.gather(*tasks)
 
