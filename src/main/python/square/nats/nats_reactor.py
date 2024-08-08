@@ -1,18 +1,16 @@
 #!/usr/bin/env -S poetry run python3
 
-from asyncio import Event
-from asyncio import Task
 import asyncio
 import time
 import traceback
+from asyncio import Event
 from typing import List, ClassVar
 
+import rx
 from nats.aio.client import Client as NatsClient
 from nats.aio.client import Msg
 from rx import operators as ops
-import rx
 from rx.core.observable.observable import Observable as ObsObs
-from rx.core.typing import Observable
 
 from nats_common import NatsCommon
 
@@ -70,11 +68,15 @@ class NatsReactor:
         :return: A list of results.
         """
         finish: Event = Event()
+        # Create an asyncio s c h e d u l e r
+        # scheduler = AsyncIOScheduler(asyncio.get_event_loop())
+        loop = asyncio.get_event_loop()
+
         observable: ObsObs = rx.range(1, n + 1).pipe(
             ops.map(self.to_bytes),
             ops.flat_map(
                 lambda data: rx.from_future(
-                    asyncio.get_event_loop().create_task(
+                    loop.create_task(
                         self.nc.request(NatsCommon.SQUARE_SUBJECT, data)
                     )
                 )

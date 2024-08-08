@@ -8,7 +8,6 @@ import time
 
 from nats_reactor import NatsReactor
 
-
 lock = Manager().Lock()
 reactors: dict = {}
 result_list = []

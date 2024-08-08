@@ -37,7 +37,7 @@ public class NatsSquareStringClientReactorNoPool implements NatsSquare {
 		return toInt(msg.getData());
 	}
 
-	public long call(Connection nc, int number) throws Exception {
+	public long aggregate(Connection nc, int number) throws Exception {
 		long start = System.currentTimeMillis();
 
 		final AtomicBoolean run = new AtomicBoolean(true);
@@ -71,7 +71,7 @@ public class NatsSquareStringClientReactorNoPool implements NatsSquare {
 		Connection c = Nats.connect(options);
 
 		for (int i = 0; i < mTests; i++) {
-			call(c, mNumber);
+			aggregate(c, mNumber);
 		}
 		long finish = System.currentTimeMillis();
 		long duration = finish - start;
