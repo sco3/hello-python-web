@@ -10,7 +10,7 @@ from nats.aio.client import Msg
 from nats_common import NatsCommon
 
 
-class NatsBatcher:
+class NatsAsyncBatcher:
     tests: ClassVar[int] = 1000
     numbers: ClassVar[int] = 1000
     running: ClassVar[int] = 0
@@ -53,11 +53,11 @@ class NatsBatcher:
         :param data: The data to send to the NATS server.
         :return: The response data from the NATS server.
         """
-        data = NatsBatcher.to_bytes(n)
+        data = NatsAsyncBatcher.to_bytes(n)
         result: Msg = await self.nc.request(NatsCommon.SQUARE_SUBJECT, data)
-        NatsBatcher.running -= 1
+        NatsAsyncBatcher.running -= 1
         NatsCommon.calls += 1
-        return NatsBatcher.from_bytes(result.data)
+        return NatsAsyncBatcher.from_bytes(result.data)
 
     async def aggregate(self, n: int) -> List[int]:
         """
@@ -71,8 +71,8 @@ class NatsBatcher:
 
         for i in range(n):
             task = asyncio.create_task(self.call(i))
-            if NatsBatcher.running < NatsBatcher.tasks:
-                NatsBatcher.running += 1
+            if NatsAsyncBatcher.running < NatsAsyncBatcher.tasks:
+                NatsAsyncBatcher.running += 1
                 tasks.append(task)
 
             # if len([t for t in tasks if not task.done()]) < n:
@@ -85,11 +85,11 @@ class NatsBatcher:
 
 async def main() -> None:
     start: int = time.time_ns()
-    manager = NatsBatcher()
+    manager = NatsAsyncBatcher()
     await manager.connect_nats()
     sizes = set()
-    for i in range(NatsBatcher.tests):
-        r = await manager.aggregate(NatsBatcher.numbers)
+    for i in range(NatsAsyncBatcher.tests):
+        r = await manager.aggregate(NatsAsyncBatcher.numbers)
         sizes.add(len(r))
 
     duration_ms: float = (time.time_ns() - start) / 1_000_000
