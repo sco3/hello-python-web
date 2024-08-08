@@ -13,7 +13,7 @@ import (
 	"github.com/nats-io/nats.go"
 )
 
-func call(nc *nats.Conn, num int, results chan int, wg *sync.WaitGroup, mu *sync.Mutex, i2 int, i *[]int) {
+func call(nc *nats.Conn, num int, results chan int, wg *sync.WaitGroup) {
 	defer wg.Done()
 	const subj string = "square"
 	var sNum string = strconv.Itoa(num)
@@ -22,39 +22,25 @@ func call(nc *nats.Conn, num int, results chan int, wg *sync.WaitGroup, mu *sync
 	sNum = string(res.Data)
 	var outNum int
 	outNum, _ = strconv.Atoi(sNum)
-	mu.Lock()
-	(*i)[i2] = outNum
-	mu.Unlock()
-	//results <- outNum
-	//mu.Store(num, outNum)
-
+	results <- outNum
 }
 
 func aggregate(num int, nc *nats.Conn) []int {
 	var wg sync.WaitGroup
 	wg.Add(num)
 	var resChannels chan int = make(chan int, num)
-	var mu sync.Mutex
 	var a []int = make([]int, num)
 	for i := 0; i < num; i++ {
-		go call(nc, i+1, resChannels, &wg, &mu, i, &a)
+		go call(nc, i+1, resChannels, &wg)
 	}
 	wg.Wait()
 	close(resChannels)
-	/*
-		for i := 0; i < num; i++ {
-			if value, ok := mu.Load(i); ok {
-				a[i] = value.(int)
-			}
-		}
-	*/
-	/*
-		var i int = 0
-		for r := range resChannels {
-			a[i] = r
-			i++
-		}
-	*/
+	var i int = 0
+	for r := range resChannels {
+		a[i] = r
+		i++
+	}
+
 	//sort.Ints(a)
 	//fmt.Printf("%v\n", a)
 	return a
