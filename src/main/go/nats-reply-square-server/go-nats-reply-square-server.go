@@ -10,6 +10,16 @@ import (
 	"github.com/nats-io/nats.go"
 )
 
+func respond(m *nats.Msg) {
+	i, _ := strconv.Atoi(string(m.Data))
+	i = i * i
+	bytes := []byte(strconv.Itoa(i))
+	err := m.Respond(bytes)
+	if err != nil {
+		log.Printf("Failed to respond to message: %v", err)
+	}
+}
+
 func main() {
 
 	opts := nats.Options{
@@ -30,13 +40,7 @@ func main() {
 	subj := "square"
 
 	nc.QueueSubscribe(subj, "worker", func(m *nats.Msg) {
-		i, _ := strconv.Atoi(string(m.Data))
-		i = i * i
-		hello_bytes := []byte(strconv.Itoa(i))
-		err = m.Respond(hello_bytes)
-		if err != nil {
-			log.Printf("Failed to respond to message: %v", err)
-		}
+		go respond(m)
 	})
 	println("listening:", subj)
 	// Keep the connection alive

@@ -5,11 +5,12 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
+	"time"
+
 	"github.com/jjeffcaii/reactor-go"
 	"github.com/jjeffcaii/reactor-go/flux"
 	"github.com/jjeffcaii/reactor-go/scheduler"
-	"log"
-	"time"
 
 	"strconv"
 
@@ -18,19 +19,32 @@ import (
 
 const subj = "square"
 
-func call(nc *nats.Conn, num int) int {
-	bytes := toBytes(num)
-	res, _ := nc.Request(subj, bytes, time.Hour)
+func handleResult(nc *nats.Conn, bytes []byte, result chan<- int) {
+	var res *nats.Msg
+	res, _ = nc.Request(subj, bytes, time.Hour)
 	bytes = res.Data
 	outNum := fromBytes(bytes)
+	result <- outNum
+
+}
+
+func call(nc *nats.Conn, num int) int {
+	var bytes []byte = toBytes(num)
+
+	result := make(chan int)
+	go handleResult(nc, bytes, result)
+
+	outNum := <-result
 	return outNum
 }
 
-func call2(nc *nats.Conn, bytes []byte) []byte {
+/*
+func _call2(nc *nats.Conn, bytes []byte) []byte {
 	res, _ := nc.Request(subj, bytes, time.Hour)
 	bytes = res.Data
 	return bytes
 }
+*/
 
 func fromBytes(bytes []byte) int {
 	outNum, _ := strconv.Atoi(string(bytes))
@@ -98,6 +112,7 @@ func main() {
 
 	for i := 0; i < nTests; i++ {
 		result := aggregate(number, nc)
+		//fmt.Printf("Result: %v\n", result)
 		results[len(result)] = struct{}{}
 	}
 
