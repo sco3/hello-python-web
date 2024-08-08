@@ -102,6 +102,7 @@ async def main() -> None:
     await manager.connect_nats()
     for i in range(NatsReactor.tests):
         await manager.aggregate(NatsReactor.number)
+        
     duration_ms: float = (time.time_ns() - start) / 1_000_000
     print(f"Took: {duration_ms} ms calls:{NatsCommon.calls}")
 
