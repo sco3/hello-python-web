@@ -12,15 +12,14 @@ import (
 
 // Function to write a NATS configuration file
 func writeConfigFile(
-    serverName string, filename string, store string, logFile string,
-    clientPort int, clusterPort int, httpPort int,  routes []string,
+	serverName string, filename string, store string, logFile string,
+	clientPort int, clusterPort int, httpPort int, routes []string,
 ) error {
 
 	configContent := fmt.Sprintf(`
 	
 	
 jetstream: true
-store_dir: "%s"
 port: %d
 server_name: %s
 
@@ -31,14 +30,20 @@ logfile_size_limit: 100MB
 http: localhost:%d
 http_port: %d
 
-accounts: {
-  SYSDBA: {
-    users: [{user: sys, password: pass}]
-  }
+#accounts: {
+#  SYSDBA: {
+#    users: [{user: sys, password: pass}]
+#  }
+#}
+
+jetstream {
+  max_memory_store: 1GB
+  store_dir: "%s/jetstream"
+  sync_interval: "1m"
 }
 
 
-system_account: SYSDBA
+#system_account: SYSDBA
 
 cluster {
   name: test-cluster
@@ -48,9 +53,9 @@ cluster {
     %s
   ]
 }
-`, store, clientPort, serverName, logFile,
-  httpPort, httpPort, clusterPort, strings.Join(routes, "\n    "),
-)
+`, clientPort, serverName, logFile,
+		httpPort, httpPort, store, clusterPort, strings.Join(routes, "\n    "),
+	)
 	return os.WriteFile(filename, []byte(configContent), 0644)
 
 }
@@ -58,7 +63,7 @@ cluster {
 // Function to start a NATS server in a tmux session
 func startNatsServer(sessionName, configFile string, logFile string) error {
 	fmt.Printf("config: %s log: %s\n", configFile, logFile)
-	cmd := exec.Command("tmux", "new-session", "-d", "-s", sessionName, "nats-server", "-c", configFile)
+	cmd := exec.Command("tmux", "new-session", "-d", "-s", sessionName, "nats-server", "-js", "-c", configFile)
 	return cmd.Run()
 }
 
@@ -96,7 +101,7 @@ func main() {
 		httpPort := baseHttpPort + i
 		serverName := fmt.Sprintf("nats%d", i)
 		configFilename := fmt.Sprintf("%s/%s.conf", dir, serverName)
-		storeFilename := fmt.Sprintf ("%s/%s.data", dir, serverName)
+		storeFilename := fmt.Sprintf("%s/%s_data", dir, serverName)
 		logFile := fmt.Sprintf("%s/%s.log", dir, serverName)
 
 		// Generate routes for the cluster configuration
