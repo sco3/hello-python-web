@@ -8,6 +8,7 @@ build
 .project
 .settings
 target
+src/main/dotshell
 Cargo.lock
 /.pydevproject
 /.mypy_cache/
