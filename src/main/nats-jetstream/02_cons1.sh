@@ -1,0 +1,1 @@
+nats consumer add stream_lim cons_lim1  --ack explicit --filter "subj_lim"  --replay instant

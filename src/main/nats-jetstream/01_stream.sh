@@ -1,0 +1,1 @@
+nats stream add stream_lim --subjects "subj_lim" --storage file --retention limits --max-msgs=-1 --max-age=0 --max-bytes=-1 --ack --discard=old --defaults
