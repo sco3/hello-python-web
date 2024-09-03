@@ -24,10 +24,9 @@ from nats.js.client import JetStreamContext
 
 from nats_common import NatsCommon
 
-
-CONSUMER_NAME: str = "cons_lim1"
-SUBJECT: str = "subj_lim"
-STREAM: str = "stream_lim"
+STREAM: str = "stream_retention_limits"
+SUBJECT: str = "subject_limits"
+CONSUMER_NAME: str = "consumer_limits1"
 
 
 async def call(
@@ -37,9 +36,9 @@ async def call(
 
     # Pull a batch of messages from the consumer
     batch_size = 20
+    msgs = []
     try:
         msgs = await subscription.fetch(batch_size, timeout=2)
-
         # Process the messages
         for msg in msgs:
             data = msg.data
@@ -53,15 +52,11 @@ async def call(
     except TimeoutError as e:
         print("Timeout.")
 
-    call_start = time.time_ns()
-
     duration = (time.time_ns() - start) / 1_000_000
-    call_duration = (time.time_ns() - call_start) / 1_000_000
 
     async with NatsCommon.lock:
         NatsCommon.calls += len(msgs)
         NatsCommon.duration += duration
-        NatsCommon.call_duration += call_duration
 
 
 async def round(subsription) -> None:
@@ -75,6 +70,12 @@ async def round(subsription) -> None:
 
     mb = NatsCommon.traffic / 1024 / 1024
     calls_sec = NatsCommon.calls / duration
+
+    if NatsCommon.calls != 0:
+        avg_rtt = NatsCommon.duration / NatsCommon.calls
+    else:
+        avg_rtt = 0  # or any other default value, e.g., float('inf') or None
+
     print(
         f"Calls: {NatsCommon.calls} in {duration} s {calls_sec} calls/s "
         "\n"
@@ -82,8 +83,7 @@ async def round(subsription) -> None:
         "\n"
         f"Throughput: {mb/duration} mb/s "
         "\n"
-        f"Avg Full RTT: {NatsCommon.duration/NatsCommon.calls} ms "
-        f"Avg Call RTT: {NatsCommon.call_duration/NatsCommon.calls} ms "
+        f"Avg RTT: {avg_rtt} ms "
     )
 
 
