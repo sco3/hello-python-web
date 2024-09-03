@@ -14,7 +14,6 @@ authors = []
 
 [tool.poetry.dependencies]
 python = "^3.11"
-fastwsgi = "^0.0.9"
 uvicorn = "^0.30.1"
 fastapi = "^0.111.1"
 uvloop = "^0.19.0"
@@ -32,6 +31,8 @@ black = "^24.4.2"
 blacksheep = "^2.0.7"
 blacksheep-cli = "^0.0.4"
 pyre = "^1.12.5"
+fastwsgi = "^0.0.9"
+setuptools = "^74.1.1"
 
 
 [build-system]
