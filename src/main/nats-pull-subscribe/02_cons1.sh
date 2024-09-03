@@ -1,1 +1,9 @@
-nats consumer add stream_lim cons_lim1  --ack explicit --filter "subj_lim"  --replay instant
+nats consumer add stream_lim cons_lim1  \
+   --pull \
+   --deliver all \
+   --ack explicit \
+   --filter "subj_lim"  \
+   --replay instant \
+   --max-pending=-1 \
+   --no-headers-only \
+   --defaults
