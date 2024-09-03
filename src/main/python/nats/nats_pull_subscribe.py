@@ -94,7 +94,7 @@ async def async_main() -> None:
     js: JetStreamContext = nc.jetstream()
     consumer_config = ConsumerConfig(
         durable_name=CONSUMER_NAME,
-        max_deliver=1,
+        # max_deliver=1,
         ack_policy=AckPolicy.EXPLICIT,
     )
     subscription = await js.pull_subscribe(
