@@ -1,5 +1,7 @@
+#!/usr/bin/env -S bash
 
+name=consumer_limits
 
-
-nats consumer sub stream_retention_limits consumer_limits1  > .1.out      &
-nats consumer sub stream_retention_limist consumer_limits2  > .2.out      &
+for i in 1 2  ; do
+   nats consumer sub stream_retention_limits "${name}${i}"  > .$i.out 2>&1 &
+done
