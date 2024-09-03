@@ -1,4 +1,3 @@
-poetry.lock
 **/__pycache__
 **/.vscode
 /.gradle/
@@ -9,8 +8,8 @@ build
 .settings
 target
 src/main/dotshell
-Cargo.lock
 /.pydevproject
 /.mypy_cache/
 .idea
 /.pytest_cache/
+/.venv/
