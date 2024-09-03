@@ -1,9 +1,6 @@
-nats consumer add  stream_lim cons_lim2  \
+n1ats consumer add stream_retention_limits consumer_limits2  \
    --pull \
    --deliver all \
    --ack explicit \
-   --filter "subj_lim"  \
-   --replay instant \
-   --max-pending=-1 \
-   --no-headers-only \
+   --filter "subject_limits"  \
    --defaults
