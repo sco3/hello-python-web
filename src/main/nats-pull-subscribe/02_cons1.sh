@@ -1,4 +1,4 @@
-n1ats consumer add stream_retention_limits consumer_limits1  \
+nats consumer add stream_retention_limits consumer_limits1  \
    --pull \
    --deliver all \
    --ack explicit \
