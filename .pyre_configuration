@@ -1,0 +1,16 @@
+{
+  "version": "1.0",
+  "source_directories": [
+    "src/main/python",
+    "tests"
+  ],
+  "ignore_all_errors": false,
+  "strict": false,
+  "transitive": true,
+  "typeshed": "/path/to/typeshed",
+  "exclude": [
+    "build",
+    "migrations"
+  ],
+  "project_root": "/absolute/path/to/your/project"
+}
