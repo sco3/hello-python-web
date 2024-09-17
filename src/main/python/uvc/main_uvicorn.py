@@ -23,6 +23,8 @@ async def app(scope, receive, send):
 
 
 if __name__ == "__main__":
+    n: int = 8
+    print (f"workers: {n}")
     uvicorn.run(
-        "main_uvicorn:app", host="0.0.0.0", port=8000, reload=False, log_level="error", workers=1
+        "main_uvicorn:app", host="0.0.0.0", port=8000, reload=False, log_level="error", workers=n
     )

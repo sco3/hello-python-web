@@ -1,0 +1,1 @@
+nats bench subj_lim --pub 1 --js --msgs 1000000 --size 20 --stream stream-lim

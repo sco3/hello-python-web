@@ -30,11 +30,26 @@ logfile_size_limit: 100MB
 http: localhost:%d
 http_port: %d
 
-#accounts: {
-#  SYSDBA: {
-#    users: [{user: sys, password: pass}]
-#  }
-#}
+accounts: {
+  SYSDBA: {
+    jetstream: enabled
+    users: [
+      {user: sys, password: pass}
+    ]
+  },
+  A: {
+    jetstream: enabled
+    users: [
+      {user: user1, password: pass1}
+    ]
+  },
+  B: {
+    jetstream: enabled
+    users: [
+      {user: user2, password: pass2}
+    ]
+  }
+}
 
 jetstream {
   max_memory_store: 1GB

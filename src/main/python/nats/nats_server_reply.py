@@ -11,9 +11,10 @@ async def main():
     if await NatsCommon.connect(nc):
 
         async def message_handler(msg):
+            print(msg.metadata)
             await msg.respond(NatsCommon.HELLO)
 
-        await nc.subscribe(NatsCommon.REQ_ALL, cb=message_handler)
+        await nc.subscribe("subject_limits", cb=message_handler)
 
         await asyncio.Event().wait()
 

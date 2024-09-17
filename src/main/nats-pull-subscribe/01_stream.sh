@@ -7,4 +7,5 @@ nats stream add stream_retention_limits \
   --max-bytes=20g \
   --ack \
   --discard=old \
+  --replicas 3 \
   --defaults

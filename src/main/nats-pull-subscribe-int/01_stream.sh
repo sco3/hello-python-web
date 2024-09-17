@@ -1,0 +1,11 @@
+nats stream add stream_retention_int \
+  --subjects "subject_int" \
+  --storage file \
+  --retention interest \
+  --max-msgs=7000000 \
+  --max-age="7d" \
+  --max-bytes=7g \
+  --ack \
+  --discard=old \
+  --replicas 3 \
+  --defaults
