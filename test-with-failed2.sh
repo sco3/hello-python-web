@@ -8,6 +8,6 @@ echo $server
 echo ---
 echo ''
 echo '```'
-wrk2 http://127.0.0.1:8000 -r 1000 -d 120 -t 400 -c 400 -s test-with-failed.lua
+wrk2  -R 60000 -s test-with-failed.lua  -t 500 -c 500 http://127.0.0.1:8000
 #-H "Hello, world\n"
 echo '```'
