@@ -1,5 +1,7 @@
 #!/usr/bin/env -S poetry run python
 import uvicorn
+import asyncio
+import uvloop
 
 
 async def app(scope, receive, send):
@@ -23,7 +25,8 @@ async def app(scope, receive, send):
 
 
 if __name__ == "__main__":
-    n: int = 1
+    asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+    n: int = 4
     print (f"workers: {n}")
     uvicorn.run(
         "main_uvicorn:app", host="0.0.0.0", port=8000, reload=False, log_level="error", workers=n
