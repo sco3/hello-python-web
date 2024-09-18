@@ -5,11 +5,11 @@ uvicorn
 Running 10s test @ http://127.0.0.1:8000
   2 threads and 200 connections
   Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency    14.41ms  676.05us  19.81ms   84.16%
-    Req/Sec     6.97k   279.14     7.70k    79.00%
-  138704 requests in 10.00s, 19.97MB read
-Requests/sec:  13865.62
-Transfer/sec:      2.00MB
+    Latency     2.78ms  518.39us  12.33ms   94.41%
+    Req/Sec    36.25k     1.71k   39.93k    87.50%
+  721552 requests in 10.01s, 103.91MB read
+Requests/sec:  72106.68
+Transfer/sec:     10.38MB
 ```
 
 JerseyNetty
