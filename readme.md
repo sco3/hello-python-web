@@ -153,3 +153,17 @@ Running 10s test @ http://127.0.0.1:8000
 Requests/sec: 388073.54
 Transfer/sec:     55.14MB
 ```
+
+
+Nginx Unit python
+---
+
+```
+Running 10s test @ http://127.0.0.1:8000
+  2 threads and 200 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   731.86us  659.45us  21.53ms   87.92%
+    Req/Sec   101.12k    20.25k  176.99k    74.50%
+  2011723 requests in 10.00s, 295.45MB read
+Requests/sec: 201130.32
+Transfer/sec:     29.54MB

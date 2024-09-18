@@ -1,0 +1,15 @@
+{
+  "listeners": {
+    "*:8000": {
+      "pass": "applications/python"
+    }
+  },
+  "applications": {
+    "python": {
+      "type": "python 3.12",
+      "path": "/var/log/unit/",
+      "module": "wsgi",
+      "processes": 1
+    }
+  }
+}

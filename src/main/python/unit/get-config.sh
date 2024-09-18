@@ -1,0 +1,1 @@
+sudo curl --unix-socket /var/run/unit/control.sock http://localhost/config/
