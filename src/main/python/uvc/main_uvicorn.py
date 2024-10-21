@@ -27,7 +27,12 @@ async def app(scope, receive, send):
 if __name__ == "__main__":
     asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
     n: int = 1
-    print (f"workers: {n}")
+    print(f"workers: {n}")
     uvicorn.run(
-        "main_uvicorn:app", host="0.0.0.0", port=8000, reload=False, log_level="error", workers=n
+        "main_uvicorn:app",
+        host="0.0.0.0",
+        port=8000,
+        reload=False,
+        log_level="error",
+        workers=n,
     )

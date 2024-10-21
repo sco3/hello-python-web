@@ -10,6 +10,7 @@ async def main() -> None:
     nc: NATS = NATS()
     NatsCommon.setClusterNodes(1)
     if await NatsCommon.connect(nc):
+
         async def message_handler(msg) -> None:
             i: int = int(msg.data.decode())
             i = i * i

@@ -57,9 +57,7 @@ def benchmark():
     result_sizes = set()
     for result in result_list:
         result_sizes.add(len(result))
-    print(
-        "took:", dur, "results:", len(result_list), "sizes:", result_sizes, "ms"
-    )
+    print("took:", dur, "results:", len(result_list), "sizes:", result_sizes, "ms")
 
 
 if __name__ == "__main__":

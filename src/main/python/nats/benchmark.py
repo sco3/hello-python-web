@@ -69,9 +69,7 @@ async def benchmark(
         clients.append(nc)
 
     async def worker(client):
-        return await send_requests(
-            client, subject, duration, num_requests_per_client
-        )
+        return await send_requests(client, subject, duration, num_requests_per_client)
 
     # Create tasks
     tasks = [worker(client) for client in clients]
@@ -82,9 +80,7 @@ async def benchmark(
     total_bytes_sent = sum(r["total_bytes_sent"] for r in results)
     total_bytes_received = sum(r["total_bytes_received"] for r in results)
     avg_rtt = sum(r["average_rtt"] for r in results) / len(results)
-    throughput_mb_per_s = sum(r["throughput_mb_per_s"] for r in results) / len(
-        results
-    )
+    throughput_mb_per_s = sum(r["throughput_mb_per_s"] for r in results) / len(results)
 
     # Close clients
     for client in clients:

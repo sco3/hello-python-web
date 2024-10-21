@@ -1,10 +1,10 @@
 ##
 #
-#prefix = "/square/"
-#prefix_len = len(prefix)
+# prefix = "/square/"
+# prefix_len = len(prefix)
 #
 #
-#def app(environ, start_response) -> bytes:
+# def app(environ, start_response) -> bytes:
 #    thread_id: int = threading.get_ident()
 #    pid: int = os.getpid()
 #    print(f"Current thread id: {thread_id} pid: {pid} {type(environ)}")

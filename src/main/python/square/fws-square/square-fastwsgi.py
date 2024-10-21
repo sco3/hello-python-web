@@ -2,8 +2,9 @@
 
 import fastwsgi
 
-prefix="/square/"
-prefix_len=len(prefix)
+prefix = "/square/"
+prefix_len = len(prefix)
+
 
 def app(environ, start_response):
 

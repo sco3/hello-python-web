@@ -1,4 +1,4 @@
-#!/usr/bin/env -S poetry run python 
+#!/usr/bin/env -S poetry run python
 
 
 import asyncio
@@ -7,10 +7,12 @@ import uvloop
 
 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
+
 async def hello(websocket, path):
     async for message in websocket:
-        #print(f"{message}")
+        # print(f"{message}")
         await websocket.send("Hello, world!\n")
+
 
 start_server = websockets.serve(hello, "localhost", 8081)
 

@@ -76,9 +76,7 @@ class NatsReactor:
             ops.map(self.to_bytes),
             ops.flat_map(
                 lambda data: rx.from_future(
-                    loop.create_task(
-                        self.nc.request(NatsCommon.SQUARE_SUBJECT, data)
-                    )
+                    loop.create_task(self.nc.request(NatsCommon.SQUARE_SUBJECT, data))
                 )
             ),
             ops.map(self.from_message),

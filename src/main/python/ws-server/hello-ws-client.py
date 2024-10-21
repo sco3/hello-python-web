@@ -1,6 +1,7 @@
 import asyncio
 import websockets
 
+
 async def websocket_client():
     uri = "ws://localhost:8081/ws"
     async with websockets.connect(uri) as websocket:
@@ -10,5 +11,6 @@ async def websocket_client():
         # Receive and print the response from the server
         response = await websocket.recv()
         print(f"Response from server: {response}")
+
 
 asyncio.get_event_loop().run_until_complete(websocket_client())
