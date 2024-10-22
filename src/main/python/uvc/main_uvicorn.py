@@ -6,6 +6,7 @@ import uvloop
 
 async def app(scope, receive, send):
     assert scope["type"] == "http"
+    # await asyncio.sleep (.5)
 
     await send(
         {

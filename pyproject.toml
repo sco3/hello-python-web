@@ -34,6 +34,7 @@ pyre = "^1.12.5"
 fastwsgi = "^0.0.9"
 setuptools = "^74.1.1"
 scalene = "^1.5.45"
+pyinstrument = "^5.0.0"
 
 
 [build-system]

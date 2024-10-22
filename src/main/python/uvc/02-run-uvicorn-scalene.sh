@@ -15,5 +15,6 @@ uvicorn.run(
 EOF
 
 poetry run \
-    scalene --cli --outfile scalene.out --reduced-profile --no-browser --cpu --profile-interval 10 \
+    scalene --cli --outfile scalene.out \
+    --reduced-profile --profile-only 'main,uvicorn'  --no-browser --cpu --profile-interval 10 \
     /tmp/run.py
