@@ -110,6 +110,21 @@ Requests/sec: 254749.13
 Transfer/sec:     34.01MB
 ```
 
+fastwsgi - falcon
+---
+
+```
+Running 10s test @ http://127.0.0.1:8000
+  2 threads and 200 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     2.20ms   60.60us   4.61ms   83.68%
+    Req/Sec    45.76k     0.87k   49.70k    81.50%
+  910510 requests in 10.00s, 130.25MB read
+Requests/sec:  91023.23
+Transfer/sec:     13.02MB
+```
+
+
 
 rust-minihttp
 ---
