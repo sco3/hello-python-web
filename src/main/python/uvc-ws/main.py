@@ -4,13 +4,15 @@ from fastapi import FastAPI, WebSocket
 import uvicorn
 import logging
 import time
+from datetime import datetime
 import asyncio
 import uvloop
 
+import gc
 import psutil
 import threading
 
-asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+#asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 
 logging.basicConfig(level=logging.CRITICAL)
@@ -33,8 +35,9 @@ def monitor_memory():
     while True:
         mem_info = process.memory_info()
         rss_memory = mem_info.rss / (1024 * 1024)  # Convert bytes to MB
-        print(f"Memory Usage (RSS): {rss_memory:.2f} MB")
-        time.sleep(5)  # Interval for checking memory (every 5 seconds)
+        print(f"{datetime.utcnow()} Memory Usage (RSS): {rss_memory:.2f} MB")
+        time.sleep(10)  # Interval for checking memory (every 5 seconds)
+        #gc.collect()
 
 
 if __name__ == "__main__":
@@ -43,4 +46,4 @@ if __name__ == "__main__":
     monitoring_thread.start()
 
     # Run the WebSocket server
-    uvicorn.run(app, host="0.0.0.0", port=8081, log_level="critical")
+    uvicorn.run(app, host="0.0.0.0", port=8081, log_level="critical") # , ws="wsproto")

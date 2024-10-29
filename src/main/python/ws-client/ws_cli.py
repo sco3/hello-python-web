@@ -55,7 +55,7 @@ async def ping_pong():
         # print (response)
 
 
-async def client():
+async def client(duration_ns:int):
     global total
     global total_lock
     tasks = set()
@@ -65,7 +65,7 @@ async def client():
     timeok = True
 
     while timeok or (len(tasks) > 0):
-        timeok = time.time_ns() - start < 10_000_000_000
+        timeok = time.time_ns() - start < duration_ns
         tasks = {task for task in tasks if not task.done()}
         if timeok and (len(tasks) < 200):
             # print (cnt)
@@ -79,8 +79,12 @@ async def client():
 
 
 async def main():
-    task1 = asyncio.create_task(client())
-    task2 = asyncio.create_task(client())
+    duration_ns  = 10_000_000_000
+    print (f"Duration: {duration_ns / 1_000_000_000} seconds")
+
+
+    task1 = asyncio.create_task(client(duration_ns))
+    task2 = asyncio.create_task(client(duration_ns))
     await asyncio.gather(task1, task2)
 
 
