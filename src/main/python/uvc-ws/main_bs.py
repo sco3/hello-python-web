@@ -1,6 +1,10 @@
 #!/usr/bin/env -S poetry run python
 
-from fastapi import FastAPI, WebSocket
+
+from blacksheep import Application, WebSocket, ws
+
+
+
 import uvicorn
 import logging
 import time
@@ -17,10 +21,10 @@ import threading
 
 logging.basicConfig(level=logging.CRITICAL)
 
-app = FastAPI()
+app = Application()
 
 
-@app.websocket("/ws")
+@ws("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     data = await websocket.receive_text()
@@ -46,4 +50,4 @@ if __name__ == "__main__":
     monitoring_thread.start()
 
     # Run the WebSocket server
-    uvicorn.run(app, host="0.0.0.0", port=8081, log_level="critical", ws="wsproto")
+    uvicorn.run(app, host="0.0.0.0", port=8081, log_level="critical") # , ws="wsproto")
