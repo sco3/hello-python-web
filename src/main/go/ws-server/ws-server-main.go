@@ -1,7 +1,6 @@
 package main
 
 import (
-    //"fmt"
     "log"
     "net/http"
 
@@ -35,14 +34,34 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    //fmt.Printf("Sent: %s", message)
+    // Read messages from the client
+    for {
+        _, msg, err := ws.ReadMessage()
+        if err != nil {
+            // Check if the error is a normal closure
+            if websocket.IsCloseError(err, websocket.CloseNormalClosure) {
+                // Skip logging for normal closure
+                return // Exit the loop gracefully
+            }
+            log.Printf("Error reading message: %v", err)
+            return // Exit the loop for other errors
+        }
+
+        // Optionally echo the message back to the client
+        err = ws.WriteMessage(websocket.TextMessage, msg)
+        if err != nil {
+            log.Printf("Error sending message: %v", err)
+            return
+        }
+    }
 }
 
 func main() {
     // Create an HTTP server and handle WebSocket connections
     http.HandleFunc("/ws", handleConnections)
-    log.Println("WebSocket server started on :8081")
-    err := http.ListenAndServe(":8081", nil)
+    port := ":8082"
+    log.Println("WebSocket server started on ", port)
+    err := http.ListenAndServe(port, nil)
     if err != nil {
         log.Fatalf("Failed to start server: %v", err)
     }
