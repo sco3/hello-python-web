@@ -1,12 +1,12 @@
 #!/usr/bin/env -S poetry run python
-import uvicorn
-import asyncio
-import uvloop
 
+import uvicorn
+import uvloop
+import asyncio
+import sys
 
 async def app(scope, receive, send):
     assert scope["type"] == "http"
-    # await asyncio.sleep (.5)
 
     await send(
         {
@@ -17,6 +17,7 @@ async def app(scope, receive, send):
             ],
         }
     )
+
     await send(
         {
             "type": "http.response.body",
@@ -26,14 +27,11 @@ async def app(scope, receive, send):
 
 
 if __name__ == "__main__":
-    asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
-    n: int = 1
-    print(f"workers: {n}")
+    print (f"python: {sys.version} uvicorn: {uvicorn.__version__} uvloop: {uvloop.__version__} policy: {asyncio.get_event_loop_policy()}")
     uvicorn.run(
         "main_uvicorn:app",
         host="0.0.0.0",
         port=8000,
         reload=False,
         log_level="error",
-        workers=n,
     )
