@@ -10,6 +10,7 @@ import psutil
 import threading
 import sys
 import subprocess
+import gc
 
 # Set logging level
 logging.basicConfig(level=logging.CRITICAL)
@@ -54,6 +55,7 @@ def monitor_memory():
         mem_info = process.memory_info()
         rss_memory = mem_info.rss / (1024 * 1024)  # Convert bytes to MB
         print(f"{datetime.now(timezone.utc)} Memory Usage (RSS): {rss_memory:.2f} MB")
+        print("ws count:", sum(1 for obj in gc.get_objects() if isinstance(obj, WebSocket)))
         time.sleep(10)  # Check memory every 10 seconds
 
 if __name__ == "__main__":
