@@ -1,0 +1,1 @@
+poetry run granian --port 8081 --interface asgi main_fastapi_ws:app

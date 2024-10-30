@@ -37,6 +37,7 @@ scalene = "^1.5.45"
 pyinstrument = "^5.0.0"
 boto3 = "^1.35.45"
 wsproto = "^1.2.0"
+granian = "^1.6.3"
 
 
 [build-system]
