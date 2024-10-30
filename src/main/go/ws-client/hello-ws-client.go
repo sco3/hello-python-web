@@ -10,13 +10,14 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var port = ":8082"
+var port = ":8081"
 var addr = "ws://localhost" + port + "/ws" // Change to your WebSocket server address
-var parallel = int64(200)
+var parallel = int64(100)
 var threads = 2
 var wg sync.WaitGroup
 var stopFlag int64 = 0
 var message = "Hello, world!\n"
+var treshold = 300*time.Second
 
 type Stats struct {
 	minRTT int64
@@ -110,7 +111,7 @@ func main() {
 	}
 
 	start := time.Now()
-	fmt.Printf("Start with: %v threads %v parallel requests\n", threads, parallel)
+	fmt.Printf("Duration %v  with: %v threads %v parallel requests port: %v\n", treshold, threads, parallel, port)
 	for i := 0; i < threads; i++ {
 		wg.Add(1)
 		go openSomeConnections(i, &stats)
@@ -121,7 +122,7 @@ func main() {
 	for {
 		end = time.Now() // Record time after receiving
 		duration = end.Sub(start)
-		if duration >= 10*time.Second {
+		if duration >= treshold {
 			atomic.StoreInt64(&stopFlag, 1)
 			break
 		}
@@ -134,11 +135,11 @@ func main() {
 	minRTT := float64(stats.minRTT) / 1000_000.0
 	maxRTT := float64(stats.maxRTT) / 1000_000.0
 	thr := float64(stats.snt+stats.rcv) / float64(duration.Seconds()) / 1024 / 1024
-	fmt.Printf("Duration: %v s expected bytes: %v\n", duration.Seconds(), int64(len(message))*stats.cnt)
+	fmt.Printf("Expected bytes: %v\n", int64(len(message))*stats.cnt)
 	fmt.Printf("Requests sent/received: %v bytes: %v/%v throughput: %v mb/s\n",
 		stats.cnt, stats.snt, stats.rcv, thr,
 	)
-	fmt.Printf("RTT min: %v ms max: %v ms avg: %v ms\n",
-		minRTT, maxRTT, avgRTT,
+	fmt.Printf("RTT avg: %v ms min: %v ms max: %v ms\n",
+		avgRTT, minRTT, maxRTT,
 	)
 }
