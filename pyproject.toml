@@ -38,7 +38,8 @@ pyinstrument = "^5.0.0"
 boto3 = "^1.35.45"
 wsproto = "^1.2.0"
 granian = "^1.6.3"
-
+anthropic = { extras = ["bedrock"], version = "^0.30.1" }
+vcrpy = "^6.0.2"
 
 [build-system]
 requires = ["poetry-core"]

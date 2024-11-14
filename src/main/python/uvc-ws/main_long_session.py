@@ -90,8 +90,8 @@ def monitor_memory():
         mem_info = process.memory_info()
         rss_memory = mem_info.rss / (1024 * 1024)  # Convert bytes to MB
         print(f"{datetime.now(timezone.utc)} Memory Usage (RSS): {rss_memory:.2f} MB")
-        #analyze_memory_usage()
-        time.sleep(10)  # Check memory every 10 seconds
+        analyze_memory_usage()
+        time.sleep(10*60)  # Check memory every 10 minutes
 
 if __name__ == "__main__":
     port = 8081

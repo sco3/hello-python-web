@@ -56,7 +56,7 @@ def print_stats(start_time, duration_ns):
         print("No RTT data collected.")
 
 async def main():
-    n = 100  # Number of tasks to create
+    n = 200  # Number of tasks to create
     duration_ns = 10_000_000_000  # Duration of each task in nanoseconds
     uri = 'ws://localhost:8081/ws'  # WebSocket server URL
 

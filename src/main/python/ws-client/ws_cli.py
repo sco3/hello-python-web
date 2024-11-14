@@ -86,14 +86,6 @@ async def main():
     await asyncio.gather(
         asyncio.create_task(client(duration_ns)),
         asyncio.create_task(client(duration_ns)),
-        asyncio.create_task(client(duration_ns)),
-        asyncio.create_task(client(duration_ns)),
-        asyncio.create_task(client(duration_ns)),
-        asyncio.create_task(client(duration_ns)),
-        asyncio.create_task(client(duration_ns)),
-        asyncio.create_task(client(duration_ns)),
-        asyncio.create_task(client(duration_ns)),
-        asyncio.create_task(client(duration_ns)),
     )
     print(
         "Total rounds:",
