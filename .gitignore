@@ -13,3 +13,4 @@ src/main/dotshell
 .idea
 /.pytest_cache/
 /.venv/
+.externalToolBuilders
