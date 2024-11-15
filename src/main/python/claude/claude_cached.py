@@ -3,16 +3,16 @@
 import asyncio
 import json
 import os
+import time
+import traceback
 from typing import ClassVar
 
-import boto3
-from botocore.response import StreamingBody
+import anthropic
+from anthropic.types.message import Message
 import dotenv
 import uvicorn
 import uvloop
-import anthropic
-from main.python.claude.claude import REGION_NAME
-import traceback
+import vcr  # type:ignore
 
 
 class AnthropicClient:
@@ -20,14 +20,19 @@ class AnthropicClient:
 
     def __init__(self) -> None:
         dotenv.load_dotenv("/app/.env")
-        self.region = REGION_NAME
+        self.region = self.REGION_NAME
         # Initialize Anthropic client with an API key from .env file
         self.anthropic_client = anthropic.AsyncAnthropicBedrock(
             aws_secret_key=os.getenv("AWS_SECRET_KEY"),
             aws_access_key=os.getenv("AWS_ACCESS_KEY"),
-            aws_region=REGION_NAME,
+            aws_region=self.REGION_NAME,
         )
 
+    @vcr.use_cassette(
+        "/tmp/cassettes/claude_responses.yml",
+        match_on=["uri", "body"],
+        record_mode=vcr.record_mode.RecordMode.NEW_EPISODES,
+    )
     async def call_claude_anthropic(self, prompt: str) -> str:
         result: str = ""
 
@@ -50,11 +55,20 @@ class Client:
     cli: ClassVar[AnthropicClient] = AnthropicClient()
 
 
-async def main() -> None:
+def took_ms(start_ns: int) -> int:
+    return (time.time_ns() - start_ns) // 1_000_000
 
-    # Call the model and print the result
-    result = await Client.cli.call_claude_anthropic("What is the capital of France?")
-    print(result)
+
+async def main() -> None:
+    for _ in range(10):
+        start: int = time.time_ns()
+        result = await Client.cli.call_claude_anthropic("What is the capital of Italy?")
+        print(result, took_ms(start), "ms")
+        start = time.time_ns()
+        result = await Client.cli.call_claude_anthropic(
+            "What is the capital of Germany?"
+        )
+        print(result, took_ms(start), "ms")
 
 
 if __name__ == "__main__":
