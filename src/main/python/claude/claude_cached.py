@@ -69,6 +69,11 @@ async def main() -> None:
             "What is the capital of Germany?"
         )
         print(result, took_ms(start), "ms")
+        start = time.time_ns()
+        result = await Client.cli.call_claude_anthropic(
+            "What is the capital of England?"
+        )
+        print(result, took_ms(start), "ms")
 
 
 if __name__ == "__main__":
