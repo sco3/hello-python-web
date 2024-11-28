@@ -15,7 +15,7 @@ function check() {
     #5MYPYPATH=../../stubs uv run mypyc --check-untyped-defs --strict "$@"
     uv run pyright "$@"
     uv run pyre check | grep vcr || echo pyre check all files
-    uv run pylint "$@"
+    poetry  run pylint "$@"
 }
 
 cd $(dirname $0)
