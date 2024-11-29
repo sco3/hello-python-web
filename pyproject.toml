@@ -5,7 +5,12 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11.1"
 dependencies = [
+    "austin-dist>=3.7.0",
+    "austin-tui>=1.2.3",
+    "fastapi>=0.115.5",
+    "guppy3>=3.1.4.post1",
     "pylint>=3.3.1",
+    "uvicorn>=0.32.1",
 ]
 
 [tool.poetry]

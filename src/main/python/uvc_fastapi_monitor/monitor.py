@@ -23,6 +23,8 @@ from collections import Counter
 from tracemalloc import Snapshot
 from typing import ClassVar
 
+from guppy import hpy
+
 # Start tracemalloc to track memory allocation
 tracemalloc.start()
 
@@ -121,13 +123,40 @@ def count_objects_by_type() -> str:
     return out
 
 
+def save_dicts() -> str:
+    out = ""
+    # Initialize a Counter to count unique dictionary strings
+    dict_counter = Counter()
+
+    # Collect all dictionary objects
+    for obj in gc.get_objects():
+        if isinstance(obj, dict):
+            dict_str = str(obj)
+            dict_counter[dict_str] += 1
+
+    # Get the top 20 most common dictionaries
+    top_dicts = dict_counter.most_common(20)
+
+    for dict_str, count in top_dicts:
+        out += f"Count: {count} - {dict_str}\n"
+
+    return out
+
+
 def endpoint() -> str:
     """endpoint handler"""
     out: str = ""
-    out += get_memory_snapshot() + "\n"
-    out += count_objects_by_type() + "\n"
-    out += show_top_garbage_objects_by_count() + "\n"
-    out += "Total: " + str(len(gc.get_objects())) + " objects. \n"
+    # out += get_memory_snapshot() + "\n"
+    # out += count_objects_by_type() + "\n"
+    # out += show_top_garbage_objects_by_count() + "\n"
+    # out += "Total: " + str(len(gc.get_objects())) + " objects. \n"
+    out += save_dicts()
+    hp = hpy()
+    try:
+        out += str(hp.heap().byrcs) + "\n"
+    except:
+        out + "hpy error\n"
+
     return out + "\n\n"
 
 
