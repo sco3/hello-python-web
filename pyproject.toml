@@ -7,10 +7,15 @@ requires-python = ">=3.11.1"
 dependencies = [
     "austin-dist>=3.7.0",
     "austin-tui>=1.2.3",
+    "black>=24.10.0",
     "fastapi>=0.115.5",
+    "granian>=1.6.4",
     "guppy3>=3.1.4.post1",
+    "mypy>=1.13.0",
     "pylint>=3.3.1",
     "uvicorn>=0.32.1",
+    "websockets>=14.1",
+    "wsproto>=1.2.0",
 ]
 
 [tool.poetry]
