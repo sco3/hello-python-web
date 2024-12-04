@@ -49,9 +49,12 @@ async def home(reso=Depends(MyClass.resource)):
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
-    while True:
-        data = await websocket.receive_text()
-        await websocket.send_text(f"Message text was: {data}")
+    try:
+        while True:
+            data = await websocket.receive_text()
+            await websocket.send_text(f"Message text was: {data}")
+    except WebSocketDisconnect:
+        print("Client disconnected")
 
 
 if __name__ == "__main__":
