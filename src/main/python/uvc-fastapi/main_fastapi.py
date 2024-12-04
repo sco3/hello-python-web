@@ -1,11 +1,12 @@
 #!/usr/bin/env -S uv run
 
 import asyncio
+from contextvars import ContextVar, Token
 from datetime import datetime
 import subprocess
 from typing import Annotated, Any, Dict, ClassVar
 
-from fastapi import FastAPI, Depends, Request, WebSocket
+from fastapi import FastAPI, Depends, Request, WebSocket, WebSocketDisconnect
 import uvicorn
 import uvloop
 
@@ -16,6 +17,7 @@ class MyClass:
     def __init__(self) -> None:
         MyClass.counter += 1
         self.cnt = MyClass.counter
+        self.token: Token = 0
 
     def clean(self) -> None:
         self.cnt = None
@@ -47,17 +49,20 @@ async def home(reso=Depends(MyClass.resource)):
 
 
 @app.websocket("/ws")
-async def websocket_endpoint(websocket: WebSocket):
+async def websocket_endpoint(
+    websocket: WebSocket, reso=Depends(MyClass.resource)
+):
     await websocket.accept()
     try:
         while True:
             data = await websocket.receive_text()
             await websocket.send_text(f"Message text was: {data}")
-    except WebSocketDisconnect:
+    except Exception as ex:
         print("Client disconnected")
 
 
 if __name__ == "__main__":
+
     asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
     workers: int = 1
     port: int = 8000
