@@ -43,9 +43,10 @@ async def filter(request: Request, call_next):
 
 
 @app.get("/")
-async def home(reso=Depends(MyClass.resource)):
+async def home(request:Request,reso=Depends(MyClass.resource)):
+    request.state.reso=reso
     print("route", reso)
-    return f"Hello, World!\n"
+    return f"Hello, World!\n"+str(request.state.reso)
 
 
 @app.websocket("/ws")
@@ -53,12 +54,14 @@ async def websocket_endpoint(
     websocket: WebSocket, reso=Depends(MyClass.resource)
 ):
     await websocket.accept()
+    websocket.state.asdf="asdf-value"
+    websocket.state['user_id'] = "user_123"
     try:
         while True:
             data = await websocket.receive_text()
             await websocket.send_text(f"Message text was: {data}")
     except Exception as ex:
-        print("Client disconnected")
+        print("Client disconnected", websocket.state.asdf)
 
 
 if __name__ == "__main__":

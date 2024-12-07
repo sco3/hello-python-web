@@ -27,7 +27,6 @@ async def app(scope, receive, send):
 
 
 if __name__ == "__main__":
-    print (f"python: {sys.version} uvicorn: {uvicorn.__version__} uvloop: {uvloop.__version__} policy: {asyncio.get_event_loop_policy()}")
     uvicorn.run(
         "main_uvicorn:app",
         host="0.0.0.0",
