@@ -1,0 +1,1 @@
+curl localhost:8000 --data-binary @data.json
