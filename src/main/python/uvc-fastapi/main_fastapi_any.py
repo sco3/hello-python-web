@@ -7,8 +7,9 @@ import subprocess
 from typing import Annotated, Any, Dict, ClassVar
 
 from fastapi import FastAPI, Depends, Request, WebSocket, WebSocketDisconnect
-import uvicorn
-import uvloop
+import anyio
+from anycorn import serve
+from anycorn.config import Config
 
 
 class MyClass:
@@ -66,16 +67,11 @@ async def websocket_endpoint(
 
 if __name__ == "__main__":
 
-    asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
     workers: int = 1
     port: int = 8000
     print(f"{port=} {workers=}")
-    uvicorn.run(
-        "main_fastapi:app",
-        host="0.0.0.0",
-        port=port,
-        reload=False,
-        log_level="error",
-        workers=workers,
-        loop="trio",
+    anyio.run(
+        serve,
+        app,
+        Config(),
     )
