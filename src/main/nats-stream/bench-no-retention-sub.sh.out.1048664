@@ -1,6 +1,6 @@
-15:45:56 JetStream ephemeral ordered push consumer mode, subscribers will not acknowledge the consumption of messages
-15:45:56 Starting JetStream benchmark [subject=test, multisubject=false, multisubjectmax=100000, js=true, msgs=6,865, msgsize=1.0 MiB, pubs=0, subs=1, stream=benchstream, maxbytes=8.0 GiB, storage=file, syncpub=false, pubbatch=100, jstimeout=30s, pull=false, consumerbatch=100, push=false, consumername=natscli-bench, replicas=1, purge=false, pubsleep=0s, subsleep=0s, dedup=false, dedupwindow=2m0s]
-15:45:56 Starting subscriber, expecting 6,865 messages
+20:51:55 JetStream ephemeral ordered push consumer mode, subscribers will not acknowledge the consumption of messages
+20:51:55 Starting JetStream benchmark [subject=test, multisubject=false, multisubjectmax=100000, js=true, msgs=5, msgsize=1.0 MiB, pubs=0, subs=1, stream=benchstream, maxbytes=8.0 GiB, storage=file, syncpub=false, pubbatch=100, jstimeout=30s, pull=false, consumerbatch=100, push=false, consumername=natscli-bench, replicas=1, purge=false, pubsleep=0s, subsleep=0s, dedup=false, dedupwindow=2m0s]
+20:51:55 Starting subscriber, expecting 5 messages
 
-Sub stats: 968 msgs/sec ~ 968.10 MB/sec
+Sub stats: 194 msgs/sec ~ 194.18 MB/sec
 

@@ -9,4 +9,4 @@ TOTAL=8000000000
 NUM=$((90*$TOTAL/$SIZE/100))
 
 
-nats bench test --no-progress --js --pub 1  --size $SIZE --msgs $NUM --maxbytes 8G   2>&1 | tee $0.out.$SIZE
+nats bench test --no-progress --js --pub 1  --size $SIZE --msgs 5 --maxbytes 8G   2>&1 | tee $0.out.$SIZE
