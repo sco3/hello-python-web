@@ -1,0 +1,9 @@
+21:56:21 JetStream ephemeral ordered push consumer mode, subscribers will not acknowledge the consumption of messages
+21:56:21 Starting JetStream benchmark [subject=test, multisubject=false, multisubjectmax=100000, js=true, msgs=50,000, msgsize=256 B, pubs=1, subs=1, stream=benchstream, maxbytes=100 GiB, storage=file, syncpub=false, pubbatch=100, jstimeout=30s, pull=false, consumerbatch=100, push=false, consumername=natscli-bench, replicas=3, purge=false, pubsleep=0s, subsleep=0s, dedup=false, dedupwindow=2m0s]
+21:56:21 Starting subscriber, expecting 50,000 messages
+21:56:21 Starting publisher, publishing 50,000 messages
+
+NATS Pub/Sub stats: 225,910 msgs/sec ~ 55.15 MB/sec
+ Pub stats: 124,406 msgs/sec ~ 30.37 MB/sec
+ Sub stats: 112,955 msgs/sec ~ 27.58 MB/sec
+
