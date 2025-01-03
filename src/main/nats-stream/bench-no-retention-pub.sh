@@ -3,4 +3,4 @@
 
 source 00-sizes.sh
 
-nats bench test --no-progress --js --pub 1  --size $SIZE --msgs 5 --maxbytes 8G   2>&1 | tee $0.out.$SIZE
+nats bench test --no-progress --js --pub 1  --size $SIZE --msgs $NUM --maxbytes $MAX   2>&1 | tee $0.out.$SIZE
