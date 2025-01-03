@@ -1,10 +1,23 @@
+#!/usr/bin/env -S bash
+
+DIR=$(dirname $(readlink -f $0))
+JAVA_HOME=~/prg/java-21
+DATADIR=$HOME/kafka-logs
+mkdir -p $DATADIR
+mkdir -p $DIR/logs
 
 
 
-sed  "s!log.dirs=.+$!log.dirs=$HOME/kafka-logs" cluster.cfg
+
+# Update log.dirs and kafka.logs.dir in cluster.cfg
+sed -i "s|^log.dirs=.*|log.dirs=${DATADIR}|g" cluster.cfg
+sed -i "s|^kafka.logs.dir=.*|kafka.logs.dir=${DIR}/logs/|g" cluster.cfg
 
 
-~/prg/confluent/bin/kafka-storage format --config cluster.cfg --cluster-id asdf
+if [ ! -f $DATADIR/meta.properties ] ; then 
+    ~/prg/kafka/bin/kafka-storage.sh format --config cluster.cfg --cluster-id asdf
+fi
 
+export KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:$DIR/log4j.properties"
 
-#~/prg/confluent/bin/kafka-server-start cluster.cfg
+~/prg/kafka/bin/kafka-server-start.sh cluster.cfg
