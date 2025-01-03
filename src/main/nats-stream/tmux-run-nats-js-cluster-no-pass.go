@@ -81,7 +81,7 @@ func main() {
 			return
 		}
 	}
-	dir := "/tmp/nats"
+	dir := os.Getenv("HOME")+"/nats-logs"
 	err = os.Mkdir(dir, 0755) // 0755 is the permission mode for the directory
 	if err != nil {
 		fmt.Printf("Directory: %v\n", err)
