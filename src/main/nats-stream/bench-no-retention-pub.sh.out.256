@@ -1,5 +1,5 @@
-14:44:21 Starting JetStream benchmark [subject=test, multisubject=false, multisubjectmax=100000, js=true, msgs=15,625,000, msgsize=256 B, pubs=1, subs=0, stream=benchstream, maxbytes=8.0 GiB, storage=file, syncpub=false, pubbatch=100, jstimeout=30s, pull=false, consumerbatch=100, push=false, consumername=natscli-bench, replicas=1, purge=false, pubsleep=0s, subsleep=0s, dedup=false, dedupwindow=2m0s]
-14:44:21 Starting publisher, publishing 15,625,000 messages
+15:30:51 Starting JetStream benchmark [subject=test, multisubject=false, multisubjectmax=100000, js=true, msgs=28,125,000, msgsize=256 B, pubs=1, subs=0, stream=benchstream, maxbytes=8.0 GiB, storage=file, syncpub=false, pubbatch=100, jstimeout=30s, pull=false, consumerbatch=100, push=false, consumername=natscli-bench, replicas=1, purge=false, pubsleep=0s, subsleep=0s, dedup=false, dedupwindow=2m0s]
+15:30:51 Starting publisher, publishing 28,125,000 messages
 
-Pub stats: 121,659 msgs/sec ~ 29.70 MB/sec
+Pub stats: 116,780 msgs/sec ~ 28.51 MB/sec
 

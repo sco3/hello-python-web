@@ -6,6 +6,6 @@ SIZE=${1:-1048664}
 
 # limit total size to ~ 8g
 TOTAL=8000000000
-NUM=$(($TOTAL/$SIZE/2))
+NUM=$((90*$TOTAL/$SIZE/100))
 
-nats bench test --no-progress --js --sub 1 --size 256 --msgs $NUM --maxbytes 8G  2>&1 | tee $0.out.$SIZE
+nats bench test --no-progress --js --sub 1 --size $SIZE --msgs $NUM --maxbytes 8G  2>&1 | tee $0.out.$SIZE

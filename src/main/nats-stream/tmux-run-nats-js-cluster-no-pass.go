@@ -31,6 +31,8 @@ http: localhost:%d
 http_port: %d
 
 
+max_payload: 1100000
+
 jetstream {
   max_memory_store: 1GB
   store_dir: "%s/jetstream"
