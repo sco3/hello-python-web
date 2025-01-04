@@ -2,4 +2,4 @@
 
 source 00-sizes.sh
 
-nats bench test --no-progress --js --pub 1 --sub 1 --size $SIZE --msgs $NUM --maxbytes $MAX  2>&1 | tee $0.out.$SIZE
+nats bench test --no-progress --js --purge --pub 1 --sub 1 --size $SIZE --msgs $NUM --maxbytes $MAX  --csv $0.$SIZE.csv 2>&1 | tee $0.out.$SIZE
