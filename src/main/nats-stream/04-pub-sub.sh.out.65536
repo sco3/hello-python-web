@@ -1,11 +1,11 @@
-15:14:56 JetStream ephemeral ordered push consumer mode, subscribers will not acknowledge the consumption of messages
-15:14:56 Starting JetStream benchmark [subject=test, multisubject=false, multisubjectmax=100000, js=true, msgs=320,026, msgsize=64 KiB, pubs=1, subs=1, stream=benchstream, maxbytes=29 GiB, storage=file, syncpub=false, pubbatch=100, jstimeout=30s, pull=false, consumerbatch=100, push=false, consumername=natscli-bench, replicas=1, purge=true, pubsleep=0s, subsleep=0s, dedup=false, dedupwindow=2m0s]
-15:14:56 Purging the stream
-15:14:56 Starting subscriber, expecting 320,026 messages
-15:14:56 Starting publisher, publishing 320,026 messages
+16:57:49 JetStream ephemeral ordered push consumer mode, subscribers will not acknowledge the consumption of messages
+16:57:49 Starting JetStream benchmark [subject=test, multisubject=false, multisubjectmax=100000, js=true, msgs=320,026, msgsize=64 KiB, pubs=1, subs=1, stream=benchstream, maxbytes=29 GiB, storage=file, syncpub=false, pubbatch=100, jstimeout=30s, pull=false, consumerbatch=100, push=false, consumername=natscli-bench, replicas=1, purge=true, pubsleep=0s, subsleep=0s, dedup=false, dedupwindow=2m0s]
+16:57:49 Purging the stream
+16:57:49 Starting subscriber, expecting 320,026 messages
+16:57:49 Starting publisher, publishing 320,026 messages
 
-NATS Pub/Sub stats: 11,355 msgs/sec ~ 709.70 MB/sec
- Pub stats: 5,677 msgs/sec ~ 354.86 MB/sec
- Sub stats: 5,677 msgs/sec ~ 354.85 MB/sec
+NATS Pub/Sub stats: 10,753 msgs/sec ~ 672.09 MB/sec
+ Pub stats: 5,376 msgs/sec ~ 336.05 MB/sec
+ Sub stats: 5,377 msgs/sec ~ 336.10 MB/sec
 
 Saved metric data in csv file ./04-pub-sub.sh.65536.csv
