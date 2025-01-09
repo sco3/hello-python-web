@@ -1,4 +1,4 @@
-[2025-01-09 09:37:48,228] INFO ProducerConfig values: 
+[2025-01-09 11:13:07,775] INFO ProducerConfig values: 
 	acks = -1
 	auto.include.jmx.reporter = true
 	batch.size = 16384
@@ -95,17 +95,25 @@
 	transactional.id = null
 	value.serializer = class org.apache.kafka.common.serialization.ByteArraySerializer
  (org.apache.kafka.clients.producer.ProducerConfig)
-[2025-01-09 09:37:48,261] INFO initializing Kafka metrics collector (org.apache.kafka.common.telemetry.internals.KafkaMetricsCollector)
-[2025-01-09 09:37:48,281] INFO [Producer clientId=perf-producer-client] Instantiated an idempotent producer. (org.apache.kafka.clients.producer.KafkaProducer)
-[2025-01-09 09:37:48,327] INFO Kafka version: 3.9.0 (org.apache.kafka.common.utils.AppInfoParser)
-[2025-01-09 09:37:48,328] INFO Kafka commitId: a60e31147e6b01ee (org.apache.kafka.common.utils.AppInfoParser)
-[2025-01-09 09:37:48,328] INFO Kafka startTimeMs: 1736415468325 (org.apache.kafka.common.utils.AppInfoParser)
-[2025-01-09 09:37:48,541] INFO [Producer clientId=perf-producer-client] Cluster ID: asdf (org.apache.kafka.clients.Metadata)
-[2025-01-09 09:37:48,649] INFO [Producer clientId=perf-producer-client] ProducerId set to 0 with epoch 0 (org.apache.kafka.clients.producer.internals.TransactionManager)
-[2025-01-09 09:37:49,695] INFO [Producer clientId=perf-producer-client] Closing the Kafka producer with timeoutMillis = 9223372036854775807 ms. (org.apache.kafka.clients.producer.KafkaProducer)
-[2025-01-09 09:37:50,438] INFO Metrics scheduler closed (org.apache.kafka.common.metrics.Metrics)
-[2025-01-09 09:37:50,438] INFO Closing reporter org.apache.kafka.common.metrics.JmxReporter (org.apache.kafka.common.metrics.Metrics)
-[2025-01-09 09:37:50,438] INFO Closing reporter org.apache.kafka.common.telemetry.internals.ClientTelemetryReporter (org.apache.kafka.common.metrics.Metrics)
-[2025-01-09 09:37:50,438] INFO Metrics reporters closed (org.apache.kafka.common.metrics.Metrics)
-[2025-01-09 09:37:50,439] INFO App info kafka.producer for perf-producer-client unregistered (org.apache.kafka.common.utils.AppInfoParser)
-200000 records sent, 94876.660342 records/sec (23.16 MB/sec), 812.72 ms avg latency, 1125.00 ms max latency, 831 ms 50th, 1092 ms 95th, 1120 ms 99th, 1124 ms 99.9th.
+[2025-01-09 11:13:07,825] INFO initializing Kafka metrics collector (org.apache.kafka.common.telemetry.internals.KafkaMetricsCollector)
+[2025-01-09 11:13:07,842] INFO [Producer clientId=perf-producer-client] Instantiated an idempotent producer. (org.apache.kafka.clients.producer.KafkaProducer)
+[2025-01-09 11:13:07,897] INFO Kafka version: 3.9.0 (org.apache.kafka.common.utils.AppInfoParser)
+[2025-01-09 11:13:07,897] INFO Kafka commitId: a60e31147e6b01ee (org.apache.kafka.common.utils.AppInfoParser)
+[2025-01-09 11:13:07,897] INFO Kafka startTimeMs: 1736421187894 (org.apache.kafka.common.utils.AppInfoParser)
+[2025-01-09 11:13:08,114] INFO [Producer clientId=perf-producer-client] Cluster ID: asdf (org.apache.kafka.clients.Metadata)
+[2025-01-09 11:13:08,221] INFO [Producer clientId=perf-producer-client] ProducerId set to 0 with epoch 0 (org.apache.kafka.clients.producer.internals.TransactionManager)
+1986 records sent, 397.1 records/sec (397.12 MB/sec), 16.8 ms avg latency, 364.0 ms max latency.
+2606 records sent, 521.2 records/sec (521.20 MB/sec), 2.9 ms avg latency, 17.0 ms max latency.
+2555 records sent, 510.8 records/sec (510.80 MB/sec), 3.6 ms avg latency, 47.0 ms max latency.
+2551 records sent, 510.1 records/sec (510.10 MB/sec), 3.8 ms avg latency, 81.0 ms max latency.
+2437 records sent, 487.3 records/sec (487.30 MB/sec), 10.1 ms avg latency, 358.0 ms max latency.
+2129 records sent, 425.7 records/sec (425.71 MB/sec), 18.9 ms avg latency, 570.0 ms max latency.
+2215 records sent, 442.5 records/sec (442.47 MB/sec), 14.2 ms avg latency, 534.0 ms max latency.
+1936 records sent, 324.1 records/sec (324.13 MB/sec), 27.2 ms avg latency, 1046.0 ms max latency.
+[2025-01-09 11:13:52,574] INFO [Producer clientId=perf-producer-client] Closing the Kafka producer with timeoutMillis = 9223372036854775807 ms. (org.apache.kafka.clients.producer.KafkaProducer)
+[2025-01-09 11:13:52,859] INFO Metrics scheduler closed (org.apache.kafka.common.metrics.Metrics)
+[2025-01-09 11:13:52,859] INFO Closing reporter org.apache.kafka.common.metrics.JmxReporter (org.apache.kafka.common.metrics.Metrics)
+[2025-01-09 11:13:52,859] INFO Closing reporter org.apache.kafka.common.telemetry.internals.ClientTelemetryReporter (org.apache.kafka.common.metrics.Metrics)
+[2025-01-09 11:13:52,859] INFO Metrics reporters closed (org.apache.kafka.common.metrics.Metrics)
+[2025-01-09 11:13:52,861] INFO App info kafka.producer for perf-producer-client unregistered (org.apache.kafka.common.utils.AppInfoParser)
+20000 records sent, 444.849752 records/sec (444.85 MB/sec), 13.72 ms avg latency, 1061.00 ms max latency, 2 ms 50th, 30 ms 95th, 532 ms 99th, 1055 ms 99.9th.

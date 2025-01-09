@@ -26,7 +26,7 @@ server_name: %s
 log_file: "%s"
 debug: false
 trace: false
-logfile_size_limit: 100MB
+logfile_size_limit: 10000MB
 http: localhost:%d
 http_port: %d
 

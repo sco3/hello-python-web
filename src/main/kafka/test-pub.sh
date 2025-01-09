@@ -1,12 +1,8 @@
 #!/usr/bin/env -S bash
 
 set -xueo pipefail
+source ./00-sizes.sh
 
-SIZE=${1:-1048664}
-
-# limit total size to ~ 8g
-TOTAL=8000000000
-NUM=$(($TOTAL/$SIZE))
 
 
 ~/prg/kafka/bin/kafka-producer-perf-test.sh \
@@ -14,5 +10,9 @@ NUM=$(($TOTAL/$SIZE))
 --topic asdf   \
 --throughput  -1  \
 --num-records $NUM \
---record-size $SIZE | tee $0.out.$SIZE
+--record-size $SIZE | tee $OUT
+
+
+grep "sent" $OUT | awk '{print $3 " " $4 }' > $OUT.msgs
+#| awk '{ print $4 " " $5' > $OUT.msgs
 

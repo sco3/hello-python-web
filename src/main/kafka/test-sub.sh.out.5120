@@ -1,2 +1,179 @@
+[2025-01-09 09:38:36,946] INFO Starting consumer... (org.apache.kafka.tools.ConsumerPerformance)
 start.time, end.time, data.consumed.in.MB, MB.sec, data.consumed.in.nMsg, nMsg.sec, rebalance.time.ms, fetch.time.ms, fetch.MB.sec, fetch.nMsg.sec
-2025-01-03 14:03:34:432, 2025-01-03 14:03:44:560, 7629.3945, 753.2972, 1562500, 154275.2765, 571, 9557, 798.3043, 163492.7278
+[2025-01-09 09:38:36,973] INFO ConsumerConfig values: 
+	allow.auto.create.topics = true
+	auto.commit.interval.ms = 5000
+	auto.include.jmx.reporter = true
+	auto.offset.reset = earliest
+	bootstrap.servers = [localhost:33001]
+	check.crcs = false
+	client.dns.lookup = use_all_dns_ips
+	client.id = perf-consumer-client
+	client.rack = 
+	connections.max.idle.ms = 540000
+	default.api.timeout.ms = 60000
+	enable.auto.commit = true
+	enable.metrics.push = true
+	exclude.internal.topics = true
+	fetch.max.bytes = 52428800
+	fetch.max.wait.ms = 500
+	fetch.min.bytes = 1
+	group.id = perf-consumer-45707
+	group.instance.id = null
+	group.protocol = classic
+	group.remote.assignor = null
+	heartbeat.interval.ms = 3000
+	interceptor.classes = []
+	internal.leave.group.on.close = true
+	internal.throw.on.fetch.stable.offset.unsupported = false
+	isolation.level = read_uncommitted
+	key.deserializer = class org.apache.kafka.common.serialization.ByteArrayDeserializer
+	max.partition.fetch.bytes = 1048576
+	max.poll.interval.ms = 300000
+	max.poll.records = 500
+	metadata.max.age.ms = 300000
+	metadata.recovery.strategy = none
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partition.assignment.strategy = [class org.apache.kafka.clients.consumer.RangeAssignor, class org.apache.kafka.clients.consumer.CooperativeStickyAssignor]
+	receive.buffer.bytes = 2097152
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.header.urlencode = false
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	session.timeout.ms = 45000
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	value.deserializer = class org.apache.kafka.common.serialization.ByteArrayDeserializer
+ (org.apache.kafka.clients.consumer.ConsumerConfig)
+[2025-01-09 09:38:37,015] INFO initializing Kafka metrics collector (org.apache.kafka.common.telemetry.internals.KafkaMetricsCollector)
+[2025-01-09 09:38:37,111] INFO Kafka version: 3.9.0 (org.apache.kafka.common.utils.AppInfoParser)
+[2025-01-09 09:38:37,112] INFO Kafka commitId: a60e31147e6b01ee (org.apache.kafka.common.utils.AppInfoParser)
+[2025-01-09 09:38:37,112] INFO Kafka startTimeMs: 1736415517108 (org.apache.kafka.common.utils.AppInfoParser)
+[2025-01-09 09:38:37,117] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Subscribed to topic(s): asdf (org.apache.kafka.clients.consumer.internals.ClassicKafkaConsumer)
+[2025-01-09 09:38:37,365] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Cluster ID: asdf (org.apache.kafka.clients.Metadata)
+[2025-01-09 09:38:37,426] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Discovered group coordinator localhost:33001 (id: 2147483646 rack: null) (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,431] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] (Re-)joining group (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,444] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Group coordinator localhost:33001 (id: 2147483646 rack: null) is unavailable or invalid due to cause: error response NOT_COORDINATOR. isDisconnected: false. Rediscovery will be attempted. (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,445] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Requesting disconnect from last known coordinator localhost:33001 (id: 2147483646 rack: null) (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,445] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] JoinGroup failed: This is not the correct coordinator. Marking coordinator unknown. Sent generation was Generation{generationId=-1, memberId='', protocol='null'} (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,445] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Client requested disconnect from node 2147483646 (org.apache.kafka.clients.NetworkClient)
+[2025-01-09 09:38:37,448] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Discovered group coordinator localhost:33001 (id: 2147483646 rack: null) (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,448] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Group coordinator localhost:33001 (id: 2147483646 rack: null) is unavailable or invalid due to cause: coordinator unavailable. isDisconnected: false. Rediscovery will be attempted. (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,448] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Requesting disconnect from last known coordinator localhost:33001 (id: 2147483646 rack: null) (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,521] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Discovered group coordinator localhost:33001 (id: 2147483646 rack: null) (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,523] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Request joining group due to: rebalance failed due to 'This is not the correct coordinator.' (NotCoordinatorException) (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,523] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] (Re-)joining group (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,528] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Group coordinator localhost:33001 (id: 2147483646 rack: null) is unavailable or invalid due to cause: error response NOT_COORDINATOR. isDisconnected: false. Rediscovery will be attempted. (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,528] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Requesting disconnect from last known coordinator localhost:33001 (id: 2147483646 rack: null) (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,528] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] JoinGroup failed: This is not the correct coordinator. Marking coordinator unknown. Sent generation was Generation{generationId=-1, memberId='', protocol='null'} (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,528] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Client requested disconnect from node 2147483646 (org.apache.kafka.clients.NetworkClient)
+[2025-01-09 09:38:37,531] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Discovered group coordinator localhost:33001 (id: 2147483646 rack: null) (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,531] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Group coordinator localhost:33001 (id: 2147483646 rack: null) is unavailable or invalid due to cause: coordinator unavailable. isDisconnected: false. Rediscovery will be attempted. (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,531] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Requesting disconnect from last known coordinator localhost:33001 (id: 2147483646 rack: null) (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,622] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Discovered group coordinator localhost:33001 (id: 2147483646 rack: null) (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,624] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Request joining group due to: rebalance failed due to 'This is not the correct coordinator.' (NotCoordinatorException) (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,625] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] (Re-)joining group (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,630] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Group coordinator localhost:33001 (id: 2147483646 rack: null) is unavailable or invalid due to cause: error response NOT_COORDINATOR. isDisconnected: false. Rediscovery will be attempted. (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,630] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Requesting disconnect from last known coordinator localhost:33001 (id: 2147483646 rack: null) (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,630] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] JoinGroup failed: This is not the correct coordinator. Marking coordinator unknown. Sent generation was Generation{generationId=-1, memberId='', protocol='null'} (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,631] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Client requested disconnect from node 2147483646 (org.apache.kafka.clients.NetworkClient)
+[2025-01-09 09:38:37,635] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Discovered group coordinator localhost:33001 (id: 2147483646 rack: null) (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,635] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Group coordinator localhost:33001 (id: 2147483646 rack: null) is unavailable or invalid due to cause: coordinator unavailable. isDisconnected: false. Rediscovery will be attempted. (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,635] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Requesting disconnect from last known coordinator localhost:33001 (id: 2147483646 rack: null) (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,722] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Discovered group coordinator localhost:33001 (id: 2147483646 rack: null) (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,723] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Request joining group due to: rebalance failed due to 'This is not the correct coordinator.' (NotCoordinatorException) (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,723] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] (Re-)joining group (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,727] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Group coordinator localhost:33001 (id: 2147483646 rack: null) is unavailable or invalid due to cause: error response NOT_COORDINATOR. isDisconnected: false. Rediscovery will be attempted. (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,727] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Requesting disconnect from last known coordinator localhost:33001 (id: 2147483646 rack: null) (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,727] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] JoinGroup failed: This is not the correct coordinator. Marking coordinator unknown. Sent generation was Generation{generationId=-1, memberId='', protocol='null'} (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,727] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Client requested disconnect from node 2147483646 (org.apache.kafka.clients.NetworkClient)
+[2025-01-09 09:38:37,730] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Discovered group coordinator localhost:33001 (id: 2147483646 rack: null) (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,730] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Group coordinator localhost:33001 (id: 2147483646 rack: null) is unavailable or invalid due to cause: coordinator unavailable. isDisconnected: false. Rediscovery will be attempted. (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,730] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Requesting disconnect from last known coordinator localhost:33001 (id: 2147483646 rack: null) (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,824] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Discovered group coordinator localhost:33001 (id: 2147483646 rack: null) (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,826] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Request joining group due to: rebalance failed due to 'This is not the correct coordinator.' (NotCoordinatorException) (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,827] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] (Re-)joining group (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,831] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Group coordinator localhost:33001 (id: 2147483646 rack: null) is unavailable or invalid due to cause: error response NOT_COORDINATOR. isDisconnected: false. Rediscovery will be attempted. (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,832] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Requesting disconnect from last known coordinator localhost:33001 (id: 2147483646 rack: null) (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,832] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] JoinGroup failed: This is not the correct coordinator. Marking coordinator unknown. Sent generation was Generation{generationId=-1, memberId='', protocol='null'} (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,832] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Client requested disconnect from node 2147483646 (org.apache.kafka.clients.NetworkClient)
+[2025-01-09 09:38:37,835] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Discovered group coordinator localhost:33001 (id: 2147483646 rack: null) (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,835] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Group coordinator localhost:33001 (id: 2147483646 rack: null) is unavailable or invalid due to cause: coordinator unavailable. isDisconnected: false. Rediscovery will be attempted. (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,835] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Requesting disconnect from last known coordinator localhost:33001 (id: 2147483646 rack: null) (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,924] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Discovered group coordinator localhost:33001 (id: 2147483646 rack: null) (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,925] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Request joining group due to: rebalance failed due to 'This is not the correct coordinator.' (NotCoordinatorException) (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,925] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] (Re-)joining group (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,946] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Request joining group due to: need to re-join with the given member-id: perf-consumer-client-6f5f9d74-bdaa-47c7-b1d1-717df519d2e7 (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,947] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] (Re-)joining group (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,981] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Successfully joined group with generation Generation{generationId=1, memberId='perf-consumer-client-6f5f9d74-bdaa-47c7-b1d1-717df519d2e7', protocol='range'} (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:37,996] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Finished assignment for group at generation 1: {perf-consumer-client-6f5f9d74-bdaa-47c7-b1d1-717df519d2e7=Assignment(partitions=[asdf-0])} (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:38,025] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Successfully synced group in generation Generation{generationId=1, memberId='perf-consumer-client-6f5f9d74-bdaa-47c7-b1d1-717df519d2e7', protocol='range'} (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:38,026] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Notifying assignor about the new Assignment(partitions=[asdf-0]) (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:38,032] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Adding newly assigned partitions: asdf-0 (org.apache.kafka.clients.consumer.internals.ConsumerRebalanceListenerInvoker)
+[2025-01-09 09:38:38,053] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Found no committed offset for partition asdf-0 (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:38,074] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Resetting offset for partition asdf-0 to position FetchPosition{offset=0, offsetEpoch=Optional.empty, currentLeader=LeaderAndEpoch{leader=Optional[localhost:33001 (id: 1 rack: null)], epoch=0}}. (org.apache.kafka.clients.consumer.internals.SubscriptionState)
+[2025-01-09 09:38:45,056] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Revoke previously assigned partitions asdf-0 (org.apache.kafka.clients.consumer.internals.ConsumerRebalanceListenerInvoker)
+[2025-01-09 09:38:45,056] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Member perf-consumer-client-6f5f9d74-bdaa-47c7-b1d1-717df519d2e7 sending LeaveGroup request to coordinator localhost:33001 (id: 2147483646 rack: null) due to the consumer is being closed (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:45,057] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Resetting generation and member id due to: consumer pro-actively leaving the group (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:45,057] INFO [Consumer clientId=perf-consumer-client, groupId=perf-consumer-45707] Request joining group due to: consumer pro-actively leaving the group (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator)
+[2025-01-09 09:38:45,561] INFO Metrics scheduler closed (org.apache.kafka.common.metrics.Metrics)
+[2025-01-09 09:38:45,561] INFO Closing reporter org.apache.kafka.common.metrics.JmxReporter (org.apache.kafka.common.metrics.Metrics)
+[2025-01-09 09:38:45,561] INFO Closing reporter org.apache.kafka.common.telemetry.internals.ClientTelemetryReporter (org.apache.kafka.common.metrics.Metrics)
+[2025-01-09 09:38:45,561] INFO Metrics reporters closed (org.apache.kafka.common.metrics.Metrics)
+[2025-01-09 09:38:45,566] INFO App info kafka.consumer for perf-consumer-client unregistered (org.apache.kafka.common.utils.AppInfoParser)
+2025-01-09 09:38:37:114, 2025-01-09 09:38:45:050, 976.5625, 123.0548, 200000, 25201.6129, 918, 7018, 139.1511, 28498.1476

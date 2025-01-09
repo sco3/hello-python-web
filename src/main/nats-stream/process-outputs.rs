@@ -1,4 +1,5 @@
-#!/usr/bin/env -S cargo run --bin process-outputs
+#!/usr/bin/env -S cargo run
+// --bin process-outputs
 
 use regex::Regex;
 use std::collections::BTreeMap;
@@ -9,8 +10,6 @@ use std::io::BufRead;
 use std::path::Path;
 
 fn main() {
-    const _MSGSIZE_EQ: &str = "msgsize=";
-    // Collect command-line arguments (file paths)
     let args: Vec<String> = env::args().skip(1).collect();
 
     if args.is_empty() {
@@ -49,7 +48,6 @@ fn main() {
                                         .replace(',', "")
                                         .parse()
                                         .unwrap_or_default();
-                                    //println!("stat = {}", stat);
                                     if stat < msg_per_sec {
                                         msg_per_sec = stat
                                     }
@@ -57,7 +55,6 @@ fn main() {
                             }
                         }
                     }
-                    //println!("size: {} msg/s: {}", size, msg_per_sec);
                     if size > 0 {
                         results.insert(size, msg_per_sec);
                     }
@@ -68,8 +65,8 @@ fn main() {
             }
         }
     }
-    println!("\"Message size\",\"msg/s\"");
+    println!("\"Message size\" , \"msg/s\"");
     for (key, value) in results {
-        println!("{},{}", key, value);
+        println!("{} , {}", key, value);
     }
 }
