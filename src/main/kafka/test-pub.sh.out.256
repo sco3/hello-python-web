@@ -1,111 +1,31 @@
-[2025-01-09 09:37:48,228] INFO ProducerConfig values: 
-	acks = -1
-	auto.include.jmx.reporter = true
-	batch.size = 16384
-	bootstrap.servers = [localhost:33001]
-	buffer.memory = 33554432
-	client.dns.lookup = use_all_dns_ips
-	client.id = perf-producer-client
-	compression.gzip.level = -1
-	compression.lz4.level = 9
-	compression.type = none
-	compression.zstd.level = 3
-	connections.max.idle.ms = 540000
-	delivery.timeout.ms = 120000
-	enable.idempotence = true
-	enable.metrics.push = true
-	interceptor.classes = []
-	key.serializer = class org.apache.kafka.common.serialization.ByteArraySerializer
-	linger.ms = 0
-	max.block.ms = 60000
-	max.in.flight.requests.per.connection = 5
-	max.request.size = 1100000
-	metadata.max.age.ms = 300000
-	metadata.max.idle.ms = 300000
-	metadata.recovery.strategy = none
-	metric.reporters = []
-	metrics.num.samples = 2
-	metrics.recording.level = INFO
-	metrics.sample.window.ms = 30000
-	partitioner.adaptive.partitioning.enable = true
-	partitioner.availability.timeout.ms = 0
-	partitioner.class = null
-	partitioner.ignore.keys = false
-	receive.buffer.bytes = 32768
-	reconnect.backoff.max.ms = 1000
-	reconnect.backoff.ms = 50
-	request.timeout.ms = 30000
-	retries = 2147483647
-	retry.backoff.max.ms = 1000
-	retry.backoff.ms = 100
-	sasl.client.callback.handler.class = null
-	sasl.jaas.config = null
-	sasl.kerberos.kinit.cmd = /usr/bin/kinit
-	sasl.kerberos.min.time.before.relogin = 60000
-	sasl.kerberos.service.name = null
-	sasl.kerberos.ticket.renew.jitter = 0.05
-	sasl.kerberos.ticket.renew.window.factor = 0.8
-	sasl.login.callback.handler.class = null
-	sasl.login.class = null
-	sasl.login.connect.timeout.ms = null
-	sasl.login.read.timeout.ms = null
-	sasl.login.refresh.buffer.seconds = 300
-	sasl.login.refresh.min.period.seconds = 60
-	sasl.login.refresh.window.factor = 0.8
-	sasl.login.refresh.window.jitter = 0.05
-	sasl.login.retry.backoff.max.ms = 10000
-	sasl.login.retry.backoff.ms = 100
-	sasl.mechanism = GSSAPI
-	sasl.oauthbearer.clock.skew.seconds = 30
-	sasl.oauthbearer.expected.audience = null
-	sasl.oauthbearer.expected.issuer = null
-	sasl.oauthbearer.header.urlencode = false
-	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
-	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
-	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
-	sasl.oauthbearer.jwks.endpoint.url = null
-	sasl.oauthbearer.scope.claim.name = scope
-	sasl.oauthbearer.sub.claim.name = sub
-	sasl.oauthbearer.token.endpoint.url = null
-	security.protocol = PLAINTEXT
-	security.providers = null
-	send.buffer.bytes = 131072
-	socket.connection.setup.timeout.max.ms = 30000
-	socket.connection.setup.timeout.ms = 10000
-	ssl.cipher.suites = null
-	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
-	ssl.endpoint.identification.algorithm = https
-	ssl.engine.factory.class = null
-	ssl.key.password = null
-	ssl.keymanager.algorithm = SunX509
-	ssl.keystore.certificate.chain = null
-	ssl.keystore.key = null
-	ssl.keystore.location = null
-	ssl.keystore.password = null
-	ssl.keystore.type = JKS
-	ssl.protocol = TLSv1.3
-	ssl.provider = null
-	ssl.secure.random.implementation = null
-	ssl.trustmanager.algorithm = PKIX
-	ssl.truststore.certificates = null
-	ssl.truststore.location = null
-	ssl.truststore.password = null
-	ssl.truststore.type = JKS
-	transaction.timeout.ms = 60000
-	transactional.id = null
-	value.serializer = class org.apache.kafka.common.serialization.ByteArraySerializer
- (org.apache.kafka.clients.producer.ProducerConfig)
-[2025-01-09 09:37:48,261] INFO initializing Kafka metrics collector (org.apache.kafka.common.telemetry.internals.KafkaMetricsCollector)
-[2025-01-09 09:37:48,281] INFO [Producer clientId=perf-producer-client] Instantiated an idempotent producer. (org.apache.kafka.clients.producer.KafkaProducer)
-[2025-01-09 09:37:48,327] INFO Kafka version: 3.9.0 (org.apache.kafka.common.utils.AppInfoParser)
-[2025-01-09 09:37:48,328] INFO Kafka commitId: a60e31147e6b01ee (org.apache.kafka.common.utils.AppInfoParser)
-[2025-01-09 09:37:48,328] INFO Kafka startTimeMs: 1736415468325 (org.apache.kafka.common.utils.AppInfoParser)
-[2025-01-09 09:37:48,541] INFO [Producer clientId=perf-producer-client] Cluster ID: asdf (org.apache.kafka.clients.Metadata)
-[2025-01-09 09:37:48,649] INFO [Producer clientId=perf-producer-client] ProducerId set to 0 with epoch 0 (org.apache.kafka.clients.producer.internals.TransactionManager)
-[2025-01-09 09:37:49,695] INFO [Producer clientId=perf-producer-client] Closing the Kafka producer with timeoutMillis = 9223372036854775807 ms. (org.apache.kafka.clients.producer.KafkaProducer)
-[2025-01-09 09:37:50,438] INFO Metrics scheduler closed (org.apache.kafka.common.metrics.Metrics)
-[2025-01-09 09:37:50,438] INFO Closing reporter org.apache.kafka.common.metrics.JmxReporter (org.apache.kafka.common.metrics.Metrics)
-[2025-01-09 09:37:50,438] INFO Closing reporter org.apache.kafka.common.telemetry.internals.ClientTelemetryReporter (org.apache.kafka.common.metrics.Metrics)
-[2025-01-09 09:37:50,438] INFO Metrics reporters closed (org.apache.kafka.common.metrics.Metrics)
-[2025-01-09 09:37:50,439] INFO App info kafka.producer for perf-producer-client unregistered (org.apache.kafka.common.utils.AppInfoParser)
-200000 records sent, 94876.660342 records/sec (23.16 MB/sec), 812.72 ms avg latency, 1125.00 ms max latency, 831 ms 50th, 1092 ms 95th, 1120 ms 99th, 1124 ms 99.9th.
+724010 records sent, 144802.0 records/sec (35.35 MB/sec), 740.7 ms avg latency, 1403.0 ms max latency.
+2842112 records sent, 568422.4 records/sec (138.78 MB/sec), 206.2 ms avg latency, 434.0 ms max latency.
+3406417 records sent, 681283.4 records/sec (166.33 MB/sec), 87.1 ms avg latency, 278.0 ms max latency.
+3771340 records sent, 754268.0 records/sec (184.15 MB/sec), 31.2 ms avg latency, 188.0 ms max latency.
+3841890 records sent, 768378.0 records/sec (187.59 MB/sec), 12.2 ms avg latency, 92.0 ms max latency.
+3594508 records sent, 718901.6 records/sec (175.51 MB/sec), 10.5 ms avg latency, 46.0 ms max latency.
+2693211 records sent, 538642.2 records/sec (131.50 MB/sec), 128.6 ms avg latency, 342.0 ms max latency.
+2884995 records sent, 576999.0 records/sec (140.87 MB/sec), 132.6 ms avg latency, 234.0 ms max latency.
+2348317 records sent, 469663.4 records/sec (114.66 MB/sec), 240.4 ms avg latency, 550.0 ms max latency.
+2437072 records sent, 487414.4 records/sec (119.00 MB/sec), 244.6 ms avg latency, 471.0 ms max latency.
+2678083 records sent, 535616.6 records/sec (130.77 MB/sec), 216.7 ms avg latency, 256.0 ms max latency.
+2518019 records sent, 503603.8 records/sec (122.95 MB/sec), 226.5 ms avg latency, 517.0 ms max latency.
+2647034 records sent, 529406.8 records/sec (129.25 MB/sec), 213.2 ms avg latency, 363.0 ms max latency.
+2679303 records sent, 535860.6 records/sec (130.83 MB/sec), 232.4 ms avg latency, 461.0 ms max latency.
+2359968 records sent, 471993.6 records/sec (115.23 MB/sec), 254.9 ms avg latency, 393.0 ms max latency.
+2691259 records sent, 538251.8 records/sec (131.41 MB/sec), 219.7 ms avg latency, 271.0 ms max latency.
+2431155 records sent, 486231.0 records/sec (118.71 MB/sec), 214.6 ms avg latency, 490.0 ms max latency.
+2483310 records sent, 496662.0 records/sec (121.26 MB/sec), 211.3 ms avg latency, 400.0 ms max latency.
+2725724 records sent, 545144.8 records/sec (133.09 MB/sec), 220.9 ms avg latency, 292.0 ms max latency.
+2473550 records sent, 494710.0 records/sec (120.78 MB/sec), 223.5 ms avg latency, 390.0 ms max latency.
+2551691 records sent, 510338.2 records/sec (124.59 MB/sec), 229.9 ms avg latency, 358.0 ms max latency.
+2542541 records sent, 508508.2 records/sec (124.15 MB/sec), 233.9 ms avg latency, 470.0 ms max latency.
+2495388 records sent, 499077.6 records/sec (121.85 MB/sec), 243.6 ms avg latency, 526.0 ms max latency.
+2657038 records sent, 531407.6 records/sec (129.74 MB/sec), 229.4 ms avg latency, 284.0 ms max latency.
+2283108 records sent, 456621.6 records/sec (111.48 MB/sec), 263.0 ms avg latency, 549.0 ms max latency.
+2347707 records sent, 469541.4 records/sec (114.63 MB/sec), 262.6 ms avg latency, 576.0 ms max latency.
+2826252 records sent, 565250.4 records/sec (138.00 MB/sec), 203.6 ms avg latency, 258.0 ms max latency.
+2513017 records sent, 502603.4 records/sec (122.71 MB/sec), 238.6 ms avg latency, 537.0 ms max latency.
+2558828 records sent, 511765.6 records/sec (124.94 MB/sec), 215.3 ms avg latency, 460.0 ms max latency.
+2941664 records sent, 588332.8 records/sec (143.64 MB/sec), 69.9 ms avg latency, 219.0 ms max latency.
+81926875 records sent, 532248.450554 records/sec (129.94 MB/sec), 185.21 ms avg latency, 1403.00 ms max latency, 208 ms 50th, 333 ms 95th, 508 ms 99th, 1160 ms 99.9th.

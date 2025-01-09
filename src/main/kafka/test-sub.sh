@@ -3,6 +3,7 @@
 set -xueo pipefail
 source ./00-sizes.sh
 
+rm -rf $OUT $OUT.msgs
 
 ~/prg/kafka/bin/kafka-consumer-perf-test.sh \
  --bootstrap-server localhost:33001  \

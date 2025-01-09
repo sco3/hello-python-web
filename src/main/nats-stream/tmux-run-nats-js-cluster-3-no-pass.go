@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"strconv"
+	"strings"
 )
 
 // Function to write a NATS configuration file
@@ -35,11 +36,22 @@ max_payload: 1100000
 jetstream {
   max_memory_store: 1GB
   store_dir: "%s/jetstream"
+  sync_interval: "1m"
 }
 
 
+#system_account: SYSDBA
+
+cluster {
+  name: test-cluster
+  listen: 0.0.0.0:%d
+
+  routes = [
+    %s
+  ]
+}
 `, clientPort, serverName, logFile,
-		httpPort, httpPort, store, 
+		httpPort, httpPort, store, clusterPort, strings.Join(routes, "\n    "),
 	)
 	return os.WriteFile(filename, []byte(configContent), 0644)
 
@@ -61,7 +73,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	numServers := 1
+	numServers := 3
 	if len(os.Args) > 1 {
 		numServers, err = strconv.Atoi(os.Args[1])
 		if err != nil {
