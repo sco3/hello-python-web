@@ -1,1 +1,1 @@
-rpk redpanda config bootstrap --config ~/redpanda/config.yaml
+rpk redpanda config bootstrap --config config.yaml
