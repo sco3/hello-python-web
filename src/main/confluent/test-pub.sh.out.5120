@@ -1,0 +1,143 @@
+[2025-01-09 23:21:43,994] INFO ProducerConfig values: 
+	acks = -1
+	auto.include.jmx.reporter = true
+	batch.size = 16384
+	bootstrap.servers = [localhost:33001]
+	buffer.memory = 33554432
+	client.dns.lookup = use_all_dns_ips
+	client.id = perf-producer-client
+	compression.gzip.level = -1
+	compression.lz4.level = 9
+	compression.type = none
+	compression.zstd.level = 3
+	confluent.lkc.id = null
+	confluent.proxy.protocol.client.address = null
+	confluent.proxy.protocol.client.mode = PROXY
+	confluent.proxy.protocol.client.port = null
+	confluent.proxy.protocol.client.version = NONE
+	connections.max.idle.ms = 540000
+	delivery.timeout.ms = 120000
+	enable.idempotence = true
+	enable.metrics.push = true
+	interceptor.classes = []
+	key.serializer = class org.apache.kafka.common.serialization.ByteArraySerializer
+	linger.ms = 0
+	max.block.ms = 60000
+	max.in.flight.requests.per.connection = 5
+	max.request.size = 1100000
+	metadata.max.age.ms = 300000
+	metadata.max.idle.ms = 300000
+	metadata.recovery.strategy = none
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partitioner.adaptive.partitioning.enable = true
+	partitioner.availability.timeout.ms = 0
+	partitioner.class = null
+	partitioner.ignore.keys = false
+	receive.buffer.bytes = 32768
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 2147483647
+	retry.backoff.max.ms = 1000
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clientassertion.audience = null
+	sasl.oauthbearer.clientassertion.expiration = 5
+	sasl.oauthbearer.clientassertion.include.jti.claim = false
+	sasl.oauthbearer.clientassertion.include.nbf.claim = false
+	sasl.oauthbearer.clientassertion.issuer = null
+	sasl.oauthbearer.clientassertion.location = null
+	sasl.oauthbearer.clientassertion.private.key = null
+	sasl.oauthbearer.clientassertion.private.key.passphrase = null
+	sasl.oauthbearer.clientassertion.subject = null
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	transaction.timeout.ms = 60000
+	transactional.id = null
+	value.serializer = class org.apache.kafka.common.serialization.ByteArraySerializer
+ (org.apache.kafka.clients.producer.ProducerConfig)
+[2025-01-09 23:21:44,044] INFO initializing Kafka metrics collector (org.apache.kafka.common.telemetry.internals.KafkaMetricsCollector)
+[2025-01-09 23:21:44,059] INFO [Producer clientId=perf-producer-client] Instantiated an idempotent producer. (org.apache.kafka.clients.producer.KafkaProducer)
+[2025-01-09 23:21:44,126] INFO Kafka version: 7.8.0-ce (org.apache.kafka.common.utils.AppInfoParser)
+[2025-01-09 23:21:44,127] INFO Kafka commitId: c43d449ca7777b4e49c5ad75407781ddbc1fffb2 (org.apache.kafka.common.utils.AppInfoParser)
+[2025-01-09 23:21:44,127] INFO Kafka startTimeMs: 1736464904121 (org.apache.kafka.common.utils.AppInfoParser)
+[2025-01-09 23:21:44,448] INFO [Producer clientId=perf-producer-client] Cluster ID: asdf (org.apache.kafka.clients.Metadata)
+[2025-01-09 23:21:44,559] INFO [Producer clientId=perf-producer-client] ProducerId set to 0 with epoch 0 (org.apache.kafka.clients.producer.internals.TransactionManager)
+38725 records sent, 7745.0 records/sec (37.82 MB/sec), 705.3 ms avg latency, 1700.0 ms max latency.
+192801 records sent, 38560.2 records/sec (188.28 MB/sec), 161.0 ms avg latency, 300.0 ms max latency.
+250947 records sent, 50189.4 records/sec (245.07 MB/sec), 122.0 ms avg latency, 215.0 ms max latency.
+243012 records sent, 48602.4 records/sec (237.32 MB/sec), 126.1 ms avg latency, 176.0 ms max latency.
+233820 records sent, 46764.0 records/sec (228.34 MB/sec), 130.1 ms avg latency, 257.0 ms max latency.
+170256 records sent, 34051.2 records/sec (166.27 MB/sec), 180.4 ms avg latency, 431.0 ms max latency.
+174390 records sent, 34878.0 records/sec (170.30 MB/sec), 176.1 ms avg latency, 417.0 ms max latency.
+175605 records sent, 35121.0 records/sec (171.49 MB/sec), 174.6 ms avg latency, 444.0 ms max latency.
+187392 records sent, 37478.4 records/sec (183.00 MB/sec), 164.1 ms avg latency, 191.0 ms max latency.
+175869 records sent, 35173.8 records/sec (171.75 MB/sec), 174.3 ms avg latency, 405.0 ms max latency.
+172446 records sent, 34489.2 records/sec (168.40 MB/sec), 178.0 ms avg latency, 407.0 ms max latency.
+118092 records sent, 23618.4 records/sec (115.32 MB/sec), 260.5 ms avg latency, 484.0 ms max latency.
+173685 records sent, 34737.0 records/sec (169.61 MB/sec), 175.4 ms avg latency, 275.0 ms max latency.
+171387 records sent, 34277.4 records/sec (167.37 MB/sec), 180.1 ms avg latency, 246.0 ms max latency.
+158508 records sent, 31701.6 records/sec (154.79 MB/sec), 194.4 ms avg latency, 327.0 ms max latency.
+163023 records sent, 32604.6 records/sec (159.20 MB/sec), 187.8 ms avg latency, 266.0 ms max latency.
+164424 records sent, 32884.8 records/sec (160.57 MB/sec), 186.1 ms avg latency, 304.0 ms max latency.
+175245 records sent, 35049.0 records/sec (171.14 MB/sec), 175.3 ms avg latency, 293.0 ms max latency.
+174747 records sent, 34949.4 records/sec (170.65 MB/sec), 176.1 ms avg latency, 242.0 ms max latency.
+166416 records sent, 33283.2 records/sec (162.52 MB/sec), 184.9 ms avg latency, 271.0 ms max latency.
+147603 records sent, 29520.6 records/sec (144.14 MB/sec), 208.1 ms avg latency, 299.0 ms max latency.
+171126 records sent, 34225.2 records/sec (167.12 MB/sec), 179.1 ms avg latency, 348.0 ms max latency.
+173199 records sent, 34639.8 records/sec (169.14 MB/sec), 176.5 ms avg latency, 429.0 ms max latency.
+[2025-01-09 23:23:43,192] INFO [Producer clientId=perf-producer-client] Closing the Kafka producer with timeoutMillis = 9223372036854775807 ms. (org.apache.kafka.clients.producer.KafkaProducer)
+[2025-01-09 23:23:43,344] INFO App info kafka.producer for perf-producer-client unregistered (org.apache.kafka.common.utils.AppInfoParser)
+4096343 records sent, 34361.834379 records/sec (167.78 MB/sec), 177.85 ms avg latency, 1700.00 ms max latency, 166 ms 50th, 272 ms 95th, 427 ms 99th, 1199 ms 99.9th.
