@@ -1,1 +1,1 @@
-DATADIR=$HOME/kafka-logs
+DATADIR=$HOME/kafka-logs-confluent

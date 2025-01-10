@@ -40,7 +40,7 @@ jetstream {
 
 
 `, clientPort, serverName, logFile,
-		httpPort, httpPort, store, 
+		httpPort, httpPort, store,
 	)
 	return os.WriteFile(filename, []byte(configContent), 0644)
 
@@ -49,7 +49,13 @@ jetstream {
 // Function to start a NATS server in a tmux session
 func startNatsServer(sessionName, configFile string, logFile string) error {
 	fmt.Printf("config: %s log: %s\n", configFile, logFile)
-	cmd := exec.Command("tmux", "new-session", "-d", "-s", sessionName, "nats-server", "-js", "-c", configFile)
+	cmd := exec.Command(
+		"tmux", "new-session",
+		"-d",
+		"-e", "GOMEMLIMIT=2GiB",
+		"-s", sessionName,
+		"nats-server", "-js", "-c", configFile,
+	)
 	return cmd.Run()
 }
 
@@ -70,7 +76,7 @@ func main() {
 			return
 		}
 	}
-	dir := os.Getenv("HOME")+"/nats-logs"
+	dir := os.Getenv("HOME") + "/nats-logs"
 	err = os.Mkdir(dir, 0755) // 0755 is the permission mode for the directory
 	if err != nil {
 		fmt.Printf("Directory: %v\n", err)

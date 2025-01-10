@@ -19,7 +19,7 @@ if [ ! -f $DATADIR/meta.properties ]; then
 fi
 
 export KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:$DIR/log4j.properties -Dkafka.logs.dir=$DIR/logs"
-export KAFKA_HEAP_OPTS=" -Xms8g -Xmx8g "
+export KAFKA_HEAP_OPTS=" -Xms2g -Xmx2g "
 export LOG_DIR="$DIR/logs"
 tmux new -d -s kafka \
     -e KAFKA_LOG4J_OPTS="$KAFKA_LOG4J_OPTS" \

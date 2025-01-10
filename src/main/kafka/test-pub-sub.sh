@@ -1,7 +1,6 @@
 
 
 ./02-stop.sh
-sleep 1
 ./03-clean.sh
 ./01-start.sh
 
