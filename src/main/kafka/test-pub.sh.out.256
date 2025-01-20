@@ -1,0 +1,2 @@
+[2025-01-13 22:57:27,645] WARN [Producer clientId=perf-producer-client] The metadata response from the cluster reported a recoverable issue with correlation id 2 : {asdf=UNKNOWN_TOPIC_OR_PARTITION} (org.apache.kafka.clients.NetworkClient)
+4096 records sent, 11736.389685 records/sec (2.87 MB/sec), 14.71 ms avg latency, 308.00 ms max latency, 12 ms 50th, 24 ms 95th, 24 ms 99th, 24 ms 99.9th.

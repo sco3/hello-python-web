@@ -5,7 +5,7 @@ set -xueo pipefail
 source 00-dir.sh
 
 DIR=$(dirname $(readlink -f $0))
-JAVA_HOME=~/prg/java-21
+JAVA_HOME=~/prg/java-23
 DATADIR=$HOME/kafka-logs
 mkdir -p $DATADIR
 mkdir -p $DIR/logs

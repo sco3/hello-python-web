@@ -1,0 +1,2 @@
+Starting benchmark: message_size=1024, num_messages=10240
+Benchmark completed: elapsed_time=0.06s, throughput=162722.67 msgs/sec

@@ -1,8 +1,16 @@
 
 
-./02-stop.sh
-./03-clean.sh
-./01-start.sh
+
+source ./00-sizes.sh
+
+#if [ $PORT -eq 9092 ] ; then
+   ./05-stop-native.sh || echo ok
+   ./04-start-native.sh
+#else
+#   ./02-stop.sh || echo ok no server was running
+#   ./03-clean.sh
+#   ./01-start.sh
+#fi
 
 sleep 1
 ./test-topic.sh

@@ -1,0 +1,15 @@
+22:27:50 JetStream durable push consumer mode, subscriber(s) will explicitly acknowledge the consumption of messages
+22:27:50 JetStream ephemeral ordered push consumer mode, subscribers will not acknowledge the consumption of messages
+22:27:50 Starting JetStream benchmark [subject=work_subj,  multisubject=false, multisubjectmax=100000, js=true, msgs=4,096, msgsize=256 B, pubs=1, subs=1, stream=work, maxbytes=1.5 MiB, syncpub=false, pubbatch=100, jstimeout=30s, pull=false, consumerbatch=100, push=true, consumername=natscli-bench, purge=true, pubsleep=0s, subsleep=0s, deduplication=false, dedupwindow=2m0s]
+22:27:50 Using stream: work
+22:27:50 Purging the stream
+22:27:50 Defined durable explicitly acked push consumer: natscli-bench
+22:27:50 Starting subscriber, expecting 4,096 messages
+22:27:50 Starting publisher, publishing 4,096 messages
+
+NATS Pub/Sub stats: 185,972 msgs/sec ~ 45.40 MB/sec
+ Pub stats: 94,991 msgs/sec ~ 23.19 MB/sec
+ Sub stats: 93,019 msgs/sec ~ 22.71 MB/sec
+
+Saved metric data in csv file ./04-pub-sub-work.sh.256.csv
+22:27:50 Deleted durable consumer: natscli-bench

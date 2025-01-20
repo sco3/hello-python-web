@@ -25,7 +25,7 @@ server_name: %s
 log_file: "%s"
 debug: false
 trace: false
-logfile_size_limit: 10000MB
+logfile_size_limit: 1000MB
 http: localhost:%d
 http_port: %d
 
@@ -33,9 +33,8 @@ http_port: %d
 max_payload: 1100000
 
 jetstream {
-  max_memory_store: 1GB
+  max_memory_store: 20MB
   store_dir: "%s/jetstream"
-  sync_interval: "1m"
 }
 
 
