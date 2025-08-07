@@ -3,7 +3,7 @@ name = "hello_python_web"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.11.1"
+requires-python = ">=3.12"
 dependencies = [
     "austin-dist>=3.7.0",
     "austin-tui>=1.2.3",
@@ -20,41 +20,5 @@ dependencies = [
 ]
 
 
-<<<<<<< HEAD
-[tool.poetry.dependencies]
-python = "^3.11.1"
-uvicorn = "^0.30.1"
-fastapi = "^0.111.1"
-uvloop = "^0.19.0"
-gunicorn = "^22.0.0"
-hypercorn = "^0.17.3"
-nats-py = "^2.8.0"
-nanoid = "^2.0.0"
-nats-python = "^0.8.0"
-requests = "^2.32.3"
-aiohttp = "^3.9.5"
-rx = "^3.2.0"
-motor = "^3.5.1"
-observable = "^1.0.3"
-black = "^24.4.2"
-blacksheep = "^2.0.7"
-blacksheep-cli = "^0.0.4"
-pyre = "^1.12.5"
-fastwsgi = "^0.0.9"
-setuptools = "^74.1.1"
-scalene = "^1.5.45"
-pyinstrument = "^5.0.0"
-boto3 = "^1.35.45"
-wsproto = "^1.2.0"
-granian = "^1.6.3"
-anthropic = { extras = ["bedrock"], version = "^0.30.1" }
-vcrpy = "^6.0.2"
-pylint = "^3.3.1"
-trio = "^0.27.0"
-anycorn = "^0.18.0"
-
 [tool.uv.workspace]
 members = ["src/main/nats-stream"]
-
-=======
->>>>>>> 1d5a4019734faaff7b82f12cf79d61451f85a892
