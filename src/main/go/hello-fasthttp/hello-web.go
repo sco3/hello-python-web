@@ -16,6 +16,6 @@ func main() {
 	}
 
 	if err := fasthttp.ListenAndServe(":8000", requestHandler); err != nil {
-		fmt.Printf("Error in ListenAndServe: %s\n", err)
+		log.Fatalf("Error in ListenAndServe: %s", err)
 	}
 }
