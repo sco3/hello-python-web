@@ -59,6 +59,3 @@ anycorn = "^0.18.0"
 [tool.uv.workspace]
 members = ["src/main/nats-stream"]
 
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"

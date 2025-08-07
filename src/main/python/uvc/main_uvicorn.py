@@ -27,10 +27,12 @@ async def app(scope, receive, send):
 
 
 if __name__ == "__main__":
+    port = 8000
+    print (port)
     uvicorn.run(
         "main_uvicorn:app",
         host="0.0.0.0",
-        port=8000,
+        port=port,
         reload=False,
         log_level="error",
     )

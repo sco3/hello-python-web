@@ -4,7 +4,7 @@
 
 ./cpu-governor.sh
 server=$(ps -aef | grep -v grep | \
-grep -E -o 'uvicorn|fastwsgi|rust-minihttp|JavaJooby|JerseyNetty|JerseyJetty|JerseyGrizzly|Vertx|spring|main-v|fasthttp-go|go' \
+grep -E -o 'node|uvicorn|fastwsgi|rust-minihttp|JavaJooby|JerseyNetty|JerseyJetty|JerseyGrizzly|Vertx|spring|main-v|fasthttp-go|go' \
 | sort -u)
 
 echo $server
