@@ -1,1 +1,1 @@
-poetry run granian --interface asgi main:app
+uv run granian --interface asgi main:app
