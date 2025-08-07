@@ -1,1 +1,1 @@
-poetry run granian --interface asgi main_fastapi:app
+uv run granian --interface asgi main_fastapi:app
