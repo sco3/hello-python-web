@@ -5,25 +5,19 @@ import uvloop
 import asyncio
 import sys
 
+
 async def app(scope, receive, send):
-    assert scope["type"] == "http"
 
-    await send(
-        {
-            "type": "http.response.start",
-            "status": 200,
-            "headers": [
-                [b"content-type", b"text/plain"],
-            ],
-        }
-    )
+    await send({
+        'type': 'http.response.start',
+        'status': 200
+    })
 
-    await send(
-        {
-            "type": "http.response.body",
-            "body": b"Hello, World!\n",
-        }
-    )
+    await send({
+        'type': 'http.response.body',
+        'body': b'Hello, World!\n'
+    })
+
 
 
 if __name__ == "__main__":
